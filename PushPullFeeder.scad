@@ -20,6 +20,8 @@
  * For more information visit https://makr.zone/tag/feeder/
  */
 
+
+
 /* [ Make Options ] */
 
 // Single/special selection
@@ -166,8 +168,10 @@ layered_wall_strength_min=0.5;
 layer_wall=ceil(layered_wall_strength_min/layer_height)*layer_height;
 // bevel/rounding in X/Y
 bevel_xy=wall;
+// bevel size, in multiples of 1 layer
+bevel_multiplier=2;
 // bevel in Z
-bevel_z=2*layer_height;
+bevel_z=bevel_multiplier*layer_height;
 
 // Maximum allowed error in (most) curve approximations
 _fp=0.02; // $fn is determined by this maximum error 
@@ -438,6 +442,8 @@ lever_spool_angle=125;
 lever_spool_spring_bend=5;
 // Ratchet tooth that the spool spring connects to (counter-clockwise from 0°)
 lever_spool_spring_tooth=-1;
+// Lever fillet radius
+lever_fillet=1.8;
 
 lever_axle_outer_diameter=reel_axle;
 lever_strength=lever_axle_diameter+3*wall;
@@ -810,7 +816,11 @@ module pivot_chute(cutout=false) {
 }
 
 // build --------------------------------------------------
- 
+
+module fillet2d(r) {
+    offset(r = -r) offset(delta = r) children(0);
+}
+
 module spent_tape_chute(cutout=false, play=0) {
      // fixture for spent tape chute
     if (extrusion_mount_enabled) {
@@ -2730,12 +2740,26 @@ if (do_lever) {
         difference() {
             union() {
                 beveled_extrude(height=ratchet_thickness-layer_height, convexity=4) {
-                    // spool ratchet spring
-                    spring_contour(lever_spool_node,
-                            [tooth_eff_x, tooth_eff_y],
-                            lever_spool_spring_bend_eff,
-                            0, spring_strength,
-                            tooth_next_angle);
+                    fillet2d(lever_fillet) union() {
+                        // the lever shape
+                        translate([(lever_axle_x-pick_offset), lever_axle_y]) {
+                            hull() {
+                                rotate([0, 0, lever_feed_angle])
+                                    translate([lever_spool_leverage-lever_axle_diameter/2, 0])
+                                        circle_p(d=lever_axle_diameter);
+                                rotate([0, 0, lever_spool_angle])
+                                    translate([lever_spool_leverage, 0])
+                                        circle_p(d=lever_node);
+                            }
+                            //circle_p(d=lever_axle_outer_diameter);
+                        }
+                        // spool ratchet spring
+                        spring_contour(lever_spool_node,
+                                [tooth_eff_x, tooth_eff_y],
+                                lever_spool_spring_bend_eff,
+                                0, spring_strength,
+                                tooth_next_angle);
+                    }
                 }
                 beveled_extrude(height=lever_actuation_thickness, bevel=bevel_z, convexity=12) {
                     union() {
@@ -2757,30 +2781,30 @@ if (do_lever) {
                             }
                             //circle_p(d=lever_axle_outer_diameter);
                         }
-                        
-                        
                     }
                 }
                 // dog lever
                 beveled_extrude(height=dog_lever_thickness, bevel=bevel_z, convexity=12) {
-                    // leverage
-                    translate([(lever_axle_x-pick_offset), lever_axle_y]) {
-                        hull() {
-                            rotate([0, 0, lever_dog_angle])
-                                translate([lever_dog_leverage, 0])
-                                    circle_p(d=lever_node);
-                            circle_p(d=lever_axle_diameter);
+                    fillet2d(lever_fillet) union() {
+                        // leverage
+                        translate([(lever_axle_x-pick_offset), lever_axle_y]) {
+                            hull() {
+                                rotate([0, 0, lever_dog_angle])
+                                    translate([lever_dog_leverage, 0])
+                                        circle_p(d=lever_node);
+                                circle_p(d=lever_axle_diameter);
+                            }
                         }
+                        // dog spring
+                        spring_contour(
+                            [lever_tape_x+(lever_axle_x-pick_offset),
+                                lever_tape_y+lever_axle_y],
+                            [dog_eff_x-dog_length+dog_slant*dog_height0,
+                                    dog_eff_y+dog_height0],
+                            dog_spring_bend_eff,
+                            -spring_strength/2,
+                            spring_strength/2);
                     }
-                    // dog spring
-                    spring_contour(
-                        [lever_tape_x+(lever_axle_x-pick_offset), 
-                            lever_tape_y+lever_axle_y],
-                        [dog_eff_x-dog_length+dog_slant*dog_height0, 
-                                dog_eff_y+dog_height0],
-                        dog_spring_bend_eff,
-                        -spring_strength/2,
-                        spring_strength/2);
                     // dog
                     translate([dog_eff_x, dog_eff_y])
                         translate(dog_neck)
