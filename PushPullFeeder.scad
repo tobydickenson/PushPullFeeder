@@ -2855,10 +2855,10 @@ if (do_lever) {
                         }
                         
                         // nozzle actuation knob
-                        translate([lever_feed_x, lever_feed_y, lever_actuation_thickness-e])
+                        translate([lever_feed_x, lever_feed_y, lever_actuation_thickness/2-e])
                             cylinder_p(
                                 d=lever_axle_diameter-nozzle_play,
-                                h=lever_thickness-lever_actuation_thickness+e);
+                                h=lever_thickness-lever_actuation_thickness/2+e);
                     }
                 }
             }
