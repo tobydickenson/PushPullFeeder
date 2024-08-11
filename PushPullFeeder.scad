@@ -392,7 +392,7 @@ blocking_spring_early=-0.15; // [-0.5:0.01:0.5]
 
 /* [ Bearing ] */
 // Is there a bearing on the lever axle
-bearing = true;
+bearing = false;
 // bearing outer
 bearing_outer_diameter=12;
 // bearing inner
