@@ -388,6 +388,18 @@ blocking_spring_tooth=-ratchet_teeth/4;
 // Ratchet spring early engagement, relative to teeth (empirical and very important)
 blocking_spring_early=-0.15; // [-0.5:0.01:0.5]
 
+/* [ Bearing ] */
+// Is there a bearing on the lever axle
+bearing = true;
+// bearing outer
+bearing_outer_diameter=12;
+// bearing inner
+bearing_inner_diameter=8;
+// bearing thickness
+bearing_thickness=3.5;
+// minimum wall to support a bearing
+bearing_surround_wall_thickness = 1.5;
+
 /* [ Reel ] */
 
 // Reel maximum diameter (178mm +/- 2mm by EIA 481)
@@ -445,7 +457,7 @@ lever_spool_spring_tooth=-1;
 // Lever fillet radius
 lever_fillet=1.8;
 
-lever_axle_outer_diameter=reel_axle;
+lever_axle_outer_diameter = bearing ? (bearing_outer_diameter+bearing_surround_wall_thickness*2) : reel_axle;
 lever_strength=lever_axle_diameter+3*wall;
 lever_thickness=emboss+tape_width+reel_wall;
 lever_spool_x=cos(lever_spool_angle)*lever_spool_leverage;
@@ -454,7 +466,7 @@ lever_tape_x=cos(lever_dog_angle)*lever_dog_leverage;
 lever_tape_y=sin(lever_dog_angle)*lever_dog_leverage;
 lever_feed_x=cos(lever_feed_angle)*lever_feed_leverage;
 lever_feed_y=sin(lever_feed_angle)*lever_feed_leverage;
-    
+
 /* [ Dog ] */
 
 
@@ -2039,8 +2051,16 @@ if (do_base_plate) {
                         bevel=bevel_z, convexity=10) {
                         union() {
                             // lever axle
-                            translate([(lever_axle_x-pick_offset), lever_axle_y]) 
-                                circle_p(d=lever_axle_diameter);
+                            if(bearing) {
+                                // axle fits a bearing
+                                translate([(lever_axle_x-pick_offset), lever_axle_y])
+                                    circle_p(d=bearing_inner_diameter);
+                            }
+                            else {
+                                // axle fits the level
+                                translate([(lever_axle_x-pick_offset), lever_axle_y])
+                                    circle_p(d=lever_axle_diameter);
+                            }
                             
                             // spool axle
                             translate([(spool_axle_x-pick_offset), spool_axle_y]) 
@@ -2842,12 +2862,33 @@ if (do_lever) {
             }
             union() {
                 // cutout axle
-                translate([(lever_axle_x-pick_offset), lever_axle_y, -e])
-                    beveled_extrude(height=lever_thickness-layer_height*2+2*e, 
-                        bevel=bevel_z, angle=135) {
-                        circle_p(d=lever_axle_diameter+axle_play+phase2_play);
-                    }
-                
+                if(bearing) {
+                    translate([(lever_axle_x-pick_offset), lever_axle_y, -e])
+                        linear_extrude(height=bearing_thickness
+                            ) {
+                            circle_p(d=bearing_outer_diameter+phase2_play);
+                        }
+                    translate([(lever_axle_x-pick_offset), lever_axle_y, lever_thickness-layer_height*2-bearing_thickness+2*e])
+                        linear_extrude(height=bearing_thickness) {
+                            circle_p(d=bearing_outer_diameter+phase2_play);
+                        }
+                    translate([(lever_axle_x-pick_offset), lever_axle_y, bearing_thickness-e*2])
+                        linear_extrude(height=lever_thickness-bearing_thickness*2+2*e,scale=0.5) {
+                            circle_p(d=bearing_outer_diameter+phase2_play - extrusion_width);
+                        }
+                    translate([(lever_axle_x-pick_offset), lever_axle_y, -e])
+                        linear_extrude(height=lever_thickness-layer_height*2+2*e) {
+                            circle_p(d=(bearing_inner_diameter+bearing_outer_diameter)/2);
+                        }
+                }
+                else {
+                    translate([(lever_axle_x-pick_offset), lever_axle_y, -e])
+                        beveled_extrude(height=lever_thickness-layer_height*2+2*e,
+                            bevel=bevel_z, angle=135) {
+                            circle_p(d=lever_axle_diameter+axle_play+phase2_play);
+                        }
+                }
+
                 // dog cutout 
                 dog_cut=dog_r*3;
                 dog_cutaway = [
@@ -2949,7 +2990,7 @@ if (do_friction_wheel) {
                         translate([0, 0, layer_height]) {
                             linear_extrude(height=spool_wall_left+layer_height+e, convexity=6) {
                                 difference() {
-                                    circle_p(d=friction_hex_diameter-fixture_play, 
+                                    circle_p(d=friction_hex_diameter-fixture_play,
                                         $fn=friction_wings);
                                     circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
                                 }
@@ -2957,7 +2998,7 @@ if (do_friction_wheel) {
                         }
                     }
                     
-                    cylinder_p(d2=friction_axle_diameter-play-6*layer_height, 
+                    cylinder_p(d2=friction_axle_diameter-play-6*layer_height,
                         d1=friction_axle_diameter-play-6*layer_height+2*spool_wall_left,
                         h=spool_wall_left+2*layer_height+3*e);
                 }
