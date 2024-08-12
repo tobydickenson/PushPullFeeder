@@ -170,8 +170,6 @@ layer_wall=ceil(layered_wall_strength_min/layer_height)*layer_height;
 bevel_xy=wall;
 // bevel size, in multiples of 1 layer
 bevel_multiplier=2;
-// bevel angle
-bevel_angle=45;
 // bevel in Z
 bevel_z=bevel_multiplier*layer_height;
 
@@ -861,7 +859,7 @@ module spent_tape_chute(cutout=false, play=0) {
             union() {
                 // axle
                 translate([0, 0, emboss]) {
-                    beveled_extrude(height=tape_width+reel_wall+e*2, angle=cutout?(180-bevel_angle):bevel_angle,
+                    beveled_extrude(height=tape_width+reel_wall+e*2, angle=cutout?135:45, 
                         bevel=bevel_z, convexity=6) {
                         translate([tape_chute_fixture_x, tape_chute_fixture_y]) 
                             circle_p(d=fixture_axle+play);
@@ -873,7 +871,7 @@ module spent_tape_chute(cutout=false, play=0) {
                 translate([-tape_chute_fixture_x, -tape_chute_fixture_y, 0]) {
                     // side structures and pivot leg
                     translate([0, 0, emboss+tape_width_eff_chute]) {
-                        beveled_extrude(height=reel_wall-tape_width_adjust_chute+e*2, angle=cutout?(180-bevel_angle):bevel_angle, bevel=bevel_z, convexity=6) {
+                        beveled_extrude(height=reel_wall-tape_width_adjust_chute+e*2, angle=cutout?135:45, bevel=bevel_z, convexity=6) {
                             pivot_chute(cutout) {
                                 intersection() {
                                     union() {
@@ -1056,13 +1054,13 @@ if (do_test_print) {
             union() {
                 translate([0, 0, -e]) {
                     if (test_axle) {
-                        beveled_extrude(convexity=test_height, height=test_height+test_thickness+2*e, angle=180-bevel_angle) {
+                        beveled_extrude(convexity=test_height, height=test_height+test_thickness+2*e, angle=135) {
                             translate([0, 0]) {
                                 circle_p(d=cross_screw_diameter+screw_play);
                             }
                         }
                     }
-                    beveled_extrude(convexity=test_height, height=test_height+2*e, angle=180-bevel_angle) {
+                    beveled_extrude(convexity=test_height, height=test_height+2*e, angle=135) {
                         for (i = [1:test_nuts]) {
                             translate([i*test_step, 0]) {
                                 circle_p(d=lever_axle_diameter+test_play(i));
@@ -2377,7 +2375,7 @@ if (do_base_plate) {
                     // window for ratchet spring action
                     if (ratchet_window) {
                         translate([0, 0, -e]) {
-                            beveled_extrude(bevel=bevel_z, angle=180-bevel_angle, height=base_thickness+2*e) {
+                            beveled_extrude(bevel=bevel_z, angle=135, height=base_thickness+2*e) {
                                 a0=(ratchet_tooth_start+blocking_spring_tooth)*360/ratchet_teeth;
                                 a1=(ratchet_tooth_start+lever_spool_spring_tooth+1)*360/ratchet_teeth;
                                 rr0=ratchet_inner_diameter/2-spring_strength;
@@ -2886,7 +2884,7 @@ if (do_lever) {
                 else {
                     translate([(lever_axle_x-pick_offset), lever_axle_y, -e])
                         beveled_extrude(height=lever_thickness-layer_height*2+2*e,
-                            bevel=bevel_z, angle=180-bevel_angle) {
+                            bevel=bevel_z, angle=135) {
                             circle_p(d=lever_axle_diameter+axle_play+phase2_play);
                         }
                 }
@@ -2903,7 +2901,7 @@ if (do_lever) {
                 ];
                 translate([0, 0, sprocket_gap+emboss-layer_height]) {
                     beveled_extrude(height=dog_lever_thickness-sprocket_gap-emboss
-                        +layer_height+e, angle=180-bevel_angle) {
+                        +layer_height+e, angle=135) {
                         translate([dog_eff_x, dog_eff_y])
                             translate(dog_neck)
                                 rotate(dog_spring_bend_eff-dog_spring_bend)
@@ -3078,7 +3076,7 @@ if (do_spool_left) {
                     }
                     union() {
                         translate([0, 0, -e]) {
-                            beveled_extrude(height=spool_wall_left+2*e, bevel=bevel_z, angle=180-bevel_angle) {
+                            beveled_extrude(height=spool_wall_left+2*e, bevel=bevel_z, angle=135) {
                                 circle_p(d=friction_hex_diameter,
                                     $fn=friction_wings);
                             }
@@ -3445,7 +3443,7 @@ module render_preview(convexity=undef) {
     }
 }
 
-module beveled_extrude(height=1, bevel=layer_height*1, angle=bevel_angle, convexity=undef) {
+module beveled_extrude(height=1, bevel=layer_height*1, angle=45, convexity=undef) {
     render_preview(convexity=convexity) union() {
         if ((bevel+e)*2 < height && bevel > e) {
             for (h = [0:layer_height:bevel-e]) {
