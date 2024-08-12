@@ -1151,12 +1151,13 @@ module handle_lock(play=0, cutout=false, lock=true) {
                     }
                 
                     // handle "keep-it-in"
+                    keep_z = 2*layer_height;
                     dia=(handle_lock_diameter+play)/2;
                     dia0=dia;
-                    dia1=dia0-bevel_z*2;
+                    dia1=dia0-keep_z*2;
                     x=dia-dia0/2;
                     y=handle_lock_diameter/2-dia0/4;
-                    th=dia0/2+bevel_z*2+handle_pull_thickness;//handle_lock_thickness*0.75;
+                    th=dia0/2+keep_z*2+handle_pull_thickness;//handle_lock_thickness*0.75;
                     
                     translate([0, 0, -th]) {
                         union() {
@@ -1166,11 +1167,11 @@ module handle_lock(play=0, cutout=false, lock=true) {
                                         translate([x, y, 0]) 
                                             cylinder_p(
                                                 d=dia1+play*2,
-                                                h=(cutout && a == 0) ? th-bevel_z-e : bevel_z*2);
+                                                h=(cutout && a == 0) ? th-keep_z-e : keep_z*2);
                                         
                                         cylinder_p(
                                             d=dia,//handle_lock_diameter+play-_fp*4,
-                                            h=th-bevel_z);
+                                            h=th-keep_z);
                                     }
                                 }
                             }
