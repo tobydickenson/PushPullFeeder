@@ -302,7 +302,7 @@ base_tape_edge=1.5;
 base_bottom=-base_height;
 base_anti_friction_ring=extrusion_width*3;
 // Add a reel holder to the base plate
-base_with_reel_holder = true;
+base_with_reel_holder = false;
 // Add base mounting screws (depends on other options)
 base_mount_screws=true;
 // Emboss the base plate to make space for mechanics
@@ -455,7 +455,7 @@ lever_spool_spring_bend=5;
 // Ratchet tooth that the spool spring connects to (counter-clockwise from 0°)
 lever_spool_spring_tooth=-1;
 // Lever fillet radius
-lever_fillet=1.8;
+lever_fillet=2.5;
 
 lever_axle_outer_diameter = bearing ? (bearing_outer_diameter+bearing_surround_wall_thickness*2) : reel_axle;
 lever_strength=lever_axle_diameter+3*wall;
@@ -533,7 +533,7 @@ friction_tension=0.16; // [-0.2:0.01:0.8]
 /* [ Extrusion Mount ] */
 
 // Add the extrusion mount to the base plate
-extrusion_mount_enabled=true;
+extrusion_mount_enabled=false;
 // Extrusion unit size
 extrusion_mount_unit=20; 
 // Extrusion overall width
@@ -3090,6 +3090,10 @@ if (do_spool_left) {
 }
 
 
+spool_right_drum_clamp = true;
+spool_right_spool = true;
+spool_right_washer = true;
+
 if (do_spool_right) {
     // spool right side
     color([0.8, 0.8, 0.8, 0.7])
@@ -3124,12 +3128,12 @@ if (do_spool_right) {
         difference() {
             union() {
                 // spool drum 
-                translate([0, 0, spool_wall_left]) 
-                    cylinder_p(h=tape_width-sprocket_gap+e, 
+                if(spool_right_spool) translate([0, 0, spool_wall_left])
+                    cylinder_p(h=tape_width-sprocket_gap+e,
                         d=spool_inner_diameter);
-                
-                // right wall    
-                translate([0, 0, spool_wall_left+tape_width-sprocket_gap])  {
+
+                // right wall
+                if(spool_right_spool) translate([0, 0, spool_wall_left+tape_width-sprocket_gap])  {
                     r0=spool_inner_diameter/2+spool_spoke_strength/2;
                     r1=spool_outer_diameter/2-spool_spoke_strength;
                     ratchet(
@@ -3144,34 +3148,34 @@ if (do_spool_right) {
                         spoke_r1=r1,
                         bevel=0);
                 }
-                
+
                 
                 // spool drum clamp
-                translate([debug_eff ? 0 : spool_inner_diameter/2-spool_outer_diameter/2, 
-                    debug_eff ? 0 : spool_inner_diameter/2+spool_outer_diameter/2, 
+                if(spool_right_drum_clamp) translate([debug_eff ? 0 : spool_inner_diameter/2-spool_outer_diameter/2,
+                    debug_eff ? 0 : spool_inner_diameter/2+spool_outer_diameter/2,
                     debug_eff ? spool_wall_left : spool_wall_left+spool_wall_right+play]) {
                     linear_extrude(height=tape_width-sprocket_gap-play, convexity=10) {
-                        scale([1-spool_drum_clamp_tension, 
-                            1-spool_drum_clamp_tension]) 
+                        scale([1-spool_drum_clamp_tension,
+                            1-spool_drum_clamp_tension])
                             polygon(spool_drum_clamp);
                     }
                 }
 
                 // groove axle nut washer
-                translate([debug_eff ? 0 : spool_outer_diameter/2, 
-                    debug_eff ? 0 : -spool_outer_diameter/2, 
-                    debug_eff ? spool_axle_groove_z-base_thickness+emboss : 
+                if(spool_right_washer) translate([debug_eff ? 0 : spool_outer_diameter/2,
+                    debug_eff ? 0 : -spool_outer_diameter/2,
+                    debug_eff ? spool_axle_groove_z-base_thickness+emboss :
                         spool_width]) {
                     rotate([debug_eff ? 0 : 180, 0, 0]) {
                         difference() {
-                            cylinder_p(h=spool_axle_groove_width, 
+                            cylinder_p(h=spool_axle_groove_width,
                                 d=spool_axle_groove_outer+4*wall);
                             hull() {
-                                translate([0, 0, -e]) 
-                                    cylinder_p(h=spool_axle_groove_width+2*e, 
+                                translate([0, 0, -e])
+                                    cylinder_p(h=spool_axle_groove_width+2*e,
                                         d2=spool_axle_groove_outer, d1=spool_axle_groove_innner-axle_groove_tension);
-                                translate([spool_axle_diameter, 0, -e]) 
-                                    cylinder_p(h=spool_axle_groove_width+2*e, 
+                                translate([spool_axle_diameter, 0, -e])
+                                    cylinder_p(h=spool_axle_groove_width+2*e,
                                         d2=spool_axle_groove_outer, d1=spool_axle_groove_innner-axle_groove_tension);
                             }
                         }
