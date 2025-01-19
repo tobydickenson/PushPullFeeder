@@ -163,7 +163,7 @@ wall_strength_min=1.3;
 // Round up to nearest multiple of extrusion width
 wall=ceil(wall_strength_min/extrusion_width)*extrusion_width;
 // Minimal sturdy horizontal wall 
-layered_wall_strength_min=0.5;
+layered_wall_strength_min=0.7;
 // Round up to nearest multiple of layer height
 layer_wall=ceil(layered_wall_strength_min/layer_height)*layer_height;
 // bevel/rounding in X/Y
@@ -335,7 +335,7 @@ spool_axle_y=spool_outer_diameter/2+2;
 // Spool left side number spokes (set 0 to switch off)
 spool_spokes_left=0;
 // Spool right side number spokes (set 0 to switch off)
-spool_spokes_right=8;
+spool_spokes_right=16;
 spool_spoke_strength=4*extrusion_width;
 spool_drum_clamp_strength=3*extrusion_width;
 // Drum clamp tension, relative
@@ -3393,7 +3393,7 @@ module ratchet(
         ];
     beveled_extrude(height=thickness, bevel=bevel,
         convexity=10) {
-        difference() {
+        fillet2d(spoke_strength) difference() {
             polygon(points=ratchet_outline);
             if (spokes > 1) {
                 for (a = [0:spokes-1]) {
