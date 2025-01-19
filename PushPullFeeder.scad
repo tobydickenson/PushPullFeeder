@@ -133,9 +133,9 @@ do_litefeeder=false;
 /*  [ 3D Printing ] */
 
 // Standard layer height
-layer_height=0.3;
+layer_height=0.1;
 // Standard extrusion width
-extrusion_width=0.5;
+extrusion_width=0.4;
 // Minimum gap between parts on the the print bed
 gap=2;
 // Maximum spacing between supports (0 to switch off)
@@ -145,9 +145,9 @@ support_grid=0;
 // the play is modelled on the smaller, removable part, so you can tune it with quick re-prints.
 
 // Play between parts that need to snap-in (empirical)
-play=-0.05; 
+play=-0.02;
 // Play on axles (empirical)
-axle_play=-0.02;
+axle_play=-0.00;
 
 // Play on the spool axle 
 spool_axle_play=axle_play;
@@ -174,7 +174,7 @@ bevel_multiplier=2;
 bevel_z=bevel_multiplier*layer_height;
 
 // Maximum allowed error in (most) curve approximations
-_fp=0.02; // $fn is determined by this maximum error 
+_fp=0.01; // $fn is determined by this maximum error
 // Epsilon for CSG body overlap
 e=0.02;
 $fs=extrusion_width;
