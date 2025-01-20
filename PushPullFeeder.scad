@@ -78,11 +78,11 @@ debug_ratchet = ratchet_parts;
 /* [ Logo and Text ] */
 
 // Switch on/off logos and text (except tag)
-logo_enabled=true;
+logo_enabled=false;
 // Logo text to be printed on the reverse of the base plate
 logo_text="makr.zone";
 // Tag to be printed on the reverse of the base plate (revision number etc.)
-logo_tag="408";
+logo_tag="";
 // Open Source Hardware Logo size (set 0 to switch off)
 logo_size=18; 
 // Etching depth
@@ -147,7 +147,7 @@ support_grid=0;
 // Play between parts that need to snap-in (empirical)
 play=-0.02;
 // Play on axles (empirical)
-axle_play=-0.00;
+axle_play=0.02;
 
 // Play on the spool axle 
 spool_axle_play=axle_play;
@@ -190,7 +190,7 @@ tape_width_eff=tape_width+tape_width_adjust;
 // Tape thickness (not incuding the embossed pockets)
 tape_thickness=0.6; // [0:0.01:1.5]
 // Embossed pockets portruding from the underside of the tape
-tape_emboss=0; // [0:0.01:2.4] 
+tape_emboss=0; // [0:0.01:3.5]
     // 250V cap = 1.6
 // Embossed pockets size, across tape, measured outside (underside of tape)
 tape_emboss_size=3.75; 
@@ -315,6 +315,7 @@ screw_play=0.1;
 base_screw_hole1=-40;
 base_screw_hole2=-10;
 base_screw_holes=[base_screw_hole1, base_screw_hole2];
+draw_nozzle_tip = false;
 
 /* [ Cover Tape Spool ] */
 
@@ -532,6 +533,8 @@ friction_tension=0.16; // [-0.2:0.01:0.8]
 
 /* [ Extrusion Mount ] */
 
+// Add the lumen mount
+lumen_mount_enabled=true;
 // Add the extrusion mount to the base plate
 extrusion_mount_enabled=false;
 // Extrusion unit size
@@ -1488,7 +1491,7 @@ if (do_nozzle_adapter || do_lever_actuator || ((do_lever || do_base_plate) && de
                 head_face_dist]) {
             rotate([debug_eff ? -90 : 90, debug_eff ? -90 : 0, 0]) { 
                 
-                if (debug_eff) {
+                if (draw_nozzle_tip) if (debug_eff) {
                     // draw the nozzle tip for debugging
                     color(animate_color[animate]) {
                         //render(convexity=10)
@@ -1805,6 +1808,85 @@ if (do_reel_counterpart && base_with_reel_holder) {
     }
 }
 
+
+lumen_y = -32;
+lumen_x = base_screw_hole2;
+
+module lumen_mount_2D() {
+    t = 4; // structural wall thickness
+    j = 2; // how far the tip protrudes behind the v slot wall
+    k = 2; // how far the tip protrudes around the bottom of the extrusion
+    tip_r = 0.5;
+    extrusion_r = 0.5; // extrusion external corner radius
+    external_r = 2.0; // rounding our structural corners
+    wall = 1.8; // extrusion wall thickness
+    big_r = 18;
+    m = 7.26; // internal pocket size for v channel wall
+    polygon([
+        each arc(
+            [lumen_x - extrusion_mount_w/2 - t + t,         lumen_y - extrusion_mount_h - t],
+            [lumen_x - extrusion_mount_w/2 - t,             lumen_y - extrusion_mount_h - t + t],
+            -90),
+
+        each arc(
+            [lumen_x - extrusion_mount_w/2 - t,             -base_height - big_r],
+            [lumen_x - extrusion_mount_w/2 - t - big_r,     -base_height+e],
+            90),
+
+        each arc(
+            [lumen_x + extrusion_mount_w/2 + t + external_r, -base_height+e],
+            [lumen_x + extrusion_mount_w/2 + t,              -base_height - external_r],
+            90),
+
+        each arc(
+            [lumen_x + extrusion_mount_w/2 + t,              lumen_y - m - t + t],
+            [lumen_x + extrusion_mount_w/2 + t - t, lumen_y - m - t],
+            -90),
+
+
+        each arc(
+            [lumen_x + extrusion_mount_w/2 - wall - j + external_r,    lumen_y - m - t ],
+            [lumen_x + extrusion_mount_w/2 - wall - j,                 lumen_y - m - t + external_r],
+            -90),
+
+        each arc(
+            [lumen_x + extrusion_mount_w/2 - wall - j,           lumen_y - m],
+            [lumen_x + extrusion_mount_w/2 - wall,            lumen_y - m],
+            -180),
+
+        each arc(
+            [lumen_x + extrusion_mount_w/2-wall,          lumen_y - m],
+            [lumen_x + extrusion_mount_w/2,                 lumen_y - m + wall],
+            90),
+
+
+        each arc(
+            [lumen_x + extrusion_mount_w/2,             lumen_y-extrusion_r],
+            [lumen_x + extrusion_mount_w/2-extrusion_r, lumen_y],
+            90),
+
+        each arc(
+            [lumen_x - extrusion_mount_w/2+extrusion_r, lumen_y],
+            [lumen_x - extrusion_mount_w/2,             lumen_y-extrusion_r],
+            90),
+
+        each arc(
+            [lumen_x - extrusion_mount_w/2,             lumen_y - extrusion_mount_h + extrusion_r],
+            [lumen_x - extrusion_mount_w/2+extrusion_r, lumen_y - extrusion_mount_h],
+            90),
+
+        each arc(
+            [lumen_x - extrusion_mount_w/2 + k - tip_r, lumen_y - extrusion_mount_h],
+            [lumen_x - extrusion_mount_w/2 + k,         lumen_y - extrusion_mount_h - tip_r],
+            -90),
+
+        each arc(
+            [lumen_x - extrusion_mount_w/2 + k,         lumen_y - extrusion_mount_h - t + external_r],
+            [lumen_x - extrusion_mount_w/2 + k - external_r, lumen_y - extrusion_mount_h - t],
+            -90),
+    ]);
+}
+
 module extrusion_mount_2D() {
         
     nut_y=extrusion_mount_y+extrusion_mount_h/2-extrusion_mount_unit/2;
@@ -2079,6 +2161,10 @@ if (do_base_plate) {
                             if (extrusion_mount_enabled) {
                                 extrusion_mount_2D();
                             }
+
+                            if (lumen_mount_enabled) {
+                                lumen_mount_2D();
+                            }
                         }
                     }
                     
@@ -2166,7 +2252,7 @@ if (do_base_plate) {
                                         spool_axle_y+reel_holder_strength/2+max_spool_dy],
                                 ]);
                                 
-                                if (extrusion_mount_enabled) 
+                                if (extrusion_mount_enabled)
                                     extrusion_mount_2D();
                             }
                             union() {
@@ -2295,15 +2381,25 @@ if (do_base_plate) {
                         cylinder_p(d=cross_screw_diameter+screw_play, 
                             h=base_thickness+tape_width+reel_wall+10*e);
                     translate([(spool_axle_x-pick_offset), spool_axle_y, -5*e])
-                        cylinder_p(d=cross_screw_diameter+screw_play, 
+                        cylinder_p(d=cross_screw_diameter+screw_play,
                             h=base_thickness+tape_width+reel_wall+10*e);
                     translate([(block_axle_x-pick_offset), block_axle_y, -5*e])
-                        cylinder_p(d=cross_screw_diameter+screw_play, 
+                        cylinder_p(d=cross_screw_diameter+screw_play,
                             h=base_thickness+tape_width+reel_wall+10*e);
-                    translate([((base_begin-pick_offset)+(tape_inset_begin-pick_offset))/2, -base_height/2, -5*e])
-                        cylinder_p(d=cross_screw_diameter+screw_play, 
+                    translate([((base_begin-pick_offset)+(tape_inset_begin-pick_offset))/2, -base_height/2, -5*e]) // inset disassembly hole, rear
+                        cylinder_p(d=cross_screw_diameter+screw_play,
                             h=base_thickness+tape_width+reel_wall+10*e);
-                    
+                    translate([(tape_inset_end+base_end)/2, -base_height/2, -5*e]) // inset disassembly hole, front
+                        cylinder_p(d=cross_screw_diameter+screw_play,
+                            h=base_thickness+tape_width+reel_wall+10*e);
+
+                    if (lumen_mount_enabled) // extrusion t nut hole
+                        translate([lumen_x,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width)/2]) // inset disassembly hole, front
+                        rotate(90,[0,-1,0])
+                            cylinder_p(d=cross_screw_diameter+screw_play,
+                                h=100);
+
+
                     /*
                     // anti-vibration structures
                     for (dx = [-2, 0, 2], dy = [0, 2]) {
@@ -2351,14 +2447,16 @@ if (do_base_plate) {
                             }
                         }
                         else {
-                            // floor screws
-                            sunk=base_height-tape_max_height;
-                            for (x = base_screw_holes) {
-                                translate([x, -base_height-e, base_thickness+tape_width/2])
-                                    rotate([-90, 0, 0]) 
-                                        cylinder_p(d1=cross_screw_diameter+screw_play, 
-                                            d2=cross_screw_diameter+screw_play+2*sunk,
-                                            h=sunk+2*e);
+                            if(!lumen_mount_enabled) {
+                                // floor screws
+                                sunk=base_height-tape_max_height;
+                                for (x = base_screw_holes) {
+                                    translate([x, -base_height-e, base_thickness+tape_width/2])
+                                        rotate([-90, 0, 0])
+                                            cylinder_p(d1=cross_screw_diameter+screw_play,
+                                                d2=cross_screw_diameter+screw_play+2*sunk,
+                                                h=sunk+2*e);
+                                }
                             }
                         }
                     }
@@ -2599,7 +2697,7 @@ if (do_inset) {
                                                 [cover_tape_edge+tape_inset_window_length, inset_edge+e],
                                                 [cover_tape_edge+tape_inset_window_length+inset_edge, 
                                                     -tape_thickness*tape_inset_cover_tension-e],
-                                                [cover_tape_edge, 
+                                                [cover_tape_edge,
                                                     -tape_thickness*tape_inset_cover_tension-e],
                                                 [cover_tape_edge-inset_edge, inset_edge+e],
                                         ]);
@@ -2944,12 +3042,16 @@ if (do_blocking_spring) {
             union() {
                 beveled_extrude(height=ratchet_thickness-layer_height, convexity=10) {
                     // spool blocking ratchet spring
-                    spring_contour(
-                        blocking_node, 
-                        [tooth_eff_x, tooth_eff_y],
-                        blocking_spring_bend_eff,
-                        0, spring_strength,
-                        tooth_angle+blocking_spring_bend_eff-blocking_spring_bend);
+                    fillet2d(lever_fillet) union() {
+                        spring_contour(
+                            blocking_node,
+                            [tooth_eff_x, tooth_eff_y],
+                            blocking_spring_bend_eff,
+                            0, spring_strength,
+                            tooth_angle+blocking_spring_bend_eff-blocking_spring_bend);
+                        translate([(block_axle_x-pick_offset), block_axle_y])
+                            circle_p(d=fixture_axle-fixture_play-phase2_play, $fn=6);
+                    }
                 }
                 translate([0, 0, ])
                     beveled_extrude(height=tape_width+emboss) 
@@ -3004,8 +3106,8 @@ if (do_friction_wheel) {
                         h=spool_wall_left+2*layer_height+3*e);
                 }
             }
-            beveled_extrude(height=tape_width-sprocket_gap, convexity=6) {
-                union() {
+            linear_extrude(height=tape_width-sprocket_gap, convexity=6) {
+                fillet2d(extrusion_width*1.5) union() {
                     difference() {
                         circle_p(d=friction_axle_diameter-play);
                         circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
