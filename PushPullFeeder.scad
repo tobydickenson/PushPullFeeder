@@ -535,6 +535,8 @@ friction_tension=0.16; // [-0.2:0.01:0.8]
 
 // Add the lumen mount
 lumen_mount_enabled=true;
+// Add the tape deflector
+tape_deflector_enabled=true;
 // Add the extrusion mount to the base plate
 extrusion_mount_enabled=false;
 // Extrusion unit size
@@ -1881,11 +1883,34 @@ module lumen_mount_2D() {
             -90),
 
         each arc(
-            [lumen_x - extrusion_mount_w/2 + k,         lumen_y - extrusion_mount_h - t + external_r],
-            [lumen_x - extrusion_mount_w/2 + k - external_r, lumen_y - extrusion_mount_h - t],
+            [lumen_x - extrusion_mount_w/2 + k,         lumen_y - extrusion_mount_h - f + external_r],
+            [lumen_x - extrusion_mount_w/2 + k - external_r, lumen_y - extrusion_mount_h - f],
             -90),
     ]);
 }
+
+module tape_deflector_2D(k) {
+    a=40;
+    r1=30;
+    r2=r1+inset_edge;
+    polygon([
+        [base_end+0.5-k,inset_edge],
+        [base_end+0.5-k,inset_edge*0.2],
+        each arc(
+            [base_end+2-k,-k],
+            [base_end+2+sin(a)*r1,-r1+cos(a)*r1],
+            -a),
+        each arc(
+            [base_end+2+sin(a)*r1,-r1+cos(a)*r1],
+            [base_end+2+sin(a)*r2,inset_edge-r2+cos(a)*r2],
+            180),
+        each arc(
+            [base_end+2+sin(a)*r2,inset_edge-r2+cos(a)*r2],
+            [base_end+2-k,inset_edge],
+            a),
+    ]);
+}
+
 
 module extrusion_mount_2D() {
         
@@ -2167,6 +2192,18 @@ if (do_base_plate) {
                             }
                         }
                     }
+
+                    if (tape_deflector_enabled) {
+                        beveled_extrude(height=base_thickness, bevel=bevel_z, convexity=6) {
+                            tape_deflector_2D(3);
+                        }
+                        beveled_extrude(height=base_thickness+tape_width, bevel=bevel_z, convexity=6) {
+                            if (tape_deflector_enabled) {
+                                tape_deflector_2D(0);
+                            }
+                        }
+                    }
+
                     
                     // dog reverse block
                     beveled_extrude(height=base_thickness-emboss+ratchet_thickness-layer_height) {
