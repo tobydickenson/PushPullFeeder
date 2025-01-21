@@ -1816,18 +1816,19 @@ lumen_x = base_screw_hole2;
 
 module lumen_mount_2D() {
     t = 4; // structural wall thickness
+    f = 2; // finger thickness
     j = 2; // how far the tip protrudes behind the v slot wall
     k = 2; // how far the tip protrudes around the bottom of the extrusion
     tip_r = 0.5;
-    extrusion_r = 0.5; // extrusion external corner radius
+    extrusion_r = 0.5; // internal corner radius
     external_r = 2.0; // rounding our structural corners
     wall = 1.8; // extrusion wall thickness
     big_r = 18;
     m = 7.26; // internal pocket size for v channel wall
     polygon([
         each arc(
-            [lumen_x - extrusion_mount_w/2 - t + t,         lumen_y - extrusion_mount_h - t],
-            [lumen_x - extrusion_mount_w/2 - t,             lumen_y - extrusion_mount_h - t + t],
+            [lumen_x - extrusion_mount_w/2 - t + t,         lumen_y - extrusion_mount_h - f],
+            [lumen_x - extrusion_mount_w/2 - t,             lumen_y - extrusion_mount_h - f + t],
             -90),
 
         each arc(
@@ -1841,14 +1842,14 @@ module lumen_mount_2D() {
             90),
 
         each arc(
-            [lumen_x + extrusion_mount_w/2 + t,              lumen_y - m - t + t],
-            [lumen_x + extrusion_mount_w/2 + t - t, lumen_y - m - t],
+            [lumen_x + extrusion_mount_w/2 + t,              lumen_y - m - f + t],
+            [lumen_x + extrusion_mount_w/2 + t - t, lumen_y - m - f],
             -90),
 
 
         each arc(
-            [lumen_x + extrusion_mount_w/2 - wall - j + external_r,    lumen_y - m - t ],
-            [lumen_x + extrusion_mount_w/2 - wall - j,                 lumen_y - m - t + external_r],
+            [lumen_x + extrusion_mount_w/2 - wall - j + external_r,    lumen_y - m - f ],
+            [lumen_x + extrusion_mount_w/2 - wall - j,                 lumen_y - m - f + external_r],
             -90),
 
         each arc(
