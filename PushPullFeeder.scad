@@ -2168,7 +2168,10 @@ if (do_base_plate) {
                         translate([deflector_pivot_x,deflector_pivot_y])
                         beveled_extrude(height=deflector_peg_length)
                         union() {
-                            circle_p(r=3);
+                            difference() {
+                                circle_p(r=3);
+                                translate([-0.85,-3.0]) circle_p(r=0.5);
+                            }
                             polygon([
                                 [-8,1],[0,1],[0,-1],[-8,-1]
                             ]);
@@ -2686,7 +2689,7 @@ if(do_tape_deflector) {
                 union() {
                     translate([deflector_pivot_x,deflector_pivot_y,-e])
                     beveled_extrude(height=deflector_peg_length+2*e,angle=135) {
-                        circle_p(r=3+axle_play);
+                        circle_p(r=3);
                     }
 
                     // a straight channel
@@ -2702,6 +2705,9 @@ if(do_tape_deflector) {
 
                 }
             }
+
+            linear_extrude(deflector_peg_length) translate([deflector_pivot_x-0.9,deflector_pivot_y-3.0]) circle_p(r=0.5);
+
         }
     }
 }
