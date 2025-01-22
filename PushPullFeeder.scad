@@ -195,6 +195,8 @@ tape_emboss=0.1; // [0:0.01:3.5]
 // Embossed pockets size, across tape, measured outside (underside of tape)
 tape_emboss_size=3.75; 
 
+// A good place to put a hole in the inset
+tape_halfway_hole = tape_width/2+1.2;
 
 /* [ Tape Specification, Advanced ] */
 
@@ -296,7 +298,7 @@ base_begin=-84;
 base_end=14;
 base_length=base_end - (base_begin-pick_offset);
 // Base plate height below tape surface
-base_height=7;
+base_height=tape_max_height+3;
 // Base plate edge on sprocket side of tape
 base_tape_edge=1.5;
 base_bottom=-base_height;
@@ -311,6 +313,10 @@ emboss=2;
 cross_screw_diameter=3;
 // Play in screw holes
 screw_play=0.1;
+
+mounting_screw_wall_thickness=4.0;
+mounting_screw_diameter=3.0+0.3;
+mounting_screw_head_diameter=5.5+0.3;
 // In case there is no extrusion mount, make screws holes at these x coordinates.
 base_screw_hole1=-40;
 base_screw_hole2=-10;
@@ -1811,57 +1817,30 @@ if (do_reel_counterpart && base_with_reel_holder) {
 }
 
 
-lumen_y = -32;
-lumen_x = base_screw_hole2;
+lumen_y = -14;
+lumen_x = 2;
 
 module lumen_mount_2D() {
     t = 4; // structural wall thickness
-    f = 2; // finger thickness
-    j = 2; // how far the tip protrudes behind the v slot wall
-    k = 2; // how far the tip protrudes around the bottom of the extrusion
-    tip_r = 0.5;
-    extrusion_r = 0.5; // internal corner radius
+    extrusion_r = 0.8; // internal corner radius
     external_r = 2.0; // rounding our structural corners
-    wall = 1.8; // extrusion wall thickness
-    big_r = 18;
-    m = 7.26; // internal pocket size for v channel wall
+    big_r = 20;
+    tension = 0.2;
     polygon([
-        each arc(
-            [lumen_x - extrusion_mount_w/2 - t + t,         lumen_y - extrusion_mount_h - f],
-            [lumen_x - extrusion_mount_w/2 - t,             lumen_y - extrusion_mount_h - f + t],
-            -90),
-
         each arc(
             [lumen_x - extrusion_mount_w/2 - t,             -base_height - big_r],
             [lumen_x - extrusion_mount_w/2 - t - big_r,     -base_height+e],
             90),
 
         each arc(
-            [lumen_x + extrusion_mount_w/2 + t + external_r, -base_height+e],
+            [lumen_x + extrusion_mount_w/2 + t - external_r, -base_height+e],
             [lumen_x + extrusion_mount_w/2 + t,              -base_height - external_r],
-            90),
-
-        each arc(
-            [lumen_x + extrusion_mount_w/2 + t,              lumen_y - m - f + t],
-            [lumen_x + extrusion_mount_w/2 + t - t, lumen_y - m - f],
-            -90),
-
-
-        each arc(
-            [lumen_x + extrusion_mount_w/2 - wall - j + external_r,    lumen_y - m - f ],
-            [lumen_x + extrusion_mount_w/2 - wall - j,                 lumen_y - m - f + external_r],
             -90),
 
         each arc(
-            [lumen_x + extrusion_mount_w/2 - wall - j,           lumen_y - m],
-            [lumen_x + extrusion_mount_w/2 - wall,            lumen_y - m],
+            [lumen_x + extrusion_mount_w/2 + t - tension,              lumen_y - extrusion_mount_h],
+            [lumen_x + extrusion_mount_w/2 - tension,        lumen_y - extrusion_mount_h],
             -180),
-
-        each arc(
-            [lumen_x + extrusion_mount_w/2-wall,          lumen_y - m],
-            [lumen_x + extrusion_mount_w/2,                 lumen_y - m + wall],
-            90),
-
 
         each arc(
             [lumen_x + extrusion_mount_w/2,             lumen_y-extrusion_r],
@@ -1874,24 +1853,15 @@ module lumen_mount_2D() {
             90),
 
         each arc(
-            [lumen_x - extrusion_mount_w/2,             lumen_y - extrusion_mount_h + extrusion_r],
-            [lumen_x - extrusion_mount_w/2+extrusion_r, lumen_y - extrusion_mount_h],
-            90),
+            [lumen_x - extrusion_mount_w/2,             lumen_y - extrusion_mount_h ],
+            [lumen_x - extrusion_mount_w/2 - t,         lumen_y - extrusion_mount_h ],
+            -180),
 
-        each arc(
-            [lumen_x - extrusion_mount_w/2 + k - tip_r, lumen_y - extrusion_mount_h],
-            [lumen_x - extrusion_mount_w/2 + k,         lumen_y - extrusion_mount_h - tip_r],
-            -90),
-
-        each arc(
-            [lumen_x - extrusion_mount_w/2 + k,         lumen_y - extrusion_mount_h - f + external_r],
-            [lumen_x - extrusion_mount_w/2 + k - external_r, lumen_y - extrusion_mount_h - f],
-            -90),
     ]);
 }
 
 module tape_deflector_2D(k) {
-    a=40;
+    a=120;
     r1=30;
     r2=r1+inset_edge;
     polygon([
@@ -2244,14 +2214,14 @@ if (do_base_plate) {
                         y0=inset_edge+dog_blocker_cover_offset;
                         y1=y0+dog_blocker_strength/2;
                         polygon([
-                            [(y0+bevel_z)*dog_slant+dog_nominal_x+dog_strength/2, 
+                            [(y0+bevel_z)*dog_slant+dog_nominal_x+dog_strength/2,
                                 y0+bevel_z],
-                            [y0*dog_slant+dog_nominal_x+dog_strength/2+bevel_z, 
+                            [y0*dog_slant+dog_nominal_x+dog_strength/2+bevel_z,
                                 y0],
                             each arc(
-                                [y0*dog_slant+dog_nominal_x+dog_strength/2+dog_blocker_strength/2, 
+                                [y0*dog_slant+dog_nominal_x+dog_strength/2+dog_blocker_strength/2,
                                     y0],
-                                [y1*dog_slant+dog_nominal_x+dog_strength/2, 
+                                [y1*dog_slant+dog_nominal_x+dog_strength/2,
                                     y1],
                                 270),
                         ]);
@@ -2431,11 +2401,16 @@ if (do_base_plate) {
                         cylinder_p(d=cross_screw_diameter+screw_play,
                             h=base_thickness+tape_width+reel_wall+10*e);
 
-                    if (lumen_mount_enabled) // extrusion t nut hole
-                        translate([lumen_x,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width)/2]) // inset disassembly hole, front
+                    // extrusion front t nut hole
+                    if (lumen_mount_enabled) {
+                        translate([lumen_x,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width)/2])
                         rotate(90,[0,-1,0])
-                            cylinder_p(d=cross_screw_diameter+screw_play,
-                                h=100);
+                            cylinder_p(d=mounting_screw_diameter,h=100);
+
+                        translate([lumen_x-extrusion_mount_w/2-mounting_screw_wall_thickness,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width)/2])
+                        rotate(90,[0,-1,0])
+                            cylinder_p(d=mounting_screw_head_diameter,h=100);
+                    }
 
 
                     /*
@@ -2497,6 +2472,18 @@ if (do_base_plate) {
                                 }
                             }
                         }
+
+                        if(lumen_mount_enabled) {
+                            // extrusion top t nut hole
+                            translate([lumen_x, -50, base_thickness+tape_halfway_hole])
+                            rotate([-90, 0, 0])
+                            cylinder_p(d=mounting_screw_diameter,h=100);
+
+                            translate([lumen_x, 0, base_thickness+tape_halfway_hole])
+                            rotate([90, 0, 0])
+                            cylinder_p(d=mounting_screw_head_diameter,h=-lumen_y-mounting_screw_wall_thickness);
+                        }
+
                     }
                     
                     // fixture for spent tape chute
@@ -2766,6 +2753,10 @@ if (do_inset) {
                                     }
                                 }
                                 
+                                for(x=[base_end,base_end-base_length])
+                                    for(i=[0,1])
+                                    translate([x,20,tape_width+i*(2+2*layer_height)]) rotate(90,[1,0,0]) linear_extrude(60) polygon([[-1,1.5],[1,1.5],[0,-0.5]]);
+
                                 // dog thorn groove
                                 groove = [
                                     [sprocket_margin-tape_min_margin+thorn_groove/2, -tape_thickness+e],
@@ -2781,18 +2772,27 @@ if (do_inset) {
                                         }
                                     }
                                 }
+
+                                if(lumen_mount_enabled) {
+                                    // extrusion top t nut driver hole
+                                    translate([lumen_x, -50, tape_halfway_hole])
+                                    rotate([-90, 0, 0])
+                                    cylinder_p(d=2.8+screw_play,h=100);
+                                }
+
                             }
                         }
                     }
                     
                     // tape reversal blocking thorn
                     if (reversal_blocking_thorn_length > 0) {
-                        x = dog_nominal_x-dog_travel_nominal-sprocket_pitch*2;
-                        translate([round(x/sprocket_pitch)*sprocket_pitch, e, 
-                            sprocket_hole_distance-thorn_sideways_tension]) {
-                            rotate([90, 0, 0]) 
-                                thorn(diameter=thorn_diameter, 
-                                      length=reversal_blocking_thorn_length+e);
+                        for(x = [dog_nominal_x-dog_travel_nominal-sprocket_pitch*2, dog_nominal_x+sprocket_pitch*2]) {
+                            translate([round(x/sprocket_pitch)*sprocket_pitch, e,
+                                sprocket_hole_distance-thorn_sideways_tension]) {
+                                rotate([90, 0, 0])
+                                    thorn(diameter=thorn_diameter,
+                                        length=reversal_blocking_thorn_length+e);
+                            }
                         }
                     }
                                         
