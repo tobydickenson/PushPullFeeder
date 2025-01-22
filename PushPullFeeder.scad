@@ -50,7 +50,9 @@ make_nozzle_adapter     = false;
 // Liteplacer specific lever actuator
 make_lever_actuator     = false;
 // Simple spent tape chute
-make_tape_chute         = true;
+make_tape_chute         = false;
+// Spent tape deflector
+make_tape_deflector     = true;
 // Test print
 make_test_print         = false;
 
@@ -71,6 +73,7 @@ do_handle_lock        = (option == 0 && make_handle_lock)        || (option ==  
 do_nozzle_adapter     = (option == 0 && make_nozzle_adapter)     || (option ==  10) || everything;
 do_lever_actuator     = (option == 0 && make_lever_actuator)     || (option ==  11) || everything;
 do_tape_chute         = (option == 0 && make_tape_chute)         || (option ==  12) || everything || phase2;
+do_tape_deflector     = (option == 0 && make_tape_deflector);
 do_test_print         = (option == 0 && make_test_print)         || (option ==  13);
 
 debug_ratchet = ratchet_parts;
@@ -316,12 +319,17 @@ screw_play=0.1;
 
 mounting_screw_wall_thickness=4.0;
 mounting_screw_diameter=3.0+0.3;
-mounting_screw_head_diameter=5.5+0.3;
+mounting_screw_head_diameter=5.54+0.3;
 // In case there is no extrusion mount, make screws holes at these x coordinates.
 base_screw_hole1=-40;
 base_screw_hole2=-10;
 base_screw_holes=[base_screw_hole1, base_screw_hole2];
 draw_nozzle_tip = false;
+
+// mounting point; top of extrusion
+lumen_y = -14;
+lumen_x = 2;
+
 
 /* [ Cover Tape Spool ] */
 
@@ -576,6 +584,15 @@ extrusion_mount_slot_angle=45;
 extrusion_mount_slot_thickness=1.8; 
 // Extrusion mounting screw diameter (should not be necessary)
 extrusion_mount_screw_diameter=4; // [3:M3, 4:M4, 5:M5]
+
+/* [ Tape Deflector ] */
+deflector_pivot_x = lumen_x+extrusion_mount_w/2+9;
+deflector_pivot_y = lumen_y-extrusion_mount_h*0.8;
+
+deflector_center_x = base_end;
+deflector_center_y = deflector_pivot_y+4;
+
+deflector_peg_length = 10;
 
 /* [ Lock and Handle ] */
 
@@ -1816,10 +1833,6 @@ if (do_reel_counterpart && base_with_reel_holder) {
     }
 }
 
-
-lumen_y = -14;
-lumen_x = 2;
-
 module lumen_mount_2D() {
     t = 4; // structural wall thickness
     extrusion_r = 0.8; // internal corner radius
@@ -1859,29 +1872,6 @@ module lumen_mount_2D() {
 
     ]);
 }
-
-module tape_deflector_2D(k) {
-    a=120;
-    r1=30;
-    r2=r1+inset_edge;
-    polygon([
-        [base_end+0.5-k,inset_edge],
-        [base_end+0.5-k,inset_edge*0.2],
-        each arc(
-            [base_end+2-k,-k],
-            [base_end+2+sin(a)*r1,-r1+cos(a)*r1],
-            -a),
-        each arc(
-            [base_end+2+sin(a)*r1,-r1+cos(a)*r1],
-            [base_end+2+sin(a)*r2,inset_edge-r2+cos(a)*r2],
-            180),
-        each arc(
-            [base_end+2+sin(a)*r2,inset_edge-r2+cos(a)*r2],
-            [base_end+2-k,inset_edge],
-            a),
-    ]);
-}
-
 
 module extrusion_mount_2D() {
         
@@ -2164,17 +2154,17 @@ if (do_base_plate) {
                         }
                     }
 
-                    if (tape_deflector_enabled) {
-                        beveled_extrude(height=base_thickness, bevel=bevel_z, convexity=6) {
-                            tape_deflector_2D(3);
-                        }
-                        beveled_extrude(height=base_thickness+tape_width, bevel=bevel_z, convexity=6) {
-                            if (tape_deflector_enabled) {
-                                tape_deflector_2D(0);
-                            }
+                    // the tape deflector attachment point
+                    if(tape_deflector_enabled) {
+                        translate([deflector_pivot_x,deflector_pivot_y])
+                        beveled_extrude(height=deflector_peg_length)
+                        union() {
+                            circle(3);
+                            polygon([
+                                [-8,1],[0,1],[0,-1],[-8,-1]
+                            ]);
                         }
                     }
-
                     
                     // dog reverse block
                     beveled_extrude(height=base_thickness-emboss+ratchet_thickness-layer_height) {
@@ -2383,7 +2373,8 @@ if (do_base_plate) {
                     }
                 
                     
-                    
+                    tape_deflector_alignment_wedge(axle_play);
+
                     // cross screws / punchouts
                     translate([(lever_axle_x-pick_offset), lever_axle_y, -5*e])
                         cylinder_p(d=cross_screw_diameter+screw_play, 
@@ -2405,11 +2396,20 @@ if (do_base_plate) {
                     if (lumen_mount_enabled) {
                         translate([lumen_x,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width)/2])
                         rotate(90,[0,-1,0])
-                            cylinder_p(d=mounting_screw_diameter,h=100);
+                        cylinder_p(d=mounting_screw_diameter,h=100);
 
                         translate([lumen_x-extrusion_mount_w/2-mounting_screw_wall_thickness,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width)/2])
                         rotate(90,[0,-1,0])
+                        union()
+                        {
                             cylinder_p(d=mounting_screw_head_diameter,h=100);
+                        }
+                        translate([lumen_x-extrusion_mount_w/2-mounting_screw_wall_thickness,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width)/2])
+                        rotate(-90,[0,-1,0])
+                        union()
+                        {
+                            cylinder_p(d1=mounting_screw_head_diameter,d2=mounting_screw_diameter,h=1.86);
+                        }
                     }
 
 
@@ -2482,6 +2482,10 @@ if (do_base_plate) {
                             translate([lumen_x, 0, base_thickness+tape_halfway_hole])
                             rotate([90, 0, 0])
                             cylinder_p(d=mounting_screw_head_diameter,h=-lumen_y-mounting_screw_wall_thickness);
+
+                            translate([lumen_x, lumen_y+mounting_screw_wall_thickness, base_thickness+tape_halfway_hole])
+                            rotate([90, 0, 0])
+                            cylinder_p(d1=mounting_screw_head_diameter,d2=mounting_screw_diameter,h=1.86);
                         }
 
                     }
@@ -2577,6 +2581,118 @@ if (do_base_plate) {
         }
     }
 }
+
+module tape_deflector_alignment_wedge(g) {
+    translate([base_end,inset_edge,0])
+    rotate(90,[1,0,0])
+    linear_extrude(inset_edge+tape_max_height)
+    polygon([[-g,base_thickness*0.2],
+             [0,base_thickness*0.2],
+             [0,base_thickness],
+             [-g-base_thickness*0.4,base_thickness]]);
+}
+
+module tape_deflector_2D(k) {
+    a=130;
+    tape_r = -deflector_center_y;
+    r1=tape_r+inset_edge; // outer
+    r2=tape_r-tape_max_height*k; // inner, at start
+    r3=tape_r-inset_edge*k; // inner, at end
+    polygon([
+        each arc(
+            [0,r1],
+            [sin(a)*r1,cos(a)*r1],
+            -a),
+        each arc(
+            [sin(a)*r1,cos(a)*r1],
+            [sin(a)*r3,cos(a)*r3],
+            -180),
+        each arc(
+            [sin(a)*r3,cos(a)*r3],
+            [0,r2],
+            a),
+    ]);
+}
+
+if(do_tape_deflector) {
+    if (tape_deflector_enabled) {
+
+        translate([
+            debug_eff ? 0 : 0,
+            debug_eff ? 0 : 0,
+            debug_eff ? emboss-base_thickness : 0]) {
+
+            difference()
+            {
+                union(){
+                    beveled_extrude(height=base_thickness, bevel=bevel_z) {
+                        fillet2d(2) union() {
+                            // the vertical curved wall
+                            translate([deflector_center_x,deflector_center_y])
+                            tape_deflector_2D(1);
+
+                            // the fingerpip
+                            translate([deflector_center_x+5,2.5])
+                            circle(2);
+
+                            // the hub
+                            translate([deflector_pivot_x,deflector_pivot_y]) union() {
+                                circle(5);
+                                for(angle = [0,180])
+                                rotate(angle,[1,sin(22.5),0])
+                                polygon([[-5,0],[-5,4],[0,4],[0,0]]);
+                            }
+
+                            for(p=[[70,18],[0,24]]) hull()
+                            {
+                                translate([deflector_pivot_x,deflector_pivot_y])
+                                circle(2);
+
+                                translate([deflector_pivot_x+sin(p[0])*p[1],deflector_pivot_y+cos(p[0])*p[1]])
+                                circle(2);
+                            }
+                        }
+                    }
+
+                    beveled_extrude(height=deflector_peg_length, bevel=bevel_z) {
+                        translate([deflector_pivot_x,deflector_pivot_y])
+                        circle(5);
+                    }
+
+                    beveled_extrude(height=base_thickness+tape_width, bevel=bevel_z) {
+                        // the drum
+                        translate([deflector_center_x,deflector_center_y])
+                        tape_deflector_2D(0);
+                    }
+
+                    tape_deflector_alignment_wedge(0);
+                }
+
+                // the cutout
+                union() {
+                    translate([deflector_pivot_x,deflector_pivot_y,-e])
+                    beveled_extrude(height=deflector_peg_length+2*e,angle=135) {
+                        circle(3+axle_play);
+                    }
+
+                    // a straight channel
+                    translate([deflector_pivot_x,deflector_pivot_y,-e]) linear_extrude(deflector_peg_length+2*e) hull() {
+                        circle(1+axle_play);
+
+                        translate([-10,0])
+                        circle(1+axle_play);
+
+                        translate([-10,-10])
+                        circle(1+axle_play);
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+
 tape_pocket_center=(tape_width_eff+sprocket_gap)/2;
 tape_support_knee=min(tape_emboss-extrusion_width, extrusion_width); 
 tape_margin=(tape_width_eff-sprocket_gap-tape_emboss_size)/2-layer_height;
