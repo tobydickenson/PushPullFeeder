@@ -177,7 +177,7 @@ bevel_multiplier=2;
 bevel_z=bevel_multiplier*layer_height;
 
 // Maximum allowed error in (most) curve approximations
-_fp=0.01; // $fn is determined by this maximum error
+_fp=0.005; // $fn is determined by this maximum error
 // Epsilon for CSG body overlap
 e=0.02;
 $fs=extrusion_width;
@@ -2168,7 +2168,7 @@ if (do_base_plate) {
                         translate([deflector_pivot_x,deflector_pivot_y])
                         beveled_extrude(height=deflector_peg_length)
                         union() {
-                            circle(3);
+                            circle_p(r=3);
                             polygon([
                                 [-8,1],[0,1],[0,-1],[-8,-1]
                             ]);
@@ -2686,7 +2686,7 @@ if(do_tape_deflector) {
                 union() {
                     translate([deflector_pivot_x,deflector_pivot_y,-e])
                     beveled_extrude(height=deflector_peg_length+2*e,angle=135) {
-                        circle(3+axle_play);
+                        circle_p(r=3+axle_play);
                     }
 
                     // a straight channel
