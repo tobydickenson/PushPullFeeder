@@ -321,6 +321,7 @@ screw_play=0.1;
 mounting_screw_wall_thickness=4.0;
 mounting_screw_diameter=3.0+0.3;
 mounting_screw_head_diameter=5.54+0.3;
+mounting_screw_countersink_depth=1.5;
 // In case there is no extrusion mount, make screws holes at these x coordinates.
 base_screw_hole1=-40;
 base_screw_hole2=-10;
