@@ -327,7 +327,7 @@ base_screw_holes=[base_screw_hole1, base_screw_hole2];
 draw_nozzle_tip = false;
 
 // mounting point; top of extrusion
-lumen_y = -14;
+lumen_y = -12;
 lumen_x = 2;
 
 
