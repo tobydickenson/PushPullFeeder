@@ -187,6 +187,7 @@ $fs=extrusion_width;
 
 // Tape width
 tape_width=8; // [8:4:24]
+tape_width_8 = 8+0;
 // Tape width adjustment for inset.
 tape_width_adjust=0.0; // [-0.25:0.01:0.25]
 tape_width_eff=tape_width+tape_width_adjust;
@@ -199,7 +200,7 @@ tape_emboss=0.1; // [0:0.01:3.5]
 tape_emboss_size=3.75; 
 
 // A good place to put a hole in the inset
-tape_halfway_hole = tape_width/2+1.2;
+tape_halfway_hole = 8/2+1.2;
 
 /* [ Tape Specification, Advanced ] */
 
@@ -2116,9 +2117,10 @@ if (do_base_plate) {
                         
                         }                            
                     }
-                    beveled_extrude(height=lever_thickness+base_thickness-emboss,
+
+                    // full width on an 8mm feeder
+                    beveled_extrude(height=lever_thickness+base_thickness-emboss+(tape_width_8-tape_width),
                         bevel=bevel_z, convexity=10) {
-                        union() {
                             // lever axle
                             if(bearing) {
                                 // axle fits a bearing
@@ -2130,7 +2132,17 @@ if (do_base_plate) {
                                 translate([(lever_axle_x-pick_offset), lever_axle_y])
                                     circle_p(d=lever_axle_diameter);
                             }
-                            
+
+                            if (lumen_mount_enabled) {
+                                lumen_mount_2D();
+                            }
+
+                    }
+
+                    // full width
+                    beveled_extrude(height=lever_thickness+base_thickness-emboss,
+                        bevel=bevel_z, convexity=10) {
+                        union() {
                             // spool axle
                             translate([(spool_axle_x-pick_offset), spool_axle_y]) 
                                 circle_p(d=spool_axle_diameter);
@@ -2146,10 +2158,6 @@ if (do_base_plate) {
                             // mounting on extrusion 
                             if (extrusion_mount_enabled) {
                                 extrusion_mount_2D();
-                            }
-
-                            if (lumen_mount_enabled) {
-                                lumen_mount_2D();
                             }
                         }
                     }
@@ -2326,7 +2334,12 @@ if (do_base_plate) {
                 }
                 union() {
                     // cutaways
-                    
+
+                    // cutaway the top half of the end of the blocking spring holder if the tape is wider than 8
+                    translate([block_axle_x,block_axle_y,base_thickness+tape_width_8])
+                    linear_extrude(tape_width-tape_width_8)
+                    polygon([[-fixture_axle,-fixture_axle*0.2],[fixture_axle,-fixture_axle*0.2],[fixture_axle,fixture_axle],[-fixture_axle,fixture_axle]]);
+
                     // logo
                     if (logo_enabled) {
                         if (logo_size > 0) {
@@ -2394,21 +2407,21 @@ if (do_base_plate) {
 
                     // extrusion front t nut hole
                     if (lumen_mount_enabled) {
-                        translate([lumen_x,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width)/2])
+                        translate([lumen_x,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width_8)/2])
                         rotate(90,[0,-1,0])
                         cylinder_p(d=mounting_screw_diameter,h=100);
 
-                        translate([lumen_x-extrusion_mount_w/2-mounting_screw_wall_thickness,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width)/2])
+                        translate([lumen_x-extrusion_mount_w/2-mounting_screw_wall_thickness,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width_8)/2])
                         rotate(90,[0,-1,0])
                         union()
                         {
                             cylinder_p(d=mounting_screw_head_diameter,h=100);
                         }
-                        translate([lumen_x-extrusion_mount_w/2-mounting_screw_wall_thickness,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width)/2])
+                        translate([lumen_x-extrusion_mount_w/2-mounting_screw_wall_thickness,lumen_y-extrusion_mount_h/2,(base_thickness+reel_wall+tape_width_8)/2])
                         rotate(-90,[0,-1,0])
                         union()
                         {
-                            cylinder_p(d1=mounting_screw_head_diameter,d2=mounting_screw_diameter,h=1.86);
+                            cylinder_p(d1=mounting_screw_head_diameter,d2=mounting_screw_diameter,h=mounting_screw_countersink_depth);
                         }
                     }
 
@@ -2485,7 +2498,7 @@ if (do_base_plate) {
 
                             translate([lumen_x, lumen_y+mounting_screw_wall_thickness, base_thickness+tape_halfway_hole])
                             rotate([90, 0, 0])
-                            cylinder_p(d1=mounting_screw_head_diameter,d2=mounting_screw_diameter,h=1.86);
+                            cylinder_p(d1=mounting_screw_head_diameter,d2=mounting_screw_diameter,h=mounting_screw_countersink_depth);
                         }
 
                     }
@@ -2588,8 +2601,8 @@ module tape_deflector_alignment_wedge(g) {
     linear_extrude(inset_edge+tape_max_height)
     polygon([[-g,base_thickness*0.2],
              [0,base_thickness*0.2],
-             [0,base_thickness],
-             [-g-base_thickness*0.4,base_thickness]]);
+             [0,base_thickness+e],
+             [-g-base_thickness*0.4,base_thickness+e]]);
 }
 
 module tape_deflector_2D(k) {
@@ -3208,7 +3221,7 @@ if (do_blocking_spring) {
                     }
                 }
                 translate([0, 0, ])
-                    beveled_extrude(height=tape_width+emboss) 
+                    beveled_extrude(height=tape_width_8+emboss)
                         translate([(block_axle_x-pick_offset), block_axle_y])
                             circle_p(d=fixture_axle-fixture_play-phase2_play, $fn=6);
             }
