@@ -190,7 +190,7 @@ tape_width_eff=tape_width+tape_width_adjust;
 // Tape thickness (not incuding the embossed pockets)
 tape_thickness=0.6; // [0:0.01:1.5]
 // Embossed pockets portruding from the underside of the tape
-tape_emboss=0; // [0:0.01:3.5]
+tape_emboss=0.1; // [0:0.01:3.5]
     // 250V cap = 1.6
 // Embossed pockets size, across tape, measured outside (underside of tape)
 tape_emboss_size=3.75; 
