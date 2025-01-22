@@ -2643,7 +2643,7 @@ if(do_tape_deflector) {
                                 polygon([[-5,0],[-5,4],[0,4],[0,0]]);
                             }
 
-                            for(p=[[70,18],[0,24]]) hull()
+                            for(p=[[90,16],[0,24]]) hull()
                             {
                                 translate([deflector_pivot_x,deflector_pivot_y])
                                 circle(2);
