@@ -592,7 +592,7 @@ deflector_pivot_x = lumen_x+extrusion_mount_w/2+9;
 deflector_pivot_y = lumen_y-extrusion_mount_h*0.8;
 
 deflector_center_x = base_end;
-deflector_center_y = deflector_pivot_y+4;
+deflector_center_y = deflector_pivot_y-4;
 
 deflector_peg_length = 10;
 
@@ -2660,7 +2660,7 @@ if(do_tape_deflector) {
                                 polygon([[-5,0],[-5,4],[0,4],[0,0]]);
                             }
 
-                            for(p=[[90,16],[0,24]]) hull()
+                            for(p=[[90,24],[0,24]]) hull()
                             {
                                 translate([deflector_pivot_x,deflector_pivot_y])
                                 circle(2);
