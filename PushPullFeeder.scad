@@ -2922,13 +2922,12 @@ if (do_inset) {
                     
                     // tape reversal blocking thorn
                     if (reversal_blocking_thorn_length > 0) {
-                        for(x = [dog_nominal_x-dog_travel_nominal-sprocket_pitch*2, dog_nominal_x+sprocket_pitch*2]) {
-                            translate([round(x/sprocket_pitch)*sprocket_pitch, e,
-                                sprocket_hole_distance-thorn_sideways_tension]) {
-                                rotate([90, 0, 0])
-                                    thorn(diameter=thorn_diameter,
-                                        length=reversal_blocking_thorn_length+e);
-                            }
+                        x = dog_nominal_x-dog_travel_nominal-sprocket_pitch*2;
+                        translate([round(x/sprocket_pitch)*sprocket_pitch, e,
+                            sprocket_hole_distance-thorn_sideways_tension]) {
+                            rotate([90, 0, 0])
+                                thorn(diameter=thorn_diameter,
+                                    length=reversal_blocking_thorn_length+e);
                         }
                     }
                                         
