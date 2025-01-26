@@ -244,6 +244,9 @@ cover_tape_edge=-1.25;
 // Tape reversal blocking thorn (set 0 to switch off)
 reversal_blocking_thorn_length=0.5;
 
+tape_inset_left = true;
+tape_inset_right = true;
+
 /* [ Label Holder ] */
 
 // Add the label to the tape inset (cannot be combined with spent tape chute)
@@ -2721,45 +2724,55 @@ tape_45_margin=tape_margin-tape_emboss;
 tape_margin_eff=tape_inset_support ? tape_margin : max(-thorn_groove, tape_45_margin); // just as good as possible
 
 function inset_profile(cover=true) = [
-    [sprocket_margin, -base_height-e],
-    [tape_width_eff+reel_wall-e, -base_height-e],
-    each [ if (cover) each [
-        [tape_width_eff+reel_wall-e, inset_edge],
-        [0, inset_edge-tape_thickness*tape_inset_cover_tension],
-        [0, -tape_thickness*tape_inset_cover_tension],
-        each arc(
-        [tape_width_eff-inset_edge, 0],
+
+    each [ if(tape_inset_right) each [
+        [sprocket_margin, -base_height-e],
+        [tape_width_eff+reel_wall-e, -base_height-e],
+        each [ if (cover) each [
+            [tape_width_eff+reel_wall-e, inset_edge],
+            [0, inset_edge-tape_thickness*tape_inset_cover_tension],
+            [0, -tape_thickness*tape_inset_cover_tension],
+            each arc(
+            [tape_width_eff-inset_edge, 0],
+            [tape_width_eff, 0],
+            -135),
+        ] else each [
+            [tape_width_eff+reel_wall-e, 0],
+        ]
+        ],
         [tape_width_eff, 0],
-        -135),
-    ] else each [
-        [tape_width_eff+reel_wall-e, 0],
-    ]
-    ],
-    [tape_width_eff, 0],
-    
-    [tape_width_eff, -tape_thickness],
-    [tape_width_eff-tape_margin, -tape_thickness],
-    
-    /* does not work in the slicer, unfortunately (wont 90° bridge it)
-    // support, if needed and possible
-    each [ if (tape_inset_support) each [ 
-    [tape_width_eff-tape_margin, -tape_thickness],
-    [tape_pocket_center, -tape_thickness-tape_support_knee],
-    [sprocket_gap+tape_margin+e, -tape_thickness],
-    [sprocket_gap+tape_margin+e, -tape_thickness-extrusion_width],
-    [tape_pocket_center, -tape_thickness-extrusion_width-tape_support_knee],
-    [tape_width_eff-tape_margin, -tape_thickness-extrusion_width],
+
+        [tape_width_eff, -tape_thickness],
+        [tape_width_eff-tape_margin, -tape_thickness],
+
+        /* does not work in the slicer, unfortunately (wont 90° bridge it)
+        // support, if needed and possible
+        each [ if (tape_inset_support) each [
+        [tape_width_eff-tape_margin, -tape_thickness],
+        [tape_pocket_center, -tape_thickness-tape_support_knee],
+        [sprocket_gap+tape_margin+e, -tape_thickness],
+        [sprocket_gap+tape_margin+e, -tape_thickness-extrusion_width],
+        [tape_pocket_center, -tape_thickness-extrusion_width-tape_support_knee],
+        [tape_width_eff-tape_margin, -tape_thickness-extrusion_width],
+        ]],
+        */
+
+        [tape_width_eff-tape_margin, -tape_thickness-tape_emboss],
     ]],
-    */
-    
-    [tape_width_eff-tape_margin, -tape_thickness-tape_emboss],
+
     [sprocket_gap+tape_margin, -tape_thickness-tape_emboss],
-    [sprocket_gap+tape_margin_eff, -tape_thickness],
-    //[sprocket_margin-tape_margin, -tape_thickness],
-    //[sprocket_hole_margin, -tape_thickness],
-    [bevel_z, -tape_thickness],
-    [0, -tape_thickness-bevel_z],
-    [0, -base_height-e],
+
+    each [ if(tape_inset_left) each [
+        [sprocket_gap+tape_margin, -tape_thickness-tape_emboss],
+        [sprocket_gap+(tape_inset_right?tape_margin_eff:tape_margin), -tape_thickness],
+        //[sprocket_margin-tape_margin, -tape_thickness],
+        //[sprocket_hole_margin, -tape_thickness],
+        [bevel_z, -tape_thickness],
+        [0, -tape_thickness-bevel_z],
+        [0, -base_height-e],
+    ]],
+
+    [sprocket_gap+tape_margin, -base_height-e],
 ];
 
 if (do_inset) {
@@ -2921,7 +2934,7 @@ if (do_inset) {
                     }
                     
                     // tape reversal blocking thorn
-                    if (reversal_blocking_thorn_length > 0) {
+                    if (reversal_blocking_thorn_length > 0 && tape_inset_right) {
                         x = dog_nominal_x-dog_travel_nominal-sprocket_pitch*2;
                         translate([round(x/sprocket_pitch)*sprocket_pitch, e,
                             sprocket_hole_distance-thorn_sideways_tension]) {
