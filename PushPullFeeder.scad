@@ -2729,13 +2729,18 @@ function inset_profile(cover=true) = [
         [sprocket_margin, -base_height-e],
         [tape_width_eff+reel_wall-e, -base_height-e],
         each [ if (cover) each [
-            [tape_width_eff+reel_wall-e, inset_edge],
+            //[tape_width_eff+reel_wall-e, inset_edge],
+            each arc(
+                [tape_width_eff+reel_wall-e, inset_edge],
+                [tape_width_eff-reel_wall, inset_edge],
+                ((tape_width>16)?90:0) // wider tape insets have a strain relief feature on the top surface of the inset
+            ),
             [0, inset_edge-tape_thickness*tape_inset_cover_tension],
             [0, -tape_thickness*tape_inset_cover_tension],
             each arc(
             [tape_width_eff-inset_edge, 0],
             [tape_width_eff, 0],
-            -135),
+            (tape_width>14?0:-135) ), // wider tape insets dont need this necking, and indeed get a bit vulnerable with it
         ] else each [
             [tape_width_eff+reel_wall-e, 0],
         ]
@@ -2776,6 +2781,9 @@ function inset_profile(cover=true) = [
 ];
 
 if (do_inset) {
+
+    // the tallest strain relief feature above the surface of the inset. To be removed on cutouts
+    inset_clearance_above = (tape_width>16)?(inset_edge+e):e;
     
     color([0,0.7,0,0.6]) {
         translate([
@@ -2826,11 +2834,11 @@ if (do_inset) {
                                             
                                             each arc(
                                             [base_end, 0],
-                                            [base_end-inset_edge, inset_edge+e],
+                                            [base_end-inset_edge, inset_edge+inset_clearance_above],
                                             90),
                                             
                                             each arc(
-                                            [(base_begin-pick_offset)+base_tape_edge, inset_edge+e],
+                                            [(base_begin-pick_offset)+base_tape_edge, inset_edge+inset_clearance_above],
                                             [(base_begin-pick_offset), -inset_edge],
                                             90),
                                             [(base_begin-pick_offset), -base_height+inset_play+phase2_play],
@@ -2845,21 +2853,21 @@ if (do_inset) {
                                 }
                                 // handle & lock cutout
                                 difference() {
-                                    translate([handle_lock_axle_x, handle_lock_axle_y, 
+                                    translate([handle_lock_axle_x, handle_lock_axle_y,
                                         -emboss+lever_thickness-layer_height]) {
-                                    
+
                                         handle_lock(cutout=true, lock=false, play=play);
                                     }
-                                    
+
                                     if (inset_flipped && support_grid > 0 ) {
                                         // subtract supports
                                         support_y = [-tape_max_height+extrusion_width-layer_height,
                                                         inset_edge-layer_height];
                                         for (x = [(tape_inset_begin-pick_offset)+support_grid/2:support_grid:extrusion_mount_x]) {
-                                            translate([x, support_y[0], 
-                                                inset_height-handle_pull_thickness-e]) 
-                                                cube([extrusion_width, 
-                                                    support_y[1]-support_y[0], 
+                                            translate([x, support_y[0],
+                                                inset_height-handle_pull_thickness-e])
+                                                cube([extrusion_width,
+                                                    support_y[1]-support_y[0],
                                                     handle_pull_thickness+2*e]);
                                         }
                                     }
@@ -2868,12 +2876,12 @@ if (do_inset) {
                                     // pick location window
                                     linear_extrude(height=tape_width_eff-layer_height+e, convexity=4) {
                                         polygon([
-                                                [cover_tape_edge+tape_inset_window_length, inset_edge+e],
+                                                [cover_tape_edge+tape_inset_window_length, inset_edge+inset_clearance_above],
                                                 [cover_tape_edge+tape_inset_window_length+inset_edge, 
                                                     -tape_thickness*tape_inset_cover_tension-e],
                                                 [cover_tape_edge,
                                                     -tape_thickness*tape_inset_cover_tension-e],
-                                                [cover_tape_edge-inset_edge, inset_edge+e],
+                                                [cover_tape_edge-inset_edge, inset_edge+inset_clearance_above],
                                         ]);
                                     }
                                     // window for dog
@@ -2881,23 +2889,23 @@ if (do_inset) {
                                     linear_extrude(height=sprocket_gap+layer_height+e, convexity=4) {
                                         polygon([
                                             [dog_x0-inset_edge, 
-                                                inset_edge+e], 
+                                                inset_edge+inset_clearance_above],
                                             [dog_x0, 
                                                     -tape_thickness*tape_inset_cover_tension-e],        
                                             [dog_nominal_x+sprocket_pitch, 
                                                     -tape_thickness*tape_inset_cover_tension-e],        
-                                            [dog_nominal_x+sprocket_pitch-inset_edge, inset_edge+e],        
+                                            [dog_nominal_x+sprocket_pitch-inset_edge, inset_edge+inset_clearance_above],
                                             ]);
                                     }
                                     // leave rear open
                                     linear_extrude(height=inset_height+2*e, convexity=4) {
                                         polygon([
-                                            [dog_x0-sprocket_pitch*2, inset_edge+e], 
-                                            [dog_x0-sprocket_pitch*2+inset_edge, 
-                                                    -tape_thickness*tape_inset_cover_tension-e],        
-                                            [(base_begin-pick_offset), 
-                                                    -tape_thickness*tape_inset_cover_tension-e],        
-                                            [(base_begin-pick_offset), inset_edge+e],        
+                                            [dog_x0-sprocket_pitch*2, inset_edge+inset_clearance_above],
+                                            [dog_x0-sprocket_pitch*2+inset_edge,
+                                                    -tape_thickness*tape_inset_cover_tension-e],
+                                            [(base_begin-pick_offset),
+                                                    -tape_thickness*tape_inset_cover_tension-e],
+                                            [(base_begin-pick_offset), inset_edge+inset_clearance_above],
                                             ]);
                                     }
                                 }
@@ -3379,8 +3387,8 @@ if (do_spool_left) {
 
 
 spool_right_drum_clamp = true;
-spool_right_spool = true;
-spool_right_washer = true;
+spool_right_spool = false;
+spool_right_washer = false;
 
 if (do_spool_right) {
     // spool right side
@@ -3583,17 +3591,21 @@ function curve(a0, a1, r0, r1, x, y, scale=false) = [
  
     
 function arc(p0, p1, angle) =  
-    let(
-        d=p1-p0,             // bee-line
-        m=(p1+p0)/2,         // mid point
-        n=[-d.y, d.x],       // perpendicular of same scale
-        c=m+cos(angle/2)/sin(angle/2)*n/2, // center point
-        b=p0-c,              // radial to p0
-        a0=atan2(b.y, b.x),  // starting angle
-        a1=a0+angle,         // ending angle
-        r=sqrt(pow(b.x, 2)+pow(b.y, 2)) // radius
-    ) 
-    curve(a0, a1, r, r, c.x, c.y);
+    (angle==0)
+    ?
+        [p0,p1]
+    :
+        let(
+            d=p1-p0,             // bee-line
+            m=(p1+p0)/2,         // mid point
+            n=[-d.y, d.x],       // perpendicular of same scale
+            c=m+cos(angle/2)/sin(angle/2)*n/2, // center point
+            b=p0-c,              // radial to p0
+            a0=atan2(b.y, b.x),  // starting angle
+            a1=a0+angle,         // ending angle
+            r=sqrt(pow(b.x, 2)+pow(b.y, 2)) // radius
+        )
+        curve(a0, a1, r, r, c.x, c.y);
 
 function spring_relaxed_endpoint(p0, p1, angle, angle_relax) = 
     let (
