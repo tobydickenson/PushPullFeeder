@@ -150,7 +150,7 @@ support_grid=0;
 // Play between parts that need to snap-in (empirical)
 play=-0.02;
 // Play on axles (empirical)
-axle_play=0.02;
+axle_play=0.03;
 
 // Play on the spool axle 
 spool_axle_play=axle_play;
