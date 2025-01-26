@@ -392,7 +392,7 @@ ratchet_window=true;
 // Tension of springs angle
 spring_tension=12;
 // Strength of springs [number of extrusions]
-spring_strength_extrusions=4;
+spring_strength_extrusions=3;
 spring_strength_extrusions_small=2;
 spring_strength=spring_strength_extrusions*extrusion_width;
 spring_small_strength=spring_strength_extrusions_small*extrusion_width;
