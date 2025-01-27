@@ -2921,9 +2921,9 @@ if (do_inset) {
                                     [sprocket_hole_margin+thorn_groove/2, -tape_thickness-thorn_groove],
                                     [max(0, sprocket_hole_margin-thorn_groove/2), -tape_thickness+e]
                                 ];
-                                translate([dog_nominal_x+sprocket_pitch, 0, 0]) {
+                                translate([dog_nominal_x+2*sprocket_pitch, 0, 0]) {
                                     rotate([0, -90, 0]) {
-                                        linear_extrude(height=dog_travel_nominal+sprocket_pitch*4,
+                                        linear_extrude(height=dog_travel_nominal+sprocket_pitch*5,
                                             convexity=10) {
                                             polygon(groove);
                                         }
@@ -2943,12 +2943,13 @@ if (do_inset) {
                     
                     // tape reversal blocking thorn
                     if (reversal_blocking_thorn_length > 0 && tape_inset_right) {
-                        x = dog_nominal_x-dog_travel_nominal-sprocket_pitch*2;
-                        translate([round(x/sprocket_pitch)*sprocket_pitch, e,
-                            sprocket_hole_distance-thorn_sideways_tension]) {
-                            rotate([90, 0, 0])
-                                thorn(diameter=thorn_diameter,
-                                    length=reversal_blocking_thorn_length+e);
+                        for(x = [dog_nominal_x-dog_travel_nominal-sprocket_pitch*2, dog_nominal_x+sprocket_pitch*2]) {
+                            translate([round(x/sprocket_pitch)*sprocket_pitch, e-tape_thickness*tape_inset_cover_tension,
+                                sprocket_hole_distance-thorn_sideways_tension]) {
+                                rotate([90, 0, 0])
+                                    thorn(diameter=thorn_diameter,
+                                        length=reversal_blocking_thorn_length+e);
+                            }
                         }
                     }
                                         
