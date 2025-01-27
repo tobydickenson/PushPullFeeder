@@ -2733,14 +2733,14 @@ function inset_profile(cover=true) = [
             each arc(
                 [tape_width_eff+reel_wall-e, inset_edge],
                 [tape_width_eff-reel_wall, inset_edge],
-                ((tape_width>16)?90:0) // wider tape insets have a strain relief feature on the top surface of the inset
+                ((tape_width>8)?90:0) // wider tape insets have a strain relief feature on the top surface of the inset
             ),
             [0, inset_edge-tape_thickness*tape_inset_cover_tension],
             [0, -tape_thickness*tape_inset_cover_tension],
             each arc(
             [tape_width_eff-inset_edge, 0],
             [tape_width_eff, 0],
-            (tape_width>14?0:-135) ), // wider tape insets dont need this necking, and indeed get a bit vulnerable with it
+            -135 ),
         ] else each [
             [tape_width_eff+reel_wall-e, 0],
         ]
@@ -2783,7 +2783,7 @@ function inset_profile(cover=true) = [
 if (do_inset) {
 
     // the tallest strain relief feature above the surface of the inset. To be removed on cutouts
-    inset_clearance_above = (tape_width>16)?(inset_edge+e):e;
+    inset_clearance_above = (tape_width>8)?(inset_edge+e):e;
     
     color([0,0.7,0,0.6]) {
         translate([
