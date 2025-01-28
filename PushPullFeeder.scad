@@ -2944,7 +2944,7 @@ if (do_inset) {
                     // tape reversal blocking thorn
                     if (reversal_blocking_thorn_length > 0 && tape_inset_right) {
                         for(x = [dog_nominal_x-dog_travel_nominal-sprocket_pitch*2, dog_nominal_x+sprocket_pitch*2]) {
-                            translate([round(x/sprocket_pitch)*sprocket_pitch, e-tape_thickness*tape_inset_cover_tension,
+                            translate([round(x/sprocket_pitch)*sprocket_pitch, e - tape_thickness*tape_inset_cover_tension*(tape_width-sprocket_hole_distance)/tape_width,
                                 sprocket_hole_distance-thorn_sideways_tension]) {
                                 rotate([90, 0, 0])
                                     thorn(diameter=thorn_diameter,
@@ -3784,7 +3784,7 @@ module beveled_extrude(height=1, bevel=layer_height*1, angle=45, convexity=undef
 module thorn(diameter, length, overlength=0) {
     
     hull() {
-        linear_extrude(height=e) {
+        translate([0,0,-1]) linear_extrude(height=1) {
             hull() {
                 translate ([0, 0])
                     circle_p(d=diameter);
