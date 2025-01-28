@@ -454,7 +454,7 @@ lever_axle_x=-48;
 lever_axle_y=29;  
 // To make the feeder compatible with various tape widths, the lever only takes up about half the tape width, so the nozzle adapter can actuate it when centered on the tape. This is the delta.
 lever_actuation_delta=1;
-lever_actuation_thickness=emboss+tape_width/2+lever_actuation_delta;
+lever_actuation_thickness=emboss+tape_width_8/2+lever_actuation_delta;
 // Leverage for the feed actuation
 lever_feed_leverage=26;
 // Angle of the feed lever in idle position.
@@ -480,6 +480,7 @@ lever_fillet=2.5;
 lever_axle_outer_diameter = bearing ? (bearing_outer_diameter+bearing_surround_wall_thickness*2) : reel_axle;
 lever_strength=lever_axle_diameter+3*wall;
 lever_thickness=emboss+tape_width+reel_wall;
+lever_thickness_8=emboss+tape_width_8+reel_wall;
 lever_spool_x=cos(lever_spool_angle)*lever_spool_leverage;
 lever_spool_y=sin(lever_spool_angle)*lever_spool_leverage;
 lever_tape_x=cos(lever_dog_angle)*lever_dog_leverage;
@@ -2123,7 +2124,7 @@ if (do_base_plate) {
                     }
 
                     // full width on an 8mm feeder
-                    beveled_extrude(height=lever_thickness+base_thickness-emboss+(tape_width_8-tape_width),
+                    beveled_extrude(height=lever_thickness_8+base_thickness-emboss,
                         bevel=bevel_z, convexity=10) {
                             // lever axle
                             if(bearing) {
@@ -3141,7 +3142,7 @@ if (do_lever) {
                 translate([(lever_axle_x-pick_offset), lever_axle_y, 0]) {
                     union() {
                         // make it full lever thickness at the axle
-                        beveled_extrude(height=lever_thickness-layer_height*2, 
+                        beveled_extrude(height=lever_thickness_8-layer_height*2,
                             bevel=bevel_z, convexity=12) {
                             circle_p(d=lever_axle_outer_diameter);
                         }
@@ -3150,7 +3151,7 @@ if (do_lever) {
                         translate([lever_feed_x, lever_feed_y, lever_actuation_thickness/2-e])
                             cylinder_p(
                                 d=lever_axle_diameter-nozzle_play,
-                                h=lever_thickness-lever_actuation_thickness/2+e);
+                                h=lever_thickness_8-lever_actuation_thickness/2+e);
                     }
                 }
             }
@@ -3162,22 +3163,22 @@ if (do_lever) {
                             ) {
                             circle_p(d=bearing_outer_diameter+phase2_play);
                         }
-                    translate([(lever_axle_x-pick_offset), lever_axle_y, lever_thickness-layer_height*2-bearing_thickness+2*e])
+                    translate([(lever_axle_x-pick_offset), lever_axle_y, lever_thickness_8-layer_height*2-bearing_thickness+2*e])
                         linear_extrude(height=bearing_thickness) {
                             circle_p(d=bearing_outer_diameter+phase2_play);
                         }
                     translate([(lever_axle_x-pick_offset), lever_axle_y, bearing_thickness-e*2])
-                        linear_extrude(height=lever_thickness-bearing_thickness*2+2*e,scale=0.5) {
+                        linear_extrude(height=lever_thickness_8-bearing_thickness*2+2*e,scale=0.5) {
                             circle_p(d=bearing_outer_diameter+phase2_play - extrusion_width);
                         }
                     translate([(lever_axle_x-pick_offset), lever_axle_y, -e])
-                        linear_extrude(height=lever_thickness-layer_height*2+2*e) {
+                        linear_extrude(height=lever_thickness_8-layer_height*2+2*e) {
                             circle_p(d=(bearing_inner_diameter+bearing_outer_diameter)/2);
                         }
                 }
                 else {
                     translate([(lever_axle_x-pick_offset), lever_axle_y, -e])
-                        beveled_extrude(height=lever_thickness-layer_height*2+2*e,
+                        beveled_extrude(height=lever_thickness_8-layer_height*2+2*e,
                             bevel=bevel_z, angle=135) {
                             circle_p(d=lever_axle_diameter+axle_play+phase2_play);
                         }
