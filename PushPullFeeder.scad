@@ -3389,8 +3389,8 @@ if (do_spool_left) {
 
 
 spool_right_drum_clamp = true;
-spool_right_spool = false;
-spool_right_washer = false;
+spool_right_spool = true;
+spool_right_washer = true;
 
 if (do_spool_right) {
     // spool right side
