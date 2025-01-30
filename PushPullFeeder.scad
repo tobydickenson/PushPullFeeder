@@ -221,7 +221,7 @@ sprocket_margin=sprocket_gap+tape_min_margin;
 /* [ Tape Inset ] */
 
 // Tape inset pick window length (make it longer than the inset to keep the end open)
-tape_inset_window_length=10;
+tape_inset_window_length=9;
 // Tape inset begin x
 tape_inset_begin=-74;
 // Tape inset end x
@@ -237,9 +237,9 @@ tape_inset_slant=2;
 // Minimum thorn groove 
 thorn_min_groove=0.4;
 // Cover tape edge relative to the pick location
-cover_tape_edge=-2.0;
+cover_tape_edge=-2.5;
 // Tape reversal blocking thorn (set 0 to switch off)
-reversal_blocking_thorn_length=0.5;
+reversal_blocking_thorn_length=0.4;
 
 tape_inset_left = true;
 tape_inset_right = true;
@@ -2645,7 +2645,7 @@ function inset_profile(cover=true) = [
 if (do_inset) {
 
     // the tallest strain relief feature above the surface of the inset. To be removed on cutouts
-    inset_clearance_above = (tape_width>8)?(inset_edge+e):e;
+    inset_clearance_above = inset_edge;
     
     color([0,0.7,0,0.6]) {
         translate([
@@ -2734,17 +2734,29 @@ if (do_inset) {
                                         }
                                     }
                                 }
-                                translate([0, 0, -e]) {
+                                if(tape_inset_right) translate([0, 0, -e]) {
                                     // pick location window
+                                    // The vertical edged part
                                     linear_extrude(height=tape_width_eff-layer_height+e, convexity=4) {
                                         polygon([
-                                                [cover_tape_edge+tape_inset_window_length, inset_edge+inset_clearance_above],
-                                                [cover_tape_edge+tape_inset_window_length+inset_edge, 
-                                                    -tape_thickness*tape_inset_cover_tension-e],
-                                                [cover_tape_edge,
-                                                    -tape_thickness*tape_inset_cover_tension-e],
-                                                [cover_tape_edge-inset_edge, inset_edge+inset_clearance_above],
+                                                [cover_tape_edge+tape_inset_window_length,  inset_edge+inset_clearance_above],
+                                                [cover_tape_edge+tape_inset_window_length,  -tape_thickness*tape_inset_cover_tension-e],
+                                                [cover_tape_edge,                           -tape_thickness*tape_inset_cover_tension-e],
+                                                [cover_tape_edge,                           inset_edge+inset_clearance_above],
                                         ]);
+                                    }
+                                    // The angled part
+                                    ee = 0.2;
+                                    offset = inset_edge*0.3;
+                                    window = [
+                                                [cover_tape_edge+tape_inset_window_length-inset_clearance_above-offset, ee+inset_edge+inset_clearance_above], // front top
+                                                [cover_tape_edge+tape_inset_window_length+inset_edge-offset,            -ee], // front lower
+                                                [cover_tape_edge+offset,                                 -ee], // back lower
+                                                [cover_tape_edge-inset_edge-inset_clearance_above+offset,               ee+inset_edge+inset_clearance_above], // back top
+                                        ];
+                                    hull() {
+                                        translate([0,-tape_thickness*tape_inset_cover_tension,0]) linear_extrude(e) polygon(window);
+                                        translate([0,0,tape_width_eff-layer_height]) linear_extrude(e) polygon(window);
                                     }
                                     // window for dog
                                     dog_x0=dog_nominal_x-dog_travel_nominal-dog_strength-sprocket_pitch;
