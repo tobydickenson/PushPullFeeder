@@ -3341,10 +3341,13 @@ if (do_spool_right) {
                         difference() {
                             cylinder_p(h=spool_axle_groove_width,
                                 d=spool_axle_groove_outer+4*wall);
+                            translate([0, 0, -e])
+                                cylinder_p(h=spool_axle_groove_width+2*e,
+                                    d2=spool_axle_groove_outer, d1=spool_axle_groove_innner-axle_groove_tension);
                             hull() {
                                 translate([0, 0, -e])
                                     cylinder_p(h=spool_axle_groove_width+2*e,
-                                        d2=spool_axle_groove_outer, d1=spool_axle_groove_innner-axle_groove_tension);
+                                        d2=spool_axle_groove_outer-0.2, d1=spool_axle_groove_innner-axle_groove_tension-0.2);
                                 translate([spool_axle_diameter, 0, -e])
                                     cylinder_p(h=spool_axle_groove_width+2*e,
                                         d2=spool_axle_groove_outer, d1=spool_axle_groove_innner-axle_groove_tension);
