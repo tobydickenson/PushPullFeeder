@@ -200,6 +200,58 @@
 
             "tape_inset_left": "false",
             "tape_inset_right": "true"
+        },
+        "friction_8mm": {
+            "make_base_plate": "false",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "true",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "false",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "8"
+        },
+        "friction_12mm": {
+            "make_base_plate": "false",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "true",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "false",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "12",
+            "friction_tension": "0.24"
+        },
+        "friction_24mm": {
+            "make_base_plate": "false",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "true",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "false",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "24"
         }
     },
     "parameterSets": "",
