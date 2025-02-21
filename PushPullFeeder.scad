@@ -3077,7 +3077,16 @@ if (do_lever) {
                                         polygon(dog_cutaway);  
                     }
                 }
-                
+            }
+
+
+            // slice the top off the knob; a few mm extra safe Z for the actuator!
+            translate([(lever_axle_x-pick_offset), lever_axle_y, 0]) {
+                union() {
+                    // nozzle actuation knob
+                    translate([lever_feed_x, lever_feed_y, -e])
+                        linear_extrude(lever_thickness_8+2*e) translate([-lever_axle_diameter,lever_axle_diameter/4,0]) square(lever_axle_diameter*4,lever_axle_diameter*4);
+                }
             }
         }
     }
