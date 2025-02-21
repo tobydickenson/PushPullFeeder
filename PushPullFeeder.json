@@ -167,7 +167,7 @@
             "tape_max_height": "14",
             "tape_inset_window_length": "20",
             "cover_tape_edge": "-12",
-            "lumen_y": "-18",
+            "lumen_y": "-20",
 
             "tape_inset_left": "true",
             "tape_inset_right": "false"
@@ -196,7 +196,7 @@
             "tape_max_height": "14",
             "tape_inset_window_length": "20",
             "cover_tape_edge": "-12",
-            "lumen_y": "-18",
+            "lumen_y": "-20",
 
             "tape_inset_left": "false",
             "tape_inset_right": "true"
