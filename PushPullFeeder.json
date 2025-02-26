@@ -165,8 +165,8 @@
             "tape_emboss_size": "18",
 
             "tape_max_height": "14",
-            "tape_inset_window_length": "20",
-            "cover_tape_edge": "-12",
+            "tape_inset_window_length": "30",
+            "cover_tape_edge": "-8",
             "lumen_y": "-20",
 
             "tape_inset_left": "true",
@@ -194,8 +194,8 @@
             "tape_emboss_size": "18",
 
             "tape_max_height": "14",
-            "tape_inset_window_length": "20",
-            "cover_tape_edge": "-12",
+            "tape_inset_window_length": "30",
+            "cover_tape_edge": "-8",
             "lumen_y": "-20",
 
             "tape_inset_left": "false",
