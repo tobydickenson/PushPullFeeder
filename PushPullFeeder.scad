@@ -455,7 +455,7 @@ lever_actuation_thickness=emboss+tape_width_8/2+lever_actuation_delta;
 // Leverage for the feed actuation
 lever_feed_leverage=26;
 // Angle of the feed lever in idle position.
-lever_feed_angle=100;
+lever_feed_angle=85;
 // Leverage for the dog actuation
 lever_dog_leverage=12;
 // Angle of the feed lever in idle position.
