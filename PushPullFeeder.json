@@ -92,7 +92,7 @@
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
-        "inset_12mm_deep_wide_left": {
+        "inset_12mm_deep_wide_left__not_needed_because_it_is_the_same_as_8mm": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
@@ -136,6 +136,57 @@
             "tape_width": "12",
             "tape_emboss": "3.1",
             "tape_emboss_size": "8.4",
+
+            "cover_tape_edge": "-4.5",
+            "tape_inset_window_length": "11",
+
+            "tape_inset_left": "false",
+            "tape_inset_right": "true"
+        },
+        "inset_16mm_deep_wide_left__not_needed_because_it_is_the_same_as_8mm": {
+            "make_base_plate": "false",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "false",
+            "make_handle_lock": "false",
+            "make_inset": "true",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "false",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_thickness": "0.3",
+            "tape_inset_cover_tension": "0.8",
+            "tape_width": "16",
+            "tape_emboss": "3.1",
+            "tape_emboss_size": "12.4",
+
+            "tape_inset_left": "true",
+            "tape_inset_right": "false"
+        },
+        "inset_16mm_deep_wide_right": {
+            "make_base_plate": "false",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "false",
+            "make_handle_lock": "false",
+            "make_inset": "true",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "false",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_thickness": "0.3",
+            "tape_inset_cover_tension": "0.8",
+            "tape_width": "16",
+            "tape_emboss": "3.1",
+            "tape_emboss_size": "12.4",
 
             "cover_tape_edge": "-4.5",
             "tape_inset_window_length": "11",
