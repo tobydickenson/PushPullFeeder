@@ -188,8 +188,8 @@
             "tape_emboss": "3.1",
             "tape_emboss_size": "12.4",
 
-            "cover_tape_edge": "-4.5",
-            "tape_inset_window_length": "11",
+            "cover_tape_edge": "-8.5",
+            "tape_inset_window_length": "15",
 
             "tape_inset_left": "false",
             "tape_inset_right": "true"
