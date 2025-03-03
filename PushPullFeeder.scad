@@ -244,6 +244,12 @@ reversal_blocking_thorn_length=0.4;
 tape_inset_left = true;
 tape_inset_right = true;
 
+tape_inset_part_chute = false;
+part_chute_height = 0.5;
+
+tape_inset_decoupling_slot = false;
+tape_inset_decoupling_slot_width = 0.8;
+
 /* [ Label Holder ] */
 
 // Add the label to the tape inset (cannot be combined with spent tape chute)
@@ -2676,6 +2682,19 @@ if (do_inset) {
                                             translate([-tape_bend_radius_begin, 0]) 
                                                 rotate(90) 
                                                     polygon(inset_profile(false));
+                            if (tape_inset_part_chute)
+                                translate([base_end,0,0])
+                                rotate([0, -90, 0])
+                                linear_extrude(height=base_end-cover_tape_edge-tape_inset_window_length)
+                                polygon([
+                                    [0,0],
+                                    [0,inset_edge-tape_thickness*tape_inset_cover_tension],
+                                    [1,inset_edge+part_chute_height-tape_thickness*tape_inset_cover_tension],
+                                    [tape_width,inset_edge+part_chute_height],
+                                    [tape_width+reel_wall,1],
+                                    [tape_width-2,1],
+                                    [tape_width-2,0]
+                                ]);
                             /*
                             // off-ramp
                             translate([tape_inset_end-e, 0, 0]) 
@@ -2758,16 +2777,30 @@ if (do_inset) {
                                         translate([0,-tape_thickness*tape_inset_cover_tension,0]) linear_extrude(e) polygon(window);
                                         translate([0,0,tape_width_eff-layer_height]) linear_extrude(e) polygon(window);
                                     }
+                                    // decoupling slot
+                                    slot_x0=dog_nominal_x+sprocket_pitch*2;
+                                    if(tape_inset_decoupling_slot)
+                                    linear_extrude(height=tape_width+reel_wall/2, convexity=4) {
+                                        polygon([
+                                            [slot_x0-inset_edge,
+                                                inset_edge+inset_clearance_above],
+                                            [slot_x0,
+                                                    -tape_thickness*tape_inset_cover_tension-e],
+                                            [slot_x0+tape_inset_decoupling_slot_width,
+                                                    -tape_thickness*tape_inset_cover_tension-e],
+                                            [slot_x0+tape_inset_decoupling_slot_width-inset_edge, inset_edge+inset_clearance_above],
+                                            ]);
+                                    }
                                     // window for dog
                                     dog_x0=dog_nominal_x-dog_travel_nominal-dog_strength-sprocket_pitch;
                                     linear_extrude(height=sprocket_gap+layer_height+e, convexity=4) {
                                         polygon([
-                                            [dog_x0-inset_edge, 
+                                            [dog_x0-inset_edge,
                                                 inset_edge+inset_clearance_above],
-                                            [dog_x0, 
-                                                    -tape_thickness*tape_inset_cover_tension-e],        
-                                            [dog_nominal_x+sprocket_pitch, 
-                                                    -tape_thickness*tape_inset_cover_tension-e],        
+                                            [dog_x0,
+                                                    -tape_thickness*tape_inset_cover_tension-e],
+                                            [dog_nominal_x+sprocket_pitch,
+                                                    -tape_thickness*tape_inset_cover_tension-e],
                                             [dog_nominal_x+sprocket_pitch-inset_edge, inset_edge+inset_clearance_above],
                                             ]);
                                     }
@@ -2811,6 +2844,16 @@ if (do_inset) {
                                     cylinder_p(d=2.8+screw_play,h=100);
                                 }
 
+                                if (tape_inset_part_chute)
+                                    translate([base_end+e,0,0])
+                                    rotate([0, -90, 0])
+                                    linear_extrude(height=base_end-cover_tape_edge-tape_inset_window_length+2*e)
+                                    polygon([
+                                        [2.3,-tape_thickness*tape_inset_cover_tension-2*e],
+                                        [2.3+part_chute_height,part_chute_height-tape_thickness*tape_inset_cover_tension+cover_film_thickness-2*e],
+                                        [tape_width-2.1,part_chute_height],
+                                        [tape_width-2.1,-tape_thickness*tape_inset_cover_tension-2*e]
+                                    ]);
                             }
                         }
                     }

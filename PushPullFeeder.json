@@ -15,6 +15,9 @@
             "make_tape_chute": "false",
             "make_test_print": "false",
 
+            "tape_inset_part_chute": "true",
+            "tape_inset_decoupling_slot": "true",
+
             "tape_emboss": "0.1",
             "tape_emboss_size": "4.4",
 
