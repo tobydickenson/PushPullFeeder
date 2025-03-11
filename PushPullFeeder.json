@@ -40,10 +40,13 @@
             "make_tape_chute": "false",
             "make_test_print": "false",
 
+            "tape_inset_part_chute": "true",
+            "part_chute_height" : 1.4,
+
             "tape_emboss": "0.1",
             "tape_emboss_size": "4.4",
 
-            "tape_thickness": "1.25",
+            "tape_thickness": "1.35",
             "tape_inset_cover_tension": "0.2",
             "tape_width": "8"
         },
