@@ -344,7 +344,7 @@
             "make_tape_chute": "false",
             "make_test_print": "false",
 
-            "lever_feed_leverage": "20"
+            "lever_feed_leverage": "18"
         }
     },
     "parameterSets": "",
