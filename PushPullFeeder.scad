@@ -39,6 +39,8 @@ make_spool_right       = true;
 make_friction_wheel     = true;
 // Exchangable tape inset, allows to use different tape thickness/embossing
 make_inset              = true;
+//
+make_scraper            = true;
 // Spring blocking the ratchet from going in reverse
 make_blocking_spring    = true;
 // Reel holder counterpart holding the reel up on the other side (for narrow reels only)
@@ -64,6 +66,7 @@ do_lever              = (option == 0 && make_lever)              || (option ==  
 do_spool_left         = (option == 0 && make_spool_left)         || (option ==  3)  || everything || phase1 || ratchet_parts;
 do_spool_right        = (option == 0 && make_spool_right)        || (option ==  4)  || everything || phase2;
 do_friction_wheel     = (option == 0 && make_friction_wheel)     || (option ==  5)  || everything || phase2;
+do_scraper            = (option == 0 && make_scraper);
 do_inset              = (option == 0 && make_inset)              || (option ==  6)  || everything || phase2;
 do_blocking_spring    = (option == 0 && make_blocking_spring)    || (option ==  7)  || everything || phase2 || ratchet_parts;
 do_reel_counterpart   = (option == 0 && make_reel_counterpart)   || (option ==  8)  || everything || phase2;
@@ -240,6 +243,8 @@ thorn_min_groove=0.4;
 cover_tape_edge=-2.5;
 // Tape reversal blocking thorn (set 0 to switch off)
 reversal_blocking_thorn_length=0.4;
+//
+enable_scraper=false;
 
 tape_inset_left = true;
 tape_inset_right = true;
@@ -2844,6 +2849,48 @@ if (do_inset) {
                                     cylinder_p(d=2.8+screw_play,h=100);
                                 }
 
+                                if(enable_scraper) {
+                                    // mount for the part screen
+                                    translate([cover_tape_edge+1.2, inset_edge+e, tape_width])
+                                    rotate([90, 0, 0])
+                                    linear_extrude(inset_edge+tape_max_height+2 )
+                                    offset(axle_play, $fn=20)
+                                    polygon([
+                                        [-1,0],
+                                        [-2,2],
+                                        [2,2],
+                                        [1,0],
+                                        [1,-0.5],
+                                        [-1,-0.5]
+                                    ]);
+
+                                    // The top body
+                                    translate([cover_tape_edge+1.2, inset_edge+tweezer_grip, tape_width])
+                                    rotate([90, 0, 0])
+                                    linear_extrude(inset_edge+tweezer_grip-0.5)
+                                    offset(axle_play,$fn=20)
+                                    polygon([
+                                        [-1,2],
+                                        [1,2],
+                                        [1,2-tape_width],
+                                        [-1,2-tape_width]
+                                    ]);
+
+                                    // square off the trapezoid
+                                    translate([cover_tape_edge+1.2, inset_edge+10, tape_width])
+                                    rotate([90, 0, 0])
+                                    linear_extrude(10)
+                                    offset(0.4,$fn=20)
+                                    polygon([
+                                        [-2,reel_wall],
+                                        [2,reel_wall],
+                                        [2,0.2],
+                                        [-2,0.2]
+                                    ]);
+
+                                }
+
+
                                 if (tape_inset_part_chute)
                                     translate([base_end+e,0,0])
                                     rotate([0, -90, 0])
@@ -2936,6 +2983,66 @@ if (do_inset) {
     }
 }
 
+
+tweezer_grip = 2;
+if (do_scraper) {
+    color([0.8,0.4,0,0.6]) {
+        translate([
+            debug_eff ? 0 : -(base_begin-pick_offset)+reel_x+reel_washer+gap+20,
+            debug_eff ? 0 : reel_y-base_height-gap,
+            debug_eff ? emboss : (inset_flipped ? tweezer_grip+inset_edge : 0)]) {
+            rotate([inset_flipped ? -90 : 0, 0, 0]) {
+                                // The trapezoid mount
+                                tighter = 0.0;
+                                translate([cover_tape_edge+1.2, inset_edge+tweezer_grip, tape_width])
+                                rotate([90, 0, 0])
+                                linear_extrude(inset_edge+min(3.5,tape_max_height-0.1)+tweezer_grip )
+                                offset(0.1,$fn=20) offset(-0.1)
+                                polygon([
+                                    [-1-tighter,0],
+                                    [-2-tighter,2],
+                                    [2+tighter,2],
+                                    [1+tighter,0],
+                                ]);
+
+                                // The top body
+                                translate([cover_tape_edge+1.2, inset_edge+tweezer_grip, tape_width])
+                                rotate([90, 0, 0])
+                                linear_extrude(inset_edge+tweezer_grip-0.5)
+                                offset(0.2,$fn=20) offset(-0.2)
+                                polygon([
+                                    [-1,2],
+                                    [1,2],
+                                    [1,2-tape_width],
+                                    [-1,2-tape_width]
+                                ]);
+
+                                // The scraping surface that makes contact with the tape
+                                translate([cover_tape_edge+1.2, inset_edge+tweezer_grip, tape_width])
+                                rotate([90, 0, 0])
+                                linear_extrude(inset_edge+tweezer_grip)
+                                offset(0.2,$fn=20) offset(-0.2)
+                                polygon([
+                                    [-1,-1],
+                                    [1,-1],
+                                    [1,2-tape_width],
+                                    [-1,2-tape_width]
+                                ]);
+
+                                // Square off the trapezoid
+                                translate([cover_tape_edge+1.2, inset_edge+tweezer_grip, tape_width])
+                                rotate([90, 0, 0])
+                                linear_extrude(tweezer_grip)
+                                offset(0.2,$fn=20)
+                                polygon([
+                                    [-2,reel_wall-0.4],
+                                    [2,reel_wall-0.4],
+                                    [2,0.2],
+                                    [-2,0.2]
+                                ]);
+
+            }}}
+}
 
 if (do_lever) {
     color([1,0,0,0.6]) translate([
