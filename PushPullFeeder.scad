@@ -515,6 +515,7 @@ thorn_length=0.9; // [0.4:0.05:1.1]
 thorn_diameter_ratio=1; // [0.8:0.01:1.1]
 // Thorn sideways "tension" to draw the tape towards the base [mm]
 thorn_sideways_tension=0.1; 
+dog_number_of_reverse_blocking_thorns=1;
 thorn_diameter=sprocket_hole_diameter*thorn_diameter_ratio;
 // Dog aproximative offset from pick location (will be aligned with nearest sprocket pitch)
 dog_offset=-24; // [-34:4:-2]
@@ -2907,7 +2908,8 @@ if (do_inset) {
                     
                     // tape reversal blocking thorn
                     if (reversal_blocking_thorn_length > 0 && tape_inset_right) {
-                        for(x = [dog_nominal_x-dog_travel_nominal-sprocket_pitch*2, dog_nominal_x+sprocket_pitch*2]) {
+                        dog_xx = [dog_nominal_x-dog_travel_nominal-sprocket_pitch*2, dog_nominal_x+sprocket_pitch*2];
+                        for(x = [ for (i=[0:dog_number_of_reverse_blocking_thorns-1]) dog_xx[i] ]) {
                             translate([round(x/sprocket_pitch)*sprocket_pitch, e - tape_thickness*tape_inset_cover_tension*(tape_width-sprocket_hole_distance)/tape_width,
                                 sprocket_hole_distance-thorn_sideways_tension]) {
                                 rotate([90, 0, 0])
