@@ -2902,6 +2902,15 @@ if (do_inset) {
                                         [tape_width-2.1,part_chute_height],
                                         [tape_width-2.1,-tape_thickness*tape_inset_cover_tension-2*e]
                                     ]);
+
+                                // remove a scallop from the strain relief to allow the film to pass under the dog blocker
+                                radius = 8;
+                                yy= (inset_edge+dog_blocker_cover_offset+bevel_z)*dog_slant+dog_nominal_x+dog_strength/2;
+                                linear_extrude(tape_width_eff + reel_wall*2)
+                                hull() {
+                                    translate([yy+dog_blocker_strength/2,inset_edge+ radius,0]) circle_p(r=radius);
+                                    translate([yy,inset_edge+ radius,0]) circle_p(r=radius);
+                                }
                             }
                         }
                     }

@@ -167,6 +167,7 @@
             "tape_width": "8",
             "tape_emboss": "3.1",
             "tape_emboss_size": "4.4",
+            "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_inset_left": "false",
             "tape_inset_right": "true"
@@ -195,6 +196,7 @@
             "tape_width": "8",
             "tape_emboss": "3.1",
             "tape_emboss_size": "4.4",
+            "dog_number_of_reverse_blocking_thorns": "2",
 
             "cover_tape_edge": "-5.0",
             "tape_inset_window_length": "11.5",
@@ -224,6 +226,7 @@
             "tape_width": "12",
             "tape_emboss": "3.1",
             "tape_emboss_size": "8.4",
+            "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_inset_left": "true",
             "tape_inset_right": "false"
@@ -249,6 +252,7 @@
             "tape_width": "12",
             "tape_emboss": "3.1",
             "tape_emboss_size": "8.4",
+            "dog_number_of_reverse_blocking_thorns": "2",
 
             "cover_tape_edge": "-4.5",
             "tape_inset_window_length": "11",
@@ -277,6 +281,7 @@
             "tape_width": "12",
             "tape_emboss": "3.1",
             "tape_emboss_size": "8.4",
+            "dog_number_of_reverse_blocking_thorns": "2",
 
             "cover_tape_edge": "-7",
             "tape_inset_window_length": "13.5",
@@ -306,6 +311,7 @@
             "tape_width": "16",
             "tape_emboss": "3.1",
             "tape_emboss_size": "12.4",
+            "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_inset_left": "true",
             "tape_inset_right": "false"
@@ -331,6 +337,7 @@
             "tape_width": "16",
             "tape_emboss": "3.1",
             "tape_emboss_size": "12.4",
+            "dog_number_of_reverse_blocking_thorns": "2",
 
             "cover_tape_edge": "-8.5",
             "tape_inset_window_length": "15",
@@ -359,6 +366,7 @@
             "tape_width": "24",
             "tape_emboss": "11.8",
             "tape_emboss_size": "18",
+            "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_max_height": "14",
             "tape_inset_window_length": "30",
@@ -389,6 +397,7 @@
             "tape_width": "24",
             "tape_emboss": "11.8",
             "tape_emboss_size": "18",
+            "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_max_height": "14",
             "tape_inset_window_length": "30",
