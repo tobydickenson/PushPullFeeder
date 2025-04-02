@@ -81,8 +81,9 @@
             "tape_emboss": "0.1",
             "tape_emboss_size": "4.4",
 
-            "tape_thickness": "1.35",
-            "tape_inset_cover_tension": "0.2",
+            "dog_number_of_reverse_blocking_thorns": "1",
+            "tape_thickness": "1.15",
+            "tape_inset_cover_tension": "0.25",
             "tape_width": "8"
         },
         "inset_8mm_thick_paper_scraper": {
@@ -112,8 +113,9 @@
             "tape_inset_window_length": "11.5",
             "enable_scraper": "true",
 
-            "tape_thickness": "1.35",
-            "tape_inset_cover_tension": "0.2",
+            "dog_number_of_reverse_blocking_thorns": "1",
+            "tape_thickness": "1.15",
+            "tape_inset_cover_tension": "0.25",
             "tape_width": "8"
         },
         "inset_8mm_deep_wide_left": {
