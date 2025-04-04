@@ -19,7 +19,7 @@
             "tape_inset_part_chute": "true",
             "tape_inset_decoupling_slot": "true",
 
-            "tape_emboss": "0.1",
+            "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
 
             "dog_number_of_reverse_blocking_thorns": "1",
@@ -46,7 +46,7 @@
             "tape_inset_part_chute": "true",
             "tape_inset_decoupling_slot": "true",
 
-            "tape_emboss": "0.1",
+            "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
 
             "cover_tape_edge": "-5.0",
@@ -78,7 +78,7 @@
             "part_chute_height" : 1.4,
             "tape_inset_decoupling_slot": "true",
 
-            "tape_emboss": "0.1",
+            "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
 
             "dog_number_of_reverse_blocking_thorns": "1",
@@ -106,7 +106,7 @@
             "part_chute_height" : 1.4,
             "tape_inset_decoupling_slot": "true",
 
-            "tape_emboss": "0.1",
+            "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
 
             "cover_tape_edge": "-5.0",
