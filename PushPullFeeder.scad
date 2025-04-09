@@ -1842,7 +1842,7 @@ module lumen_mount_2D() {
     extrusion_r = 0.8; // internal corner radius
     external_r = 2.0; // rounding our structural corners
     big_r = 20;
-    tension = 0.2;
+    tension = 0.1;
     polygon([
         each arc(
             [lumen_x - extrusion_mount_w/2 - t,             -base_height - big_r],
@@ -1855,8 +1855,8 @@ module lumen_mount_2D() {
             -90),
 
         each arc(
-            [lumen_x + extrusion_mount_w/2 + t - tension,              lumen_y - extrusion_mount_h],
-            [lumen_x + extrusion_mount_w/2 - tension,        lumen_y - extrusion_mount_h],
+            [lumen_x + extrusion_mount_w/2 + t - tension,    lumen_y - extrusion_mount_h*0.4],
+            [lumen_x + extrusion_mount_w/2 - tension,        lumen_y - extrusion_mount_h*0.4],
             -180),
 
         each arc(
@@ -1870,8 +1870,8 @@ module lumen_mount_2D() {
             90),
 
         each arc(
-            [lumen_x - extrusion_mount_w/2,             lumen_y - extrusion_mount_h ],
-            [lumen_x - extrusion_mount_w/2 - t,         lumen_y - extrusion_mount_h ],
+            [lumen_x - extrusion_mount_w/2,             lumen_y - extrusion_mount_h/2-mounting_screw_head_diameter/2-2 ],
+            [lumen_x - extrusion_mount_w/2 - t,         lumen_y - extrusion_mount_h/2-mounting_screw_head_diameter/2-2 ],
             -180),
 
     ]);
@@ -2182,7 +2182,7 @@ if (do_base_plate) {
                         }
                     }
                     // blocking fixtures
-                    beveled_extrude(height=base_thickness+tape_width, convexity=10) {
+                    beveled_extrude(height=base_thickness-emboss+ratchet_thickness, convexity=10) {
                         difference () {
                             hull() {
                                 translate([(block_axle_x-pick_offset), block_axle_y]) 
@@ -2199,6 +2199,8 @@ if (do_base_plate) {
                                     ]);
                             }
                         }
+                    }
+                    beveled_extrude(height=base_thickness+tape_width, convexity=10) {
                         // dog blocker
                         y0=inset_edge+dog_blocker_cover_offset;
                         y1=y0+dog_blocker_strength/2;
@@ -2325,11 +2327,6 @@ if (do_base_plate) {
                 }
                 union() {
                     // cutaways
-
-                    // cutaway the top half of the end of the blocking spring holder if the tape is wider than 8
-                    translate([block_axle_x,block_axle_y,base_thickness+tape_width_8])
-                    linear_extrude(tape_width-tape_width_8)
-                    polygon([[-fixture_axle,-fixture_axle*0.2],[fixture_axle,-fixture_axle*0.2],[fixture_axle,fixture_axle],[-fixture_axle,fixture_axle]]);
 
                     // logo
                     if (logo_enabled) {
@@ -3292,10 +3289,6 @@ if (do_blocking_spring) {
                             circle_p(d=fixture_axle-fixture_play-phase2_play, $fn=6);
                     }
                 }
-                translate([0, 0, ])
-                    beveled_extrude(height=tape_width_8+emboss)
-                        translate([(block_axle_x-pick_offset), block_axle_y])
-                            circle_p(d=fixture_axle-fixture_play-phase2_play, $fn=6);
             }
         }
     }
