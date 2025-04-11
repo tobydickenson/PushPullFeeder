@@ -194,7 +194,7 @@ tape_width_eff=tape_width+tape_width_adjust;
 // Tape thickness (not incuding the embossed pockets)
 tape_thickness=0.6; // [0:0.01:1.5]
 // Embossed pockets portruding from the underside of the tape
-tape_emboss=0.1; // [0:0.01:12]
+tape_emboss=0.0; // [0:0.01:12]
     // 250V cap = 1.6
 // Embossed pockets size, across tape, measured outside (underside of tape)
 tape_emboss_size=3.75; 
@@ -3510,7 +3510,7 @@ if (do_spool_right) {
                             hull() {
                                 translate([0, 0, -e])
                                     cylinder_p(h=spool_axle_groove_width+2*e,
-                                        d2=spool_axle_groove_outer-0.2, d1=spool_axle_groove_innner-axle_groove_tension-0.2);
+                                        d2=spool_axle_groove_outer-0.4, d1=spool_axle_groove_innner-axle_groove_tension-0.4);
                                 translate([spool_axle_diameter, 0, -e])
                                     cylinder_p(h=spool_axle_groove_width+2*e,
                                         d2=spool_axle_groove_outer, d1=spool_axle_groove_innner-axle_groove_tension);

@@ -345,6 +345,37 @@
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
+        "inset_16mm_deep_wide_right_on_24mm_base": {
+            "make_base_plate": "false",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "false",
+            "make_handle_lock": "false",
+            "make_inset": "true",
+            "make_scraper": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "false",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_thickness": "0.3",
+            "tape_inset_cover_tension": "0.8",
+            "tape_width": "16",
+            "tape_emboss": "11.8",
+            "tape_emboss_size": "11.4",
+            "dog_number_of_reverse_blocking_thorns": "2",
+
+            "tape_max_height": "14",
+            "cover_tape_edge": "-8.5",
+            "tape_inset_window_length": "15",
+            "lumen_y": "-20",
+
+            "tape_inset_left": "false",
+            "tape_inset_right": "true"
+        },
         "inset_24mm_deep_wide_left": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
@@ -365,7 +396,7 @@
             "tape_inset_cover_tension": "0.8",
             "tape_width": "24",
             "tape_emboss": "11.8",
-            "tape_emboss_size": "18",
+            "tape_emboss_size": "19.4",
             "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_max_height": "14",
@@ -396,7 +427,7 @@
             "tape_inset_cover_tension": "0.8",
             "tape_width": "24",
             "tape_emboss": "11.8",
-            "tape_emboss_size": "18",
+            "tape_emboss_size": "19.4",
             "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_max_height": "14",
