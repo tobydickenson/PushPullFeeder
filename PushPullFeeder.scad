@@ -3338,8 +3338,18 @@ if (do_friction_wheel) {
                         h=spool_wall_left+2*layer_height+3*e);
                 }
             }
-            linear_extrude(height=tape_width-sprocket_gap, convexity=6) {
-                fillet2d(extrusion_width*1.5) union() {
+            friction_width = tape_width-sprocket_gap;
+            profile = (friction_width<11)?
+                      [[0,friction_width,0]]:
+                      [[0,4,0],
+                      [4,1,0.25],
+                      [5,friction_width-10,0.5],
+                      [friction_width-5,1,0.25],
+                      [friction_width-4,4,0]];
+            for (m = [0:len(profile)-1] )
+            translate([0,0,profile[m][0]-e])
+            linear_extrude(height=profile[m][1]+e, convexity=6) {
+                fillet2d(extrusion_width*0.5) union() {
                     difference() {
                         circle_p(d=friction_axle_diameter-play);
                         circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
@@ -3347,7 +3357,7 @@ if (do_friction_wheel) {
                     for (a = [0:friction_wings]) {
                         da=180/PI*spring_small_strength/friction_wing_offset;
                         rotate(a*360/friction_wings-da) {
-                            r1=friction_wing_offset+friction_wing_length;
+                            r1=friction_wing_offset+friction_wing_length-profile[m][2];
                             a1=360/friction_wings-da;
                             spring_contour(
                                 [friction_wing_offset, 0],
