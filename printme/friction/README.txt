@@ -1,6 +1,7 @@
- Print Settings
+The first few layers sometimes print poorly. The arms are supposed to be 2 extrusions wide, except that the
+"initial layer horizontal expansion" setting might mean the first layer is printed narrower, with
+only 1 extrusion. Sometimes the next layer, with normal width, fails to balance on top of this
+narrow initial layer. Setting "initial layer horizontal expansion" to zero can help.
 
- * wall count 10 - no infill
-
- * initial layer horizontal extrusion 0 - to ensure the first layer, in addition to all that follow, is 2 extrusions wide
+But often it prints ok with the default settings.
 
