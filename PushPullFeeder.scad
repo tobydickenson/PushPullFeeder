@@ -2818,6 +2818,19 @@ if (do_inset) {
                                             [(base_begin-pick_offset), inset_edge+inset_clearance_above],
                                             ]);
                                     }
+                                    // A lead-in to help tape insertion
+                                    linear_extrude(height=tape_width, convexity=4) {
+                                        polygon([
+                                            each arc(
+                                                [dog_x0-sprocket_pitch*2+inset_edge/2,
+                                                        -tape_thickness*tape_inset_cover_tension-e+1.0],
+                                                [dog_x0-sprocket_pitch*2+inset_edge+2,
+                                                        -tape_thickness*tape_inset_cover_tension-e],
+                                                     30),
+                                            [dog_x0-sprocket_pitch*2+inset_edge-1,
+                                                    -tape_thickness*tape_inset_cover_tension-e],
+                                            ]);
+                                    }
                                 }
                                 
                                 for(x=[base_end,base_end-base_length])
