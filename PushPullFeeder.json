@@ -140,6 +140,7 @@
             "tape_emboss": "3.1",
             "tape_emboss_size": "4.4",
 
+            "tape_inset_split": "true",
             "tape_inset_left": "true",
             "tape_inset_right": "false"
         },
@@ -169,6 +170,7 @@
             "tape_emboss_size": "4.4",
             "dog_number_of_reverse_blocking_thorns": "2",
 
+            "tape_inset_split": "true",
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
@@ -202,6 +204,7 @@
             "tape_inset_window_length": "11.5",
             "enable_scraper": "true",
 
+            "tape_inset_split": "true",
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
@@ -228,6 +231,7 @@
             "tape_emboss_size": "8.4",
             "dog_number_of_reverse_blocking_thorns": "2",
 
+            "tape_inset_split": "true",
             "tape_inset_left": "true",
             "tape_inset_right": "false"
         },
@@ -257,6 +261,7 @@
             "cover_tape_edge": "-4.5",
             "tape_inset_window_length": "11",
 
+            "tape_inset_split": "true",
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
@@ -287,6 +292,7 @@
             "tape_inset_window_length": "13.5",
             "enable_scraper": "true",
 
+            "tape_inset_split": "true",
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
@@ -313,6 +319,7 @@
             "tape_emboss_size": "12.4",
             "dog_number_of_reverse_blocking_thorns": "2",
 
+            "tape_inset_split": "true",
             "tape_inset_left": "true",
             "tape_inset_right": "false"
         },
@@ -342,6 +349,7 @@
             "cover_tape_edge": "-8.5",
             "tape_inset_window_length": "15",
 
+            "tape_inset_split": "true",
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
@@ -373,6 +381,7 @@
             "tape_inset_window_length": "15",
             "lumen_y": "-20",
 
+            "tape_inset_split": "true",
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
@@ -404,6 +413,7 @@
             "cover_tape_edge": "-8",
             "lumen_y": "-20",
 
+            "tape_inset_split": "true",
             "tape_inset_left": "true",
             "tape_inset_right": "false"
         },
@@ -435,6 +445,7 @@
             "cover_tape_edge": "-8",
             "lumen_y": "-20",
 
+            "tape_inset_split": "true",
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
@@ -472,8 +483,25 @@
             "make_tape_chute": "false",
             "make_test_print": "false",
 
-            "tape_width": "12",
-            "friction_tension": "0.24"
+            "tape_width": "12"
+        },
+        "friction_16mm": {
+            "make_base_plate": "false",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "true",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_scraper": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "false",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "16"
         },
         "friction_24mm": {
             "make_base_plate": "false",

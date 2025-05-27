@@ -132,6 +132,10 @@ preview_rendering=false;
 // Litefeeder reference (from: https://github.com/dining-philosopher/litefeeder)
 do_litefeeder=false;
 
+// opacity of main items. 0.7 is a good option. 1.0 is fully opaque.
+opacity = 1.0;
+// opacity of ancilliary items. 0.2 is a good option. 1.0 is fully opaque.
+opacity_low = 1.0;
 
 /*  [ 3D Printing ] */
 
@@ -246,12 +250,18 @@ reversal_blocking_thorn_length=0.4;
 //
 enable_scraper=false;
 
+// Two-part print
+tape_inset_split = false;
+// Include the left half of a split inset
 tape_inset_left = true;
+// Include the right half of a split inset
 tape_inset_right = true;
 
+// The inset cover is arched after the pick window
 tape_inset_part_chute = false;
 part_chute_height = 0.5;
 
+// A slot between the pick window and ratchet to reduce vibration
 tape_inset_decoupling_slot = false;
 tape_inset_decoupling_slot_width = 0.8;
 
@@ -1034,7 +1044,7 @@ if (do_tape_chute) {
         debug_eff ? 0 : tape_width+reel_wall+emboss+e*2 
         ]) {
         rotate([debug_eff ? 0 : 180, 0, debug_eff ? 0 : -75]) {    
-            color([1, 0.5, 0.0, 0.5]) 
+            color([1, 0.5, 0.0, opacity_low])
                 render_preview(convexity=20) 
                     spent_tape_chute(play=-fixture_play);
         }
@@ -1366,7 +1376,7 @@ if (do_handle_lock) {
         }
     }
                             
-    color([1, 1, 0, .7]) {
+    color([1, 1, 0, opacity]) {
         translate([
             debug_eff ? handle_lock_axle_x : reel_x-sin(hanger_reel_axle_angle)*(reel_washer+gap*2)*2, 
             debug_eff ? handle_lock_axle_y : reel_y+cos(hanger_reel_axle_angle)*(reel_washer+gap*2)*2, 
@@ -1437,7 +1447,7 @@ if (do_nozzle_adapter || do_lever_actuator || ((do_lever || do_base_plate) && de
     actuator_d=lever_actuation_delta+nozzle_play-sprocket_gap/2;
     animate_x = [0, -nozzle_actuation_travel, -nozzle_to_camera_offset];
     animate_z = [e, nozzle_actuation_z, nozzle_safe_z]; // machine Z == Y in this model
-    animate_color = [[0.5, 0.5, 0.5, 0.3], [1, 0.5, 0.5, 0.3], [0.5, 1, 0.5, 0.1]];
+    animate_color = [[0.5, 0.5, 0.5, opacity_low], [1, 0.5, 0.5, opacity_low], [0.5, 1, 0.5, opacity_low]];
         
     slide_on_contour_cutout = [
         [-head_face_dist+nozzle_adapter_strength+nozzle_mount_groove+nozzle_adapter_strength, 
@@ -1756,7 +1766,7 @@ if (do_nozzle_adapter || do_lever_actuator || ((do_lever || do_base_plate) && de
 }
 
 if (do_reel_counterpart && base_with_reel_holder) {
-    color([0, 1, 0, 0.71]) {
+    color([0, 1, 0, opacity]) {
         // need to move aside if both options chosen
         connect_offset_x = 0;
         
@@ -2021,7 +2031,7 @@ if (do_base_plate) {
     if (base_with_reel_holder) {
         // draw reel for debugging
         if (debug_eff) {
-            color([1,1,1,0.2]) 
+            color([1,1,1,opacity_low])
                 translate([reel_x, reel_y, emboss-base_thickness+reel_holder_thickness]) 
                     render_preview(convexity=12)
                     difference() { 
@@ -2035,7 +2045,7 @@ if (do_base_plate) {
     }
 
 
-    color([0, 1, 0, 0.71]) {
+    color([0, 1, 0, opacity]) {
         translate([
             debug_eff ? 0 : 0, 
             debug_eff ? 0 : 0, 
@@ -2590,9 +2600,10 @@ tape_margin_eff=tape_inset_support ? tape_margin : max(-thorn_groove, tape_45_ma
 
 cover_film_thickness = 0.15;
 
-function inset_profile(cover=true) = [
+function inset_profile(left,right,cover) = [
 
-    each [ if(tape_inset_right) each [
+    each [ if(right) each [
+        [sprocket_gap+tape_margin+e, -base_height-e],
         [sprocket_margin, -base_height-e],
         [tape_width_eff+reel_wall-e, -base_height-e],
         each [ if (cover) each [
@@ -2634,35 +2645,30 @@ function inset_profile(cover=true) = [
         */
 
         [tape_width_eff-tape_margin, -tape_thickness-tape_emboss],
+        [sprocket_gap+tape_margin+e, -tape_thickness-tape_emboss],
     ]],
 
-    [sprocket_gap+tape_margin, -tape_thickness-tape_emboss],
-
-    each [ if(tape_inset_left) each [
+    each [ if(left) each [
         [sprocket_gap+tape_margin, -tape_thickness-tape_emboss],
-        [sprocket_gap+(tape_inset_right?tape_margin_eff:tape_margin), -tape_thickness],
+        [sprocket_gap+tape_margin, -tape_thickness-tape_emboss],
+        [sprocket_gap+(right?tape_margin_eff:tape_margin), -tape_thickness],
         //[sprocket_margin-tape_margin, -tape_thickness],
         //[sprocket_hole_margin, -tape_thickness],
         [bevel_z, -tape_thickness],
         [0, -tape_thickness-bevel_z],
         [0, -base_height-e],
+        [sprocket_gap+tape_margin, -base_height-e],
     ]],
 
-    [sprocket_gap+tape_margin, -base_height-e],
 ];
 
-if (do_inset) {
 
-    // the tallest strain relief feature above the surface of the inset. To be removed on cutouts
-    inset_clearance_above = inset_edge;
-    
-    color([0,0.7,0,0.6]) {
-        translate([
-            debug_eff ? 0 : -(base_begin-pick_offset)+reel_x+reel_washer+gap, 
-            debug_eff ? 0 : reel_y-base_height-gap, 
-            debug_eff ? emboss : (inset_flipped ? inset_height : 0)]) {
-            rotate([inset_flipped ? 180 : 0, 0, 0]) {
-                
+module inset(left,right)
+            // NB goofy indentation to minimise diff
+            {
+                // the tallest strain relief feature above the surface of the inset. To be removed on cutouts
+                inset_clearance_above = inset_edge;
+
                 render_preview(convexity=10)
                 union() {
                     // the actual inset
@@ -2673,7 +2679,7 @@ if (do_inset) {
                                 rotate([0, -90, 0]) {
                                     linear_extrude(height=base_end-(tape_inset_begin-pick_offset), 
                                         convexity=10) {
-                                        polygon(inset_profile(true));
+                                        polygon(inset_profile(left,right,true));
                                     }
                                 }
                             }
@@ -2685,7 +2691,7 @@ if (do_inset) {
                                             translate([-tape_bend_radius_begin, 0]) 
                                                 rotate(90) 
                                                     polygon(inset_profile(false));
-                            if (tape_inset_part_chute)
+                            if (right && tape_inset_part_chute)
                                 translate([base_end,0,0])
                                 rotate([0, -90, 0])
                                 linear_extrude(height=base_end-cover_tape_edge-tape_inset_window_length)
@@ -2756,7 +2762,7 @@ if (do_inset) {
                                         }
                                     }
                                 }
-                                if(tape_inset_right) translate([0, 0, -e]) {
+                                if(right) translate([0, 0, -e]) {
                                     // pick location window
                                     // The vertical edged part
                                     linear_extrude(height=tape_width_eff-layer_height+e, convexity=4) {
@@ -2926,7 +2932,7 @@ if (do_inset) {
                     }
                     
                     // tape reversal blocking thorn
-                    if (reversal_blocking_thorn_length > 0 && tape_inset_right) {
+                    if (reversal_blocking_thorn_length > 0 && right) {
                         dog_xx = [dog_nominal_x-dog_travel_nominal-sprocket_pitch*2, dog_nominal_x+sprocket_pitch*2];
                         for(x = [ for (i=[0:dog_number_of_reverse_blocking_thorns-1]) dog_xx[i] ]) {
                             translate([round(x/sprocket_pitch)*sprocket_pitch, e - tape_thickness*tape_inset_cover_tension*(tape_width-sprocket_hole_distance)/tape_width,
@@ -3000,6 +3006,41 @@ if (do_inset) {
                     }           
                 }
             }
+
+
+if (do_inset) {
+
+    if(!tape_inset_split) {
+        color([0,0.7,0,opacity]) {
+            translate([
+                debug_eff ? 0 : -(base_begin-pick_offset)+reel_x+reel_washer+gap,
+                debug_eff ? 0 : reel_y-base_height-gap,
+                debug_eff ? emboss : (inset_flipped ? inset_height : 0)]) {
+                rotate([inset_flipped ? 180 : 0, 0, 0])
+                render() inset(true,true);
+            }
+        }
+    }
+    if(tape_inset_split && tape_inset_left) {
+        color([0.4,0.7,0,opacity]) {
+            translate([
+                debug_eff ? 0 : -(base_begin-pick_offset)+reel_x+reel_washer+gap,
+                debug_eff ? 0 : reel_y-base_height-gap-20,
+                debug_eff ? emboss : (inset_flipped ? sprocket_gap+tape_margin : 0)]) {
+                rotate([inset_flipped ? 180 : 0, 0, 0])
+                render() inset(true,false);
+            }
+        }
+    }
+    if(tape_inset_split && tape_inset_right) {
+        color([0.0,0.7,0.6,opacity]) {
+            translate([
+                debug_eff ? 0 : -(base_begin-pick_offset)+reel_x+reel_washer+gap,
+                debug_eff ? 0 : reel_y-base_height-gap,
+                debug_eff ? emboss : (inset_flipped ? inset_height : 0)]) {
+                rotate([inset_flipped ? 180 : 0, 0, 0])
+                render() inset(false,true);
+            }
         }
     }
 }
@@ -3007,7 +3048,7 @@ if (do_inset) {
 
 tweezer_grip = 2;
 if (do_scraper) {
-    color([0.8,0.4,0,0.6]) {
+    color([0.8,0.4,0,opacity]) {
         translate([
             debug_eff ? 0 : -(base_begin-pick_offset)+reel_x+reel_washer+gap+20,
             debug_eff ? 0 : reel_y-base_height-gap,
@@ -3066,7 +3107,7 @@ if (do_scraper) {
 }
 
 if (do_lever) {
-    color([1,0,0,0.6]) translate([
+    color([1,0,0,opacity]) translate([
         debug_eff ? 0 : -(lever_axle_x-pick_offset)-lever_axle_diameter-2*gap, 
         debug_eff ? 0 : -base_height-extrusion_mount_strength
             -4*gap-lever_axle_y-lever_axle_diameter-lever_feed_y, 
@@ -3282,7 +3323,7 @@ if (do_blocking_spring) {
         blocking_spring_bend : 
         blocking_spring_bend-spring_tension;
 
-    color([1, .5, 0, .5]) {
+    color([1, .5, 0, opacity]) {
         translate([
             debug_eff ? 0 :  -(block_axle_x-pick_offset) + spool_outer_diameter/2, 
             debug_eff ? 0 :  lever_axle_y-fixture_axle, 
@@ -3310,7 +3351,7 @@ if (do_blocking_spring) {
 
 if (do_friction_wheel) {
     // spool right side
-    color([0, 0, 1, 0.6])
+    color([0, 0, 1, opacity])
     translate([
         debug_eff ? (spool_axle_x-pick_offset) : -spool_inner_diameter, 
         debug_eff ? spool_axle_y : gap + spool_inner_diameter,
@@ -3389,7 +3430,7 @@ if (do_friction_wheel) {
 
 if (do_spool_left) {
     // spool left side with ratchet
-    color([0.3, 0.3, 1, 0.4]) {
+    color([0.3, 0.3, 1, opacity]) {
         translate([
             debug_eff ? (spool_axle_x-pick_offset) : 0, 
             debug_eff ? spool_axle_y : max(lever_axle_y, spool_axle_y) 
@@ -3453,7 +3494,7 @@ spool_right_washer = true;
 
 if (do_spool_right) {
     // spool right side
-    color([0.8, 0.8, 0.8, 0.7])
+    color([0.8, 0.8, 0.8, opacity])
     translate([
         debug_eff ? (spool_axle_x-pick_offset) : -spool_outer_diameter-gap, 
         debug_eff ? spool_axle_y : max(lever_axle_y, spool_axle_y) 
@@ -3579,9 +3620,9 @@ if (do_litefeeder && $preview) {
 
     rotate([-90, 0, 0]) {
         translate([0,5, 0]) {
-            color([1, 1, 0, 0.3]) 
+            color([1, 1, 0, opacity_low])
                 import("feeder40_body.stl", convexity=10);
-            color([1, 0.5, 0, 0.3]) 
+            color([1, 0.5, 0, opacity_low])
                 import("feeder40_dog.stl", convexity=10);
         }
     }
@@ -3804,7 +3845,7 @@ module wire_cube(dim, wire=0.1) {
 
 module render_preview(convexity=undef) {
     if (preview_rendering || ! $preview) {
-        render(convexity) 
+        render(convexity)
             children();
     }
     else {
