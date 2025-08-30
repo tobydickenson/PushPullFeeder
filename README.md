@@ -12,12 +12,12 @@ This is a fork of Markmaker’s awesome [PushPullFeeder](https://github.com/mark
 
 The original model supports a dazzling array of configuration parameters. Here I present some useful parameter sets that I use in production on the lumenpnp.
 
-# Change Features
+# Changed Features
 
 ## Improvements for parts in paper tape
-- There are several changes to the profile of the inset to reduce part jumpiness. Firstly, this model grips the tape all around the pick window, to solidly hold the tape and minimise the risk that vibrations cause a part to jump.
+- The "inset" is the part which holds the tape as it passes through the feeder. There are several changes to the profile of the inset to reduce part jumpiness. Firstly, this model grips the tape all around the pick window, to firmly hold the tape and minimise the risk that vibrations cause a part to jump.
 - The grip after the pick window is arched to allow any mispicked parts to be expelled out the front of the feeder.
-- One of the final actions during the push/pull feed cycle is that the reverse-blocking tooth engages with the sprocket holes. This has been seen to cause jumpiness in very lightweight parts. A new slot in the tape inset acts to decouple these vibrations. This slot is located between the reverse-blocking tooth and the pick area.
+- One of the final actions during the push/pull feed cycle is that the reverse-blocking tooth engages with the sprocket holes. This has been seen to cause jumpiness in very lightweight parts. A new slot in the inset acts to decouple these vibrations. This slot is located between the reverse-blocking tooth and the pick area.
 
 ## Improvements for parts in embossed plastic tape
 - Add a second reverse-blocking tooth to minimise the possibility of it not engaging with very thin plastic tape.
@@ -42,7 +42,7 @@ The original model supports a dazzling array of configuration parameters. Here I
 ## A new optional machine mount.
 Use with the lumenpnp has several design requirements that are quite different to Mark’s baseline design.
 
-- The lumenpnp head has a large Y offset between nozzles and camera which makes it impractical to use the camera with the PushPull feeder. Since we can’t use the camera to fine-tune the pick location, we benefit from the pick location being very stable and repeatable. The feeder is therefore mounted onto a 20mm extrusion directly underneath the pick location. This new 20mm extrusion is mounted to the left and right side rails using 2 angle brackets at each end for rigidity. See photos below.
+- The lumenpnp head has a large Y offset between nozzles and camera which makes it impractical to use the camera with the PushPull feeder. Since we can’t use the camera to fine-tune the pick location, we benefit from the pick location being very stable and repeatable. The feeder is therefore mounted onto a 20mm extrusion directly underneath the pick location. This new 20mm extrusion is mounted to the machine side rails using 2 angle brackets at each end for rigidity. See photos below.
 - The feeder is mounted onto the extrusion using a 6mm M3 countersunk screw and t-nut, directly underneath the pick location. The screw is captive in the feeder once the inset is fitted, and the screw can be driven through a hole in the base of the inset so that it can be fitted and removed while tape is loaded on the feeder; you just need to cut off the empty tape end, and retract the tape a little to expose the hole.
 - There is a separate git repository for a [lumenpnp z gantry](https://github.com/tobydickenson/PushPullGantry) modification which includes the hook needed for pushing and pulling the feeder lever.
 
@@ -62,7 +62,7 @@ IMPORTANT: Before printing, it is critical that your printer can produce dimensi
 - The parts are circular
 - Inner and outer diameter of the parts are 8.00mm
 - The part mate, and work as an axel
-- The axle turns evenly through 360°. If your printer leaves a line of layer start/end points then a "randomize start location" option may make it turn more evenly.
+- The axle turns evenly through 360°. If your printer leaves a line of layer start/end points then a "randomize start location" slicer option may make it turn more evenly.
 
 Any problems need to be addressed first, through either printer hardware maintenance or slicer configuration. The printed feeder is very sensitive to dimensional tolerance; if your printer can't produce an accurate nut then it will not be able to print a working feeder!
 
@@ -88,12 +88,12 @@ To print a complete feeder you will need one item for each of the following cate
 
 - A base. 8mm, 12mm, or 16mm wide bases support paper tape and plastic tape with pockets up to 4mm deep. A 24mm extra-deep base supports both 24mm and 16mm tapes, with up to 11mm pockets.
 - A lever. The normal size fits the normal bases, and the extra-deep base needs a shorter lever.
-- A blocking spring.
+- A blocking spring; a single size for all feeders
 - For the film-peeling spool, the left side has an option to print either as a solid plate (for more robustness) or with spokes (for better visibility).
 - The spool right side has 8mm, 12mm, 16mm, or 24mm options.
 - The spool friction wheel again has width options. Please check out the README file in this directory if this prints poorly.
-- A drum, which holds the peeled tape on the spool. Again this is in width options but for this part it generally works ok to substitute a size down.
-- A washer.
+- A drum, which holds the peeled tape on the spool. Again this has width options.
+- A washer; a single size.
 
 Plus each feeder needs an inset. Insets for 8mm paper are printed as a single part. Options are:
 
@@ -123,9 +123,7 @@ Some feeders mounted on the machine. Here we have 4 feeders for 8mm thin paper t
 
 ![Some PushPull Feeders](img/some-feeders-2.jpg)
 
-Some more feeders.
-
-The 24mm feeder with extra-deep pockets is feeding a connector. Note the extra-deep feeder has an extra-short lever to keep the hook engagement height consistent.
+Below, the 24mm feeder with extra-deep pockets is feeding a connector. Note the extra-deep feeder has an extra-short lever to keep a consistent hook engagement height.
 
 Feeder P27 with an inset for 8mm paper tape has the "scraper" option. The scraper is the red finger which holds the parts in their pocket if they have a tendency to stick to the film.
 
