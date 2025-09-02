@@ -62,8 +62,8 @@ IMPORTANT: Before printing, it is critical that your printer can produce dimensi
 
 - The parts are circular
 - Inner and outer diameter of the parts are 8.00mm
-- The part mate, and work as an axel
-- The axle turns evenly through 360°. If your printer leaves a line of layer start/end points then a "randomize start location" slicer option may make it turn more evenly.
+- The part mate
+- The mated parts turns evenly through 360°. If your printer leaves a line of layer start/end points then a "randomize start location" slicer option may make it turn more evenly.
 
 Any problems need to be addressed first, through either printer hardware maintenance or slicer configuration. The printed feeder is very sensitive to dimensional tolerance; if your printer can't produce an accurate nut then it will not be able to print a working feeder!
 
