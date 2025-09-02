@@ -18,6 +18,7 @@ The original model supports a dazzling array of configuration parameters. Here I
 - The "inset" is the part which holds the tape as it passes through the feeder. There are several changes to the profile of the inset to reduce part jumpiness. Firstly, this model grips the tape all around the pick window, to firmly hold the tape and minimise the risk that vibrations cause a part to jump.
 - The grip after the pick window is arched to allow any mispicked parts to be expelled out the front of the feeder.
 - One of the final actions during the push/pull feed cycle is that the reverse-blocking tooth engages with the sprocket holes. This has been seen to cause jumpiness in very lightweight parts. A new slot in the inset acts to decouple these vibrations. This slot is located between the reverse-blocking tooth and the pick area.
+- A gentle lead-in to help insert the tape into the back of the inset.
 
 ## Improvements for parts in embossed plastic tape
 - Add a second reverse-blocking tooth to minimise the possibility of it not engaging with very thin plastic tape.
