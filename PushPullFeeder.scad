@@ -560,6 +560,9 @@ thorn_groove=max(thorn_min_groove, thorn_length+play*2-tape_thickness);
 dog_grip=7;
 // Dog advancing by bending (empirical)
 dog_travel_bend=1.9; // afraid, that's empirical    
+// The height of the bumper which prevents the dog striking the tape when the dog tooth
+// first engages with the sprocket hole.
+dog_bumper_height=0.3;
 
 /* [ Friction Wheel ] */
 
@@ -2297,9 +2300,13 @@ if (do_base_plate) {
                                     dog_nominal_y+dog_height1-dog_blocker_strength],
                                 [dog_nominal_x+dog_strength/2, 
                                     0],
-                                [dog_nominal_x-dog_travel_nominal-sprocket_pitch-dog_strength, 
+                                [dog_nominal_x-dog_strength-sprocket_pitch*0.4, // 40% of the pitch has no bumper. 50% is the ramp.
                                     0],
-                                [dog_nominal_x-dog_travel_nominal-sprocket_pitch-dog_strength-inset_edge, 
+                                [dog_nominal_x-dog_strength-sprocket_pitch*0.9, // 10% overlap between the dog and the bumper
+                                    dog_bumper_height],
+                                [dog_nominal_x-dog_travel_nominal-sprocket_pitch-dog_strength,
+                                    dog_bumper_height],
+                                [dog_nominal_x-dog_travel_nominal-sprocket_pitch-dog_strength-inset_edge,
                                     inset_edge+e],
                             
                                 each arc(
