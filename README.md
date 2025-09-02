@@ -127,7 +127,7 @@ Below, the 24mm feeder with extra-deep pockets is feeding a connector. Note the 
 
 Feeder P27 with an inset for 8mm paper tape has the "scraper" option. The scraper is the red finger which holds the parts in their pocket if they have a tendency to stick to the film.
 
-All the other feeders here have insets for plastic tape. Feeder P25 illustrates the two-part assembly of plastic tape insets; the left part of the inset is in yellow, and the right in red.
+All the other feeders here have insets for plastic tape.
 
 ![Some PushPull Feeders](img/some-feeders.jpg)
 
@@ -141,6 +141,12 @@ Partial assembly of the friction wheel onto the left side of the spool.
 
 The scraper finger removed from the inset.
 
+The red inset on the left illustrates the two-part assembly of plastic tape insets; the left part of the inset is in yellow, and the right in red. This also shows the access hole for tightening the 3M bolt into the t-nut.
+
 ![Scraper](img/scraper.jpg)
+
+The inset for plastic tape with embossed pockets is printed in two parts, which allows those embossed pockets to be deep and wide without requiring 3d printer overhang.
+
+![Two-part printing for embossed pockets](img/two-part.jpg)
 
 
