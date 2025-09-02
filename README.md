@@ -149,4 +149,13 @@ The inset for plastic tape with embossed pockets is printed in two parts, which 
 
 ![Two-part printing for embossed pockets](img/two-part.jpg)
 
+# Videos
+
+The feeder in use, feeding and placing four parts.
+
+[![The feeder in use, feeding and placing four parts](img/yt1.jpg)](https://www.youtube.com/watch?v=HmRUPP_7lOk)
+
+A single feed cycle, at 10% speed
+
+[![A single feed cycle, at 10% speed](img/yt2.jpg)](https://www.youtube.com/watch?v=0Pb1ezohiMo)
 
