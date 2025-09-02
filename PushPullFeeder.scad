@@ -2690,7 +2690,7 @@ module inset(left,right)
                                         rotate_extrude(angle=tape_bend_angle, convexity=10, $fa=3) 
                                             translate([-tape_bend_radius_begin, 0]) 
                                                 rotate(90) 
-                                                    polygon(inset_profile(false));
+                                                    polygon(inset_profile(left,right,false));
                             if (right && tape_inset_part_chute)
                                 translate([base_end,0,0])
                                 rotate([0, -90, 0])
