@@ -3,7 +3,7 @@ All 3d-Printed Feeder
 
 ![A PushPull Feeder](img/feeder.jpg)
 
-This is a fork of Markmaker’s awesome [PushPullFeeder](https://github.com/markmaker/PushPullFeeder). All of the genius in this design should be credited to Mark, and Marks's [blog](https://makr.zone/?p=399) is a great introduction. Here I present some refinements:
+This is a fork of Markmaker’s awesome [PushPullFeeder](https://github.com/markmaker/PushPullFeeder). All of the genius in this design should be credited to Mark, and Mark's [blog](https://makr.zone/?p=399) is a great introduction. Here I present some refinements:
 
 - Some general usability and maintainability improvements.
 - Some incremental improvements for feeding parts which were already handled well in Mark’s baseline design.
