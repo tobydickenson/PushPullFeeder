@@ -12,7 +12,7 @@ This is a fork of Markmaker’s awesome [PushPullFeeder](https://github.com/mark
 
 The original model supports a dazzling array of configuration parameters. Here I present some useful parameter sets that I use in production on the lumenpnp.
 
-# Changed Features
+# Changes in Release 74 (August 2025)
 
 ## Improvements for parts in paper tape
 - The "inset" is the part which holds the tape as it passes through the feeder. There are several changes to the profile of the inset to reduce part jumpiness. Firstly, this model grips the tape all around the pick window, to firmly hold the tape and minimise the risk that vibrations cause a part to jump.
