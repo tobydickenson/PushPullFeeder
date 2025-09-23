@@ -118,7 +118,7 @@
             "tape_inset_cover_tension": "0.25",
             "tape_width": "8"
         },
-        "inset_8mm_deep_wide_left": {
+        "inset_8mm_plastic_left": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
@@ -144,7 +144,7 @@
             "tape_inset_left": "true",
             "tape_inset_right": "false"
         },
-        "inset_8mm_deep_wide_right": {
+        "inset_8mm_plastic_right": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
@@ -174,7 +174,7 @@
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
-        "inset_8mm_deep_wide_right_scraper": {
+        "inset_8mm_plastic_right_scraper": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
@@ -208,7 +208,7 @@
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
-        "inset_12mm_deep_wide_left__not_needed_because_it_is_the_same_as_8mm": {
+        "inset_12mm_plastic_left__not_needed_because_it_is_the_same_as_8mm": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
@@ -235,7 +235,7 @@
             "tape_inset_left": "true",
             "tape_inset_right": "false"
         },
-        "inset_12mm_deep_wide_right": {
+        "inset_12mm_plastic_right": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
@@ -265,7 +265,7 @@
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
-        "inset_12mm_deep_wide_right_scraper": {
+        "inset_12mm_plastic_right_scraper": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
@@ -296,7 +296,7 @@
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
-        "inset_16mm_deep_wide_left__not_needed_because_it_is_the_same_as_8mm": {
+        "inset_16mm_plastic_left__not_needed_because_it_is_the_same_as_8mm": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
@@ -323,7 +323,7 @@
             "tape_inset_left": "true",
             "tape_inset_right": "false"
         },
-        "inset_16mm_deep_wide_right": {
+        "inset_16mm_plastic_right": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
@@ -353,7 +353,7 @@
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
-        "inset_16mm_deep_wide_right_on_24mm_base": {
+        "inset_16mm_plastic_right_on_24mm_base": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
@@ -385,7 +385,7 @@
             "tape_inset_left": "false",
             "tape_inset_right": "true"
         },
-        "inset_24mm_deep_wide_left": {
+        "inset_24mm_plastic_left": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
@@ -417,7 +417,7 @@
             "tape_inset_left": "true",
             "tape_inset_right": "false"
         },
-        "inset_24mm_deep_wide_right": {
+        "inset_24mm_plastic_right": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
             "make_friction_wheel": "false",
