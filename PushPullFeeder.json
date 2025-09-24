@@ -23,7 +23,7 @@
             "tape_emboss_size": "4.4",
 
             "dog_number_of_reverse_blocking_thorns": "1",
-            "tape_thickness": "0.80",
+            "tape_thickness": "0.85",
             "tape_inset_cover_tension": "0.3",
             "tape_width": "8"
         },
@@ -54,7 +54,7 @@
             "enable_scraper": "true",
 
             "dog_number_of_reverse_blocking_thorns": "1",
-            "tape_thickness": "0.80",
+            "tape_thickness": "0.85",
             "tape_inset_cover_tension": "0.3",
             "tape_width": "8"
         },
@@ -82,7 +82,7 @@
             "tape_emboss_size": "4.4",
 
             "dog_number_of_reverse_blocking_thorns": "1",
-            "tape_thickness": "1.15",
+            "tape_thickness": "1.25",
             "tape_inset_cover_tension": "0.25",
             "tape_width": "8"
         },
@@ -114,7 +114,7 @@
             "enable_scraper": "true",
 
             "dog_number_of_reverse_blocking_thorns": "1",
-            "tape_thickness": "1.15",
+            "tape_thickness": "1.25",
             "tape_inset_cover_tension": "0.25",
             "tape_width": "8"
         },

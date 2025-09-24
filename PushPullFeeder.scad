@@ -2613,12 +2613,12 @@ function inset_profile(left,right,cover,after_pick) = [
                 [tape_width_eff-reel_wall, inset_edge],
                 ((tape_width>8)?90:0) // wider tape insets have a strain relief feature on the top surface of the inset
             ),
-            [0, inset_edge-tape_thickness*tape_inset_cover_tension],
-            [0, -tape_thickness*tape_inset_cover_tension],
+            [0, inset_edge-tape_thickness*(after_pick?0:tape_inset_cover_tension)],
+            [0, -tape_thickness*(after_pick?0:tape_inset_cover_tension)],
 
             // A step to ensure that we clamp onto the tape, not the film
-            [sprocket_hole_margin+sprocket_hole_diameter-0.2, -tape_thickness*tape_inset_cover_tension],
-            [sprocket_hole_margin+sprocket_hole_diameter-0.2, -tape_thickness*tape_inset_cover_tension+(after_pick?0:cover_film_thickness)],
+            [sprocket_hole_margin+sprocket_hole_diameter-0.2, -tape_thickness*(after_pick?0:tape_inset_cover_tension)],
+            [sprocket_hole_margin+sprocket_hole_diameter-0.2, -tape_thickness*(after_pick?0:tape_inset_cover_tension)+(after_pick?0:cover_film_thickness)],
 
             each arc(
             [tape_width_eff-inset_edge, 0],
