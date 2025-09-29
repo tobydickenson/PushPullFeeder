@@ -2600,7 +2600,7 @@ tape_margin_eff=tape_inset_support ? tape_margin : max(-thorn_groove, tape_45_ma
 
 cover_film_thickness = 0.15;
 
-function inset_profile(left,right,cover) = [
+function inset_profile(left,right,cover,after_pick) = [
 
     each [ if(right) each [
         [sprocket_gap+tape_margin+e, -base_height-e],
@@ -2613,11 +2613,12 @@ function inset_profile(left,right,cover) = [
                 [tape_width_eff-reel_wall, inset_edge],
                 ((tape_width>8)?90:0) // wider tape insets have a strain relief feature on the top surface of the inset
             ),
-            [0, inset_edge-tape_thickness*tape_inset_cover_tension],
-            [0, -tape_thickness*tape_inset_cover_tension],
+            [0, inset_edge-tape_thickness*(after_pick?0:tape_inset_cover_tension)],
+            [0, -tape_thickness*(after_pick?0:tape_inset_cover_tension)],
 
-            [2.3, -tape_thickness*tape_inset_cover_tension],
-            [2.3, -tape_thickness*tape_inset_cover_tension+cover_film_thickness],
+            // A step to ensure that we clamp onto the tape, not the film
+            [sprocket_hole_margin+sprocket_hole_diameter-0.2, -tape_thickness*(after_pick?0:tape_inset_cover_tension)],
+            [sprocket_hole_margin+sprocket_hole_diameter-0.2, -tape_thickness*(after_pick?0:tape_inset_cover_tension)+(after_pick?0:cover_film_thickness)],
 
             each arc(
             [tape_width_eff-inset_edge, 0],
@@ -2674,12 +2675,21 @@ module inset(left,right)
                     // the actual inset
                     intersection() {
                         union() {
-                            // main tape slide
+                            // main tape slide, up to the pick point
+                            translate([0, 0, 0]) {
+                                rotate([0, -90, 0]) {
+                                    linear_extrude(height=pick_offset-tape_inset_begin,
+                                        convexity=10) {
+                                        polygon(inset_profile(left,right,true,false));
+                                    }
+                                }
+                            }
+                            // main tape slide, after the pick point
                             translate([base_end, 0, 0]) {
                                 rotate([0, -90, 0]) {
-                                    linear_extrude(height=base_end-(tape_inset_begin-pick_offset), 
+                                    linear_extrude(height=base_end+e,
                                         convexity=10) {
-                                        polygon(inset_profile(left,right,true));
+                                        polygon(inset_profile(left,right,true,true));
                                     }
                                 }
                             }
@@ -2690,7 +2700,7 @@ module inset(left,right)
                                         rotate_extrude(angle=tape_bend_angle, convexity=10, $fa=3) 
                                             translate([-tape_bend_radius_begin, 0]) 
                                                 rotate(90) 
-                                                    polygon(inset_profile(left,right,false));
+                                                    polygon(inset_profile(left,right,false,false));
                             if (right && tape_inset_part_chute)
                                 translate([base_end,0,0])
                                 rotate([0, -90, 0])
@@ -2785,6 +2795,15 @@ module inset(left,right)
                                     hull() {
                                         translate([0,-tape_thickness*tape_inset_cover_tension,0]) linear_extrude(e) polygon(window);
                                         translate([0,0,tape_width_eff-layer_height]) linear_extrude(e) polygon(window);
+                                    }
+                                    // Cut back to allow an exit for jumped parts
+                                    linear_extrude(height=sprocket_hole_margin+sprocket_hole_diameter, convexity=4) {
+                                        polygon([
+                                                [base_end+e,  inset_edge+inset_clearance_above],
+                                                [base_end+e,  -tape_thickness*tape_inset_cover_tension-e],
+                                                [cover_tape_edge,                           -tape_thickness*tape_inset_cover_tension-e],
+                                                [cover_tape_edge,                           inset_edge+inset_clearance_above],
+                                        ]);
                                     }
                                     // decoupling slot
                                     slot_x0=dog_nominal_x+sprocket_pitch*2;
@@ -2913,8 +2932,8 @@ module inset(left,right)
                                     rotate([0, -90, 0])
                                     linear_extrude(height=base_end-cover_tape_edge-tape_inset_window_length+2*e)
                                     polygon([
-                                        [2.3,-tape_thickness*tape_inset_cover_tension-2*e],
-                                        [2.3+part_chute_height,part_chute_height-tape_thickness*tape_inset_cover_tension+cover_film_thickness-2*e],
+                                        [sprocket_hole_margin+sprocket_hole_diameter+0.2,-tape_thickness*tape_inset_cover_tension-2*e],
+                                        [sprocket_hole_margin+sprocket_hole_diameter+0.2+part_chute_height,part_chute_height-tape_thickness*tape_inset_cover_tension+cover_film_thickness-2*e],
                                         [tape_width-2.1,part_chute_height],
                                         [tape_width-2.1,-tape_thickness*tape_inset_cover_tension-2*e]
                                     ]);
