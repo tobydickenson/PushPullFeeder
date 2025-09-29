@@ -510,10 +510,11 @@ lever_feed_y=sin(lever_feed_angle)*lever_feed_leverage;
 
 
 // Dog spring tensioned angle at idle position
-dog_spring_bend=-12;
+dog_spring_bend=-20;
 // Dog spring additional tension angle 
 dog_tension_angle=-8; 
 dog_strength=spring_strength+2*extrusion_width;
+dog_spring_coefficient = 1.2;
 dog_blocker_strength=3*wall;
 // Offset of the dog blocker above the inset cover.
 dog_blocker_cover_offset=0.5;
@@ -548,11 +549,13 @@ dog_x=dog_relaxed_pos.x;
 // Dog (thorn) relaxed position in y
 dog_y=dog_relaxed_pos.y;
 // Dog height on spring side
-dog_height0=11;
+dog_height0=6;
 // Dog height on thorn side
-dog_height1=8;
+dog_height1=6;
+// The height of the cutout on the base for viewing the dog
+dog_view_height1=8;
 // Dog length
-dog_length=9;
+dog_length=3;
 // Dog travel (nominal)
 dog_travel_nominal=sprocket_pitch;
 thorn_groove=max(thorn_min_groove, thorn_length+play*2-tape_thickness);
@@ -2252,7 +2255,7 @@ if (do_base_plate) {
                                     [dog_nominal_x+dog_strength/2+dog_blocker_strength, 0],
                                     each arc(
                                     [dog_nominal_x+dog_strength/2+dog_blocker_strength, 
-                                        dog_nominal_y+dog_height1-dog_blocker_strength],
+                                        dog_nominal_y+dog_view_height1-dog_blocker_strength],
                                     [(lever_axle_x-pick_offset)+margin, lever_axle_y],
                                     -90),
                                     each arc(
@@ -2294,11 +2297,11 @@ if (do_base_plate) {
                                 [dog_nominal_x+dog_strength/2+dog_blocker_strength+dog_slant*base_tape_edge, 
                                     base_tape_edge],
                                 [dog_nominal_x+dog_strength/2+dog_blocker_strength+dog_slant*base_tape_edge, 
-                                    dog_nominal_y+dog_height1-dog_blocker_strength],
+                                    dog_nominal_y+dog_view_height1-dog_blocker_strength],
                                 [dog_nominal_x+dog_strength/2
-                                    +dog_slant*(dog_nominal_y+dog_height1-dog_blocker_strength), 
-                                    dog_nominal_y+dog_height1-dog_blocker_strength],
-                                [dog_nominal_x+dog_strength/2, 
+                                    +dog_slant*(dog_nominal_y+dog_view_height1-dog_blocker_strength),
+                                    dog_nominal_y+dog_view_height1-dog_blocker_strength],
+                                [dog_nominal_x+dog_strength/2,
                                     0],
                                 [dog_nominal_x-dog_strength-sprocket_pitch*0.4, // 40% of the pitch has no bumper. 50% is the ramp.
                                     0],
@@ -3228,8 +3231,8 @@ if (do_lever) {
                             [dog_eff_x-dog_length+dog_slant*dog_height0,
                                     dog_eff_y+dog_height0],
                             dog_spring_bend_eff,
-                            -spring_strength/2,
-                            spring_strength/2);
+                            -dog_spring_coefficient * spring_strength/2,
+                            dog_spring_coefficient * spring_strength/2);
                     }
                     // dog
                     translate([dog_eff_x, dog_eff_y])
