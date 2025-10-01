@@ -424,7 +424,7 @@ block_axle_y=fixture_axle/2+wall+extrusion_width;
 blocking_spring_bend=-25;
 blocking_spring_tooth=-ratchet_teeth/4;
 // Ratchet spring early engagement, relative to teeth (empirical and very important)
-blocking_spring_early=-0.15; // [-0.5:0.01:0.5]
+blocking_spring_early=-0.05; // [-0.5:0.01:0.5]
 
 /* [ Bearing ] */
 // Is there a bearing on the lever axle
@@ -3165,27 +3165,39 @@ if (do_lever) {
         render_preview(convexity=12)
         difference() {
             union() {
-                beveled_extrude(height=ratchet_thickness-layer_height, convexity=4) {
-                    fillet2d(lever_fillet) union() {
-                        // the lever shape
-                        translate([(lever_axle_x-pick_offset), lever_axle_y]) {
-                            hull() {
-                                rotate([0, 0, lever_feed_angle])
-                                    translate([lever_spool_leverage-lever_axle_diameter/2, 0])
-                                        circle_p(d=lever_axle_diameter);
-                                rotate([0, 0, lever_spool_angle])
-                                    translate([lever_spool_leverage, 0])
-                                        circle_p(d=lever_node);
+                difference()
+                {
+                    beveled_extrude(height=ratchet_thickness-layer_height, convexity=4) {
+                        fillet2d(lever_fillet) union() {
+                            // the lever shape
+                            translate([(lever_axle_x-pick_offset), lever_axle_y]) {
+                                hull() {
+                                    rotate([0, 0, lever_feed_angle])
+                                        translate([lever_spool_leverage-lever_axle_diameter/2, 0])
+                                            circle_p(d=lever_axle_diameter);
+                                    rotate([0, 0, lever_spool_angle])
+                                        translate([lever_spool_leverage, 0])
+                                            circle_p(d=lever_node);
+                                }
+                                //circle_p(d=lever_axle_outer_diameter);
                             }
-                            //circle_p(d=lever_axle_outer_diameter);
+                            // spool ratchet spring
+                            spring_contour(lever_spool_node,
+                                    [tooth_eff_x, tooth_eff_y],
+                                    lever_spool_spring_bend_eff,
+                                    0, spring_strength,
+                                    tooth_next_angle);
                         }
-                        // spool ratchet spring
-                        spring_contour(lever_spool_node,
-                                [tooth_eff_x, tooth_eff_y],
-                                lever_spool_spring_bend_eff,
-                                0, spring_strength,
-                                tooth_next_angle);
                     }
+                    // put a chamfer on the first few layers to be sure that
+                    // we have no elephants-foot effects on the level length
+                    translate([tooth_eff_x, tooth_eff_y])
+                    rotate(tooth_next_angle,[0,0,1])
+                    translate([0,layer_height*3,0])
+                    rotate(120,[1,0,0])
+                    linear_extrude(1)
+                    translate([-spring_strength,-spring_strength,0])
+                    square(spring_strength*3,spring_strength*3);
                 }
                 beveled_extrude(height=lever_actuation_thickness, bevel=bevel_z, convexity=12) {
                     union() {
@@ -3355,20 +3367,32 @@ if (do_blocking_spring) {
             debug_eff ? 0 :  lever_axle_y-fixture_axle, 
             0]) {
             render_preview(convexity=6) 
-            union() {
-                beveled_extrude(height=ratchet_thickness-layer_height, convexity=10) {
-                    // spool blocking ratchet spring
-                    fillet2d(lever_fillet) union() {
-                        spring_contour(
-                            blocking_node,
-                            [tooth_eff_x, tooth_eff_y],
-                            blocking_spring_bend_eff,
-                            0, spring_strength,
-                            tooth_angle+blocking_spring_bend_eff-blocking_spring_bend);
-                        translate([(block_axle_x-pick_offset), block_axle_y])
-                            circle_p(d=fixture_axle-fixture_play-phase2_play, $fn=6);
+            difference() {
+                union() {
+                    beveled_extrude(height=ratchet_thickness-layer_height, convexity=10) {
+                        // spool blocking ratchet spring
+                        fillet2d(1.5) union() {
+                            spring_contour(
+                                blocking_node,
+                                [tooth_eff_x, tooth_eff_y],
+                                blocking_spring_bend_eff,
+                                0, spring_strength,
+                                tooth_angle+blocking_spring_bend_eff-blocking_spring_bend);
+                            translate([(block_axle_x-pick_offset), block_axle_y])
+                                circle_p(d=fixture_axle-fixture_play-phase2_play, $fn=6);
+                        }
                     }
                 }
+
+                // put a chamfer on the first few layers to be sure that
+                // we have no elephants-foot effects on the level length
+                translate([tooth_eff_x, tooth_eff_y])
+                rotate(tooth_angle+blocking_spring_bend_eff-blocking_spring_bend,[0,0,1])
+                translate([0,layer_height*3,0])
+                rotate(120,[1,0,0])
+                linear_extrude(1)
+                translate([-spring_strength,-spring_strength,0])
+                square(spring_strength*3,spring_strength*3);
             }
         }
     }
