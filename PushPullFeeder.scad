@@ -2281,6 +2281,9 @@ if (do_base_plate) {
                     
                     if (emboss > 0) {
                         // thicker parts of the base plate
+                        difference()
+                        {
+
                         beveled_extrude(height=base_thickness, bevel=bevel_z, convexity=6) {
                             // tape side
                             y0 = -base_height;
@@ -2316,6 +2319,35 @@ if (do_base_plate) {
                                 [(base_begin-pick_offset), y0],
                                 ];
                             polygon(tape_lane_profile);
+                        }
+
+                        // This groove allows the dog to fully make contact with the bumper even if the
+                        // first few layers of that print has "elephants foot" expansion.
+                        for (i = [0:3])
+                        translate([0,e,base_thickness-emboss])
+                        linear_extrude(height=0.6-i*layer_height) {
+                                polygon([
+                                [dog_nominal_x+dog_strength/2,
+                                    0],
+                                [dog_nominal_x-dog_strength-sprocket_pitch*0.4, // 40% of the pitch has no bumper. 50% is the ramp.
+                                    0],
+                                [dog_nominal_x-dog_strength-sprocket_pitch*0.9, // 10% overlap between the dog and the bumper
+                                    dog_bumper_height],
+                                [dog_nominal_x-dog_travel_nominal-sprocket_pitch-dog_strength,
+                                    dog_bumper_height],
+
+                                [dog_nominal_x-dog_travel_nominal-sprocket_pitch-dog_strength,
+                                    dog_bumper_height-i*layer_height],
+                                [dog_nominal_x-dog_strength-sprocket_pitch*0.9, // 10% overlap between the dog and the bumper
+                                    dog_bumper_height-i*layer_height],
+                                [dog_nominal_x-dog_strength-sprocket_pitch*0.4, // 40% of the pitch has no bumper. 50% is the ramp.
+                                    -i*layer_height],
+                                [dog_nominal_x+dog_strength/2,
+                                    -i*layer_height],
+                                    ]);
+
+                        }
+
                         }
                     }
                     /* --> on the inset
