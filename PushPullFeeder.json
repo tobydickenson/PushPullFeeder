@@ -1,5 +1,82 @@
 {
     "parameterSets": {
+        "base_8mm": {
+            "make_base_plate": "true",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "false",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_scraper": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "false",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "8"
+        },
+        "base_12mm": {
+            "make_base_plate": "true",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "false",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_scraper": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "false",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "12",
+            "dog_bumper_height": "0"
+        },
+        "base_16mm": {
+            "make_base_plate": "true",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "false",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_scraper": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "false",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "12",
+            "dog_bumper_height": "0"
+        },
+        "base_24mm": {
+            "make_base_plate": "true",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "false",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_scraper": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "false",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "12",
+            "tape_max_height": "14",
+            "lumen_y": "-20",
+            "dog_bumper_height": "0"
+        },
         "inset_8mm_thin_paper": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",
