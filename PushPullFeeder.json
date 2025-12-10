@@ -34,8 +34,7 @@
             "make_tape_chute": "false",
             "make_test_print": "false",
 
-            "tape_width": "12",
-            "dog_bumper_height": "0"
+            "tape_width": "12"
         },
         "base_16mm": {
             "make_base_plate": "true",
@@ -53,8 +52,7 @@
             "make_tape_chute": "false",
             "make_test_print": "false",
 
-            "tape_width": "12",
-            "dog_bumper_height": "0"
+            "tape_width": "12"
         },
         "base_24mm": {
             "make_base_plate": "true",
@@ -74,8 +72,7 @@
 
             "tape_width": "12",
             "tape_max_height": "14",
-            "lumen_y": "-20",
-            "dog_bumper_height": "0"
+            "lumen_y": "-20"
         },
         "inset_8mm_thin_paper": {
             "make_base_plate": "false",
@@ -94,14 +91,12 @@
             "make_test_print": "false",
 
             "tape_inset_part_chute": "true",
-            "tape_inset_decoupling_slot": "true",
 
             "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
 
-            "dog_number_of_reverse_blocking_thorns": "1",
-            "tape_thickness": "0.85",
-            "tape_inset_cover_tension": "0.3",
+            "tape_thickness": "0.75",
+            "tape_inset_cover_tension": "0.1",
             "tape_width": "8"
         },
         "inset_8mm_thin_paper_scraper": {
@@ -121,7 +116,6 @@
             "make_test_print": "false",
 
             "tape_inset_part_chute": "true",
-            "tape_inset_decoupling_slot": "true",
 
             "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
@@ -130,9 +124,8 @@
             "tape_inset_window_length": "11.5",
             "enable_scraper": "true",
 
-            "dog_number_of_reverse_blocking_thorns": "1",
-            "tape_thickness": "0.85",
-            "tape_inset_cover_tension": "0.3",
+            "tape_thickness": "0.75",
+            "tape_inset_cover_tension": "0.1",
             "tape_width": "8"
         },
         "inset_8mm_thick_paper": {
@@ -153,14 +146,12 @@
 
             "tape_inset_part_chute": "true",
             "part_chute_height" : 1.4,
-            "tape_inset_decoupling_slot": "true",
 
             "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
 
-            "dog_number_of_reverse_blocking_thorns": "1",
             "tape_thickness": "1.25",
-            "tape_inset_cover_tension": "0.25",
+            "tape_inset_cover_tension": "0.1",
             "tape_width": "8"
         },
         "inset_8mm_thick_paper_scraper": {
@@ -181,7 +172,6 @@
 
             "tape_inset_part_chute": "true",
             "part_chute_height" : 1.4,
-            "tape_inset_decoupling_slot": "true",
 
             "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
@@ -190,9 +180,8 @@
             "tape_inset_window_length": "11.5",
             "enable_scraper": "true",
 
-            "dog_number_of_reverse_blocking_thorns": "1",
             "tape_thickness": "1.25",
-            "tape_inset_cover_tension": "0.25",
+            "tape_inset_cover_tension": "0.1",
             "tape_width": "8"
         },
         "inset_8mm_plastic_left": {
@@ -212,7 +201,7 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.8",
+            "tape_inset_cover_tension": "0.2",
             "tape_width": "8",
             "tape_emboss": "3.1",
             "tape_emboss_size": "4.4",
@@ -241,11 +230,10 @@
             "part_chute_height" : 1.4,
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.8",
+            "tape_inset_cover_tension": "0.2",
             "tape_width": "8",
             "tape_emboss": "3.1",
             "tape_emboss_size": "4.4",
-            "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_inset_split": "true",
             "tape_inset_left": "false",
@@ -271,11 +259,10 @@
             "part_chute_height" : 1.4,
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.8",
+            "tape_inset_cover_tension": "0.2",
             "tape_width": "8",
             "tape_emboss": "3.1",
             "tape_emboss_size": "4.4",
-            "dog_number_of_reverse_blocking_thorns": "2",
 
             "cover_tape_edge": "-5.0",
             "tape_inset_window_length": "11.5",
@@ -302,11 +289,10 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.8",
+            "tape_inset_cover_tension": "0.2",
             "tape_width": "12",
             "tape_emboss": "3.1",
             "tape_emboss_size": "8.4",
-            "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_inset_split": "true",
             "tape_inset_left": "true",
@@ -329,11 +315,10 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.8",
+            "tape_inset_cover_tension": "0.4",
             "tape_width": "12",
             "tape_emboss": "3.1",
             "tape_emboss_size": "8.4",
-            "dog_number_of_reverse_blocking_thorns": "2",
 
             "cover_tape_edge": "-4.5",
             "tape_inset_window_length": "11",
@@ -359,11 +344,10 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.8",
+            "tape_inset_cover_tension": "0.4",
             "tape_width": "12",
             "tape_emboss": "3.1",
             "tape_emboss_size": "8.4",
-            "dog_number_of_reverse_blocking_thorns": "2",
 
             "cover_tape_edge": "-7",
             "tape_inset_window_length": "13.5",
@@ -390,11 +374,10 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.8",
+            "tape_inset_cover_tension": "0.6",
             "tape_width": "16",
             "tape_emboss": "3.1",
             "tape_emboss_size": "12.4",
-            "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_inset_split": "true",
             "tape_inset_left": "true",
@@ -417,11 +400,10 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.8",
+            "tape_inset_cover_tension": "0.6",
             "tape_width": "16",
             "tape_emboss": "3.1",
             "tape_emboss_size": "12.4",
-            "dog_number_of_reverse_blocking_thorns": "2",
 
             "cover_tape_edge": "-8.5",
             "tape_inset_window_length": "15",
@@ -447,11 +429,10 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.8",
+            "tape_inset_cover_tension": "0.6",
             "tape_width": "16",
             "tape_emboss": "11.8",
             "tape_emboss_size": "11.4",
-            "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_max_height": "14",
             "cover_tape_edge": "-8.5",
@@ -483,7 +464,6 @@
             "tape_width": "24",
             "tape_emboss": "11.8",
             "tape_emboss_size": "19.4",
-            "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_max_height": "14",
             "tape_inset_window_length": "30",
@@ -515,7 +495,6 @@
             "tape_width": "24",
             "tape_emboss": "11.8",
             "tape_emboss_size": "19.4",
-            "dog_number_of_reverse_blocking_thorns": "2",
 
             "tape_max_height": "14",
             "tape_inset_window_length": "30",

@@ -60,7 +60,8 @@ PETG is a good choice. I have also had success with PLA, for all parts except th
 
 IMPORTANT: Before printing, it is critical that your printer can produce dimensionally accurate parts. Print the `printme/nuts/nuts-zero-5.stl` file, and confirm that:
 
-- The parts are circular
+- The parts are circular, not elliptical
+- The parts are circular, not a lower polygon count approximation substituted by your slicer
 - Inner and outer diameter of the parts are 8.00mm
 - The part mate
 - The mated parts turns evenly through 360°. If your printer leaves a line of layer start/end points then a "randomize start location" slicer option may make it turn more evenly.

@@ -181,7 +181,7 @@ bevel_multiplier=2;
 bevel_z=bevel_multiplier*layer_height;
 
 // Maximum allowed error in (most) curve approximations
-_fp=0.005; // $fn is determined by this maximum error
+_fp=0.001; // $fn is determined by this maximum error
 // Epsilon for CSG body overlap
 e=0.02;
 $fs=extrusion_width;
@@ -193,7 +193,7 @@ $fs=extrusion_width;
 tape_width=8; // [8:4:24]
 tape_width_8 = 8+0;
 // Tape width adjustment for inset.
-tape_width_adjust=0.0; // [-0.25:0.01:0.25]
+tape_width_adjust=0.15; // [-0.25:0.01:0.25]
 tape_width_eff=tape_width+tape_width_adjust;
 // Tape thickness (not incuding the embossed pockets)
 tape_thickness=0.6; // [0:0.01:1.5]
@@ -426,18 +426,6 @@ blocking_spring_tooth=-ratchet_teeth/4;
 // Ratchet spring early engagement, relative to teeth (empirical and very important)
 blocking_spring_early=-0.05; // [-0.5:0.01:0.5]
 
-/* [ Bearing ] */
-// Is there a bearing on the lever axle
-bearing = false;
-// bearing outer
-bearing_outer_diameter=12;
-// bearing inner
-bearing_inner_diameter=8;
-// bearing thickness
-bearing_thickness=3.5;
-// minimum wall to support a bearing
-bearing_surround_wall_thickness = 1.5;
-
 /* [ Reel ] */
 
 // Reel maximum diameter (178mm +/- 2mm by EIA 481)
@@ -495,7 +483,7 @@ lever_spool_spring_tooth=-1;
 // Lever fillet radius
 lever_fillet=2.5;
 
-lever_axle_outer_diameter = bearing ? (bearing_outer_diameter+bearing_surround_wall_thickness*2) : reel_axle;
+lever_axle_outer_diameter = reel_axle;
 lever_strength=lever_axle_diameter+3*wall;
 lever_thickness=emboss+tape_width+reel_wall;
 lever_thickness_8=emboss+tape_width_8+reel_wall;
@@ -525,7 +513,7 @@ thorn_length=0.9; // [0.4:0.05:1.1]
 thorn_diameter_ratio=1; // [0.8:0.01:1.1]
 // Thorn sideways "tension" to draw the tape towards the base [mm]
 thorn_sideways_tension=0.1; 
-dog_number_of_reverse_blocking_thorns=1;
+inset_number_of_reverse_blocking_thorns=0;
 thorn_diameter=sprocket_hole_diameter*thorn_diameter_ratio;
 // Dog aproximative offset from pick location (will be aligned with nearest sprocket pitch)
 dog_offset=-24; // [-34:4:-2]
@@ -562,7 +550,9 @@ dog_grip=7;
 dog_travel_bend=1.9; // afraid, that's empirical    
 // The height of the bumper which prevents the dog striking the tape when the dog tooth
 // first engages with the sprocket hole.
-dog_bumper_height=0.3;
+dog_bumper_height=0.6;
+// The width of the ramp which lifts the dog out of the sprocket hole
+dog_bumper_ramp_width=0.8;
 
 /* [ Friction Wheel ] */
 
@@ -778,9 +768,9 @@ dog_contour = [
             dog_height0-dog_r-+extrusion_width],
         60),
     each arc(
-        [dog_slant*(dog_height0-dog_r)-dog_length-dog_r, 
+        [dog_slant*(dog_height0-dog_r)-dog_length-dog_r,
             dog_height0-dog_r-extrusion_width],
-        [-dog_r*2, 0],
+        [-dog_r*0.5, 0],
         -30),
         [dog_r, 0],
     each arc(
@@ -1854,7 +1844,7 @@ module lumen_mount_2D() {
     t = 4; // structural wall thickness
     extrusion_r = 0.8; // internal corner radius
     external_r = 2.0; // rounding our structural corners
-    big_r = 20;
+    big_r = 18;
     tension = 0.1;
     polygon([
         each arc(
@@ -2021,7 +2011,6 @@ module extrusion_mount_2D() {
     }
 }
 
-
 if (do_base_plate) {
     // base plate and (optionally) reel holder
     
@@ -2138,16 +2127,9 @@ if (do_base_plate) {
                     beveled_extrude(height=lever_thickness_8+base_thickness-emboss,
                         bevel=bevel_z, convexity=10) {
                             // lever axle
-                            if(bearing) {
-                                // axle fits a bearing
-                                translate([(lever_axle_x-pick_offset), lever_axle_y])
-                                    circle_p(d=bearing_inner_diameter);
-                            }
-                            else {
-                                // axle fits the level
-                                translate([(lever_axle_x-pick_offset), lever_axle_y])
-                                    circle_p(d=lever_axle_diameter);
-                            }
+                            // axle fits the level
+                            translate([(lever_axle_x-pick_offset), lever_axle_y])
+                                circle_p(d=lever_axle_diameter);
 
                             if (lumen_mount_enabled) {
                                 lumen_mount_2D();
@@ -2160,7 +2142,7 @@ if (do_base_plate) {
                         bevel=bevel_z, convexity=10) {
                         union() {
                             // spool axle
-                            translate([(spool_axle_x-pick_offset), spool_axle_y]) 
+                            translate([(spool_axle_x-pick_offset), spool_axle_y])
                                 circle_p(d=spool_axle_diameter);
                             
                             // tape inset fixture
@@ -2281,8 +2263,6 @@ if (do_base_plate) {
                     
                     if (emboss > 0) {
                         // thicker parts of the base plate
-                        difference()
-                        {
 
                         beveled_extrude(height=base_thickness, bevel=bevel_z, convexity=6) {
                             // tape side
@@ -2303,9 +2283,9 @@ if (do_base_plate) {
                                     dog_nominal_y+dog_height1-dog_blocker_strength],
                                 [dog_nominal_x+dog_strength/2, 
                                     0],
-                                [dog_nominal_x-dog_strength-sprocket_pitch*0.4, // 40% of the pitch has no bumper. 50% is the ramp.
+                                [dog_nominal_x-dog_strength-sprocket_pitch*0.5, // was 0.6
                                     0],
-                                [dog_nominal_x-dog_strength-sprocket_pitch*0.9, // 10% overlap between the dog and the bumper
+                                [dog_nominal_x-dog_strength-sprocket_pitch*0.9, // was 1.0
                                     dog_bumper_height],
                                 [dog_nominal_x-dog_travel_nominal-sprocket_pitch-dog_strength,
                                     dog_bumper_height],
@@ -2321,34 +2301,30 @@ if (do_base_plate) {
                             polygon(tape_lane_profile);
                         }
 
-                        // This groove allows the dog to fully make contact with the bumper even if the
-                        // first few layers of that print has "elephants foot" expansion.
-                        for (i = [0:3])
-                        translate([0,e,base_thickness-emboss])
-                        linear_extrude(height=0.6-i*layer_height) {
-                                polygon([
-                                [dog_nominal_x+dog_strength/2,
-                                    0],
-                                [dog_nominal_x-dog_strength-sprocket_pitch*0.4, // 40% of the pitch has no bumper. 50% is the ramp.
-                                    0],
-                                [dog_nominal_x-dog_strength-sprocket_pitch*0.9, // 10% overlap between the dog and the bumper
-                                    dog_bumper_height],
-                                [dog_nominal_x-dog_travel_nominal-sprocket_pitch-dog_strength,
-                                    dog_bumper_height],
+                        // The return ramp cam
+                        if(dog_bumper_height>0)
+                        translate([dog_nominal_x-0.6,0,base_thickness-emboss])
+                        intersection() {
+                            if(1)
+                            rotate(-90,[1,0,0])
+                            linear_extrude(99)
+                            polygon([ // vertical outline
+                                [1,0],
+                                [-4.6,0],     // was 4.0, 4.5, 4.1, 4.8, 4.6
+                                [-3.1,-dog_bumper_ramp_width],  // was 2.5, 3.0, 2.6, 3.3, 3.1                    // was 0.6, 0.8
+                                [1,-dog_bumper_ramp_width]
+                                ]);
 
-                                [dog_nominal_x-dog_travel_nominal-sprocket_pitch-dog_strength,
-                                    dog_bumper_height-i*layer_height],
-                                [dog_nominal_x-dog_strength-sprocket_pitch*0.9, // 10% overlap between the dog and the bumper
-                                    dog_bumper_height-i*layer_height],
-                                [dog_nominal_x-dog_strength-sprocket_pitch*0.4, // 40% of the pitch has no bumper. 50% is the ramp.
-                                    -i*layer_height],
-                                [dog_nominal_x+dog_strength/2,
-                                    -i*layer_height],
-                                    ]);
-
+                            if(1)
+                            linear_extrude(emboss+e)
+                            polygon([ // horizontal outline
+                                [0.5,0],                      // was 0
+                                [-1.2,dog_bumper_height+0.2], // was -2     was 0.2, 0.3
+                                [-99,dog_bumper_height+0.2],
+                                [-99,0]
+                                ]);
                         }
 
-                        }
                     }
                     /* --> on the inset
                     // sprocket ledge
@@ -2583,15 +2559,26 @@ if (do_base_plate) {
                     // spool axle groove
                     translate([(spool_axle_x-pick_offset), spool_axle_y, spool_axle_groove_z]) {
                         difference() {
-                            cylinder_p(d=spool_axle_diameter+2*wall, 
+                            cylinder_p(d=spool_axle_diameter+2*wall,
                                 h=spool_axle_groove_width);
                             cylinder_p(
-                                d1=spool_axle_groove_innner, 
-                                d2=spool_axle_groove_outer, 
+                                d1=spool_axle_groove_innner,
+                                d2=spool_axle_groove_outer,
                                 h=spool_axle_groove_width+e);
                         }
                     }
-                    
+
+                    translate([lever_axle_x, lever_axle_y, spool_axle_groove_z]) {
+                        difference() {
+                            cylinder_p(d=spool_axle_diameter+2*wall,
+                                h=spool_axle_groove_width);
+                            cylinder_p(
+                                d1=spool_axle_groove_innner,
+                                d2=spool_axle_groove_outer,
+                                h=spool_axle_groove_width+e);
+                        }
+                    }
+
                     // extrusion mounting screws
                     if (extrusion_mount_enabled && extrusion_mount_h/extrusion_mount_unit > 1.5) {
                         for (u = [1.5:extrusion_mount_h/extrusion_mount_unit]) {
@@ -2637,7 +2624,7 @@ tape_inset_support=false;//(tape_emboss > extrusion_width*2);
 tape_45_margin=tape_margin-tape_emboss;
 tape_margin_eff=tape_inset_support ? tape_margin : max(-thorn_groove, tape_45_margin); // just as good as possible
 
-cover_film_thickness = 0.15;
+cover_film_thickness = 0.20;
 
 function inset_profile(left,right,cover,after_pick) = [
 
@@ -2656,13 +2643,13 @@ function inset_profile(left,right,cover,after_pick) = [
             [0, -tape_thickness*(after_pick?0:tape_inset_cover_tension)],
 
             // A step to ensure that we clamp onto the tape, not the film
-            [sprocket_hole_margin+sprocket_hole_diameter-0.2, -tape_thickness*(after_pick?0:tape_inset_cover_tension)],
+            [sprocket_hole_margin+sprocket_hole_diameter-0.2-(after_pick?0:cover_film_thickness), -tape_thickness*(after_pick?0:tape_inset_cover_tension)],
             [sprocket_hole_margin+sprocket_hole_diameter-0.2, -tape_thickness*(after_pick?0:tape_inset_cover_tension)+(after_pick?0:cover_film_thickness)],
 
             each arc(
-            [tape_width_eff-inset_edge, 0],
+            [tape_width_eff-inset_edge, +(after_pick?0:cover_film_thickness)],
             [tape_width_eff, 0],
-            -135 ),
+            -105 ),
         ] else each [
             [tape_width_eff+reel_wall-e, 0],
         ]
@@ -2860,7 +2847,7 @@ module inset(left,right)
                                     }
                                     // window for dog
                                     dog_x0=dog_nominal_x-dog_travel_nominal-dog_strength-sprocket_pitch;
-                                    linear_extrude(height=sprocket_gap+layer_height+e, convexity=4) {
+                                    linear_extrude(height=sprocket_gap+layer_height+e+dog_bumper_ramp_width, convexity=4) {
                                         polygon([
                                             [dog_x0-inset_edge,
                                                 inset_edge+inset_clearance_above],
@@ -2972,7 +2959,7 @@ module inset(left,right)
                                     linear_extrude(height=base_end-cover_tape_edge-tape_inset_window_length+2*e)
                                     polygon([
                                         [sprocket_hole_margin+sprocket_hole_diameter+0.2,-tape_thickness*tape_inset_cover_tension-2*e],
-                                        [sprocket_hole_margin+sprocket_hole_diameter+0.2+part_chute_height,part_chute_height-tape_thickness*tape_inset_cover_tension+cover_film_thickness-2*e],
+                                        [sprocket_hole_margin+sprocket_hole_diameter+0.2+part_chute_height,part_chute_height-tape_thickness*tape_inset_cover_tension-2*e],
                                         [tape_width-2.1,part_chute_height],
                                         [tape_width-2.1,-tape_thickness*tape_inset_cover_tension-2*e]
                                     ]);
@@ -2992,7 +2979,7 @@ module inset(left,right)
                     // tape reversal blocking thorn
                     if (reversal_blocking_thorn_length > 0 && right) {
                         dog_xx = [dog_nominal_x-dog_travel_nominal-sprocket_pitch*2, dog_nominal_x+sprocket_pitch*2];
-                        for(x = [ for (i=[0:dog_number_of_reverse_blocking_thorns-1]) dog_xx[i] ]) {
+                        for(x = [ for (i=[0:inset_number_of_reverse_blocking_thorns-1]) dog_xx[i] ]) {
                             translate([round(x/sprocket_pitch)*sprocket_pitch, e - tape_thickness*tape_inset_cover_tension*(tape_width-sprocket_hole_distance)/tape_width,
                                 sprocket_hole_distance-thorn_sideways_tension]) {
                                 rotate([90, 0, 0])
@@ -3041,21 +3028,21 @@ module inset(left,right)
                                     square([label_length, 
                                         label_frame_thickness*2+label_frame_slot]);
                             // cutout slot
-                            translate([base_end+label_distance+label_frame_thickness, 
+                            translate([base_end+label_distance+label_frame_thickness,
                                 label_top-label_frame_thickness-label_frame_slot, 
                                 -base_thickness+label_frame_wall])
                                 linear_extrude(height=inset_height+base_thickness-label_frame_wall+e, convexity=10) 
                                     square([label_length-2*label_frame_thickness, 
                                         label_frame_slot]);
                             // cutout window
-                            translate([base_end+label_distance+label_frame_thickness*2, 
+                            translate([base_end+label_distance+label_frame_thickness*2,
                                 label_top-label_frame_thickness-label_frame_slot+e, 
                                 -base_thickness+label_frame_wall+label_frame_thickness])
                                 linear_extrude(height=inset_height+base_thickness-label_frame_wall*4, convexity=10) 
                                     square([label_length-4*label_frame_thickness, 
                                         label_frame_slot+label_frame_thickness]);
                             // cutout thumb
-                            translate([base_end+label_distance+label_length/2, 
+                            translate([base_end+label_distance+label_length/2,
                                 label_top-label_frame_thickness*2-label_frame_slot-e, 
                                 -base_thickness]) 
                                 rotate([-90, 0, 0])
@@ -3284,7 +3271,7 @@ if (do_lever) {
                 }
                 // add the dog's thorn
                 translate([dog_eff_x, dog_eff_y, 
-                    emboss+sprocket_hole_distance-thorn_sideways_tension
+                    emboss+sprocket_hole_distance-thorn_sideways_tension-dog_bumper_ramp_width
                     -layer_height]) // one layer height down because of the friction ring
                     translate([dog_neck.x, dog_neck.y, 0])
                         rotate([0, 0, dog_spring_bend_eff-dog_spring_bend])
@@ -3297,7 +3284,7 @@ if (do_lever) {
                 translate([(lever_axle_x-pick_offset), lever_axle_y, 0]) {
                     union() {
                         // make it full lever thickness at the axle
-                        beveled_extrude(height=lever_thickness_8-layer_height*2,
+                        beveled_extrude(height=spool_axle_groove_z - layer_height*2 - (base_thickness-emboss),
                             bevel=bevel_z, convexity=12) {
                             circle_p(d=lever_axle_outer_diameter);
                         }
@@ -3312,31 +3299,12 @@ if (do_lever) {
             }
             union() {
                 // cutout axle
-                if(bearing) {
-                    translate([(lever_axle_x-pick_offset), lever_axle_y, -e])
-                        linear_extrude(height=bearing_thickness
-                            ) {
-                            circle_p(d=bearing_outer_diameter+phase2_play);
-                        }
-                    translate([(lever_axle_x-pick_offset), lever_axle_y, lever_thickness_8-layer_height*2-bearing_thickness+2*e])
-                        linear_extrude(height=bearing_thickness) {
-                            circle_p(d=bearing_outer_diameter+phase2_play);
-                        }
-                    translate([(lever_axle_x-pick_offset), lever_axle_y, bearing_thickness-e*2])
-                        linear_extrude(height=lever_thickness_8-bearing_thickness*2+2*e,scale=0.5) {
-                            circle_p(d=bearing_outer_diameter+phase2_play - extrusion_width);
-                        }
-                    translate([(lever_axle_x-pick_offset), lever_axle_y, -e])
-                        linear_extrude(height=lever_thickness_8-layer_height*2+2*e) {
-                            circle_p(d=(bearing_inner_diameter+bearing_outer_diameter)/2);
-                        }
-                }
-                else {
-                    translate([(lever_axle_x-pick_offset), lever_axle_y, -e])
-                        beveled_extrude(height=lever_thickness_8-layer_height*2+2*e,
-                            bevel=bevel_z, angle=135) {
-                            circle_p(d=lever_axle_diameter+axle_play+phase2_play);
-                        }
+                translate([(lever_axle_x-pick_offset), lever_axle_y, -e]) {
+                    beveled_extrude(height=lever_thickness_8-layer_height*2+2*e,bevel=bevel_z, angle=135)
+                    circle_p(d=lever_axle_diameter+axle_play+phase2_play);
+                    // additional elephants-foot protection
+                    beveled_extrude(height=lever_thickness_8-layer_height*2+2*e+1,bevel=0.7, angle=125)
+                    circle_p(d=lever_axle_diameter+axle_play+phase2_play);
                 }
 
                 // dog cutout 
@@ -3468,42 +3436,50 @@ if (do_friction_wheel) {
                             }
                         }
                     }
-                    
+
                     cylinder_p(d2=friction_axle_diameter-play-6*layer_height,
                         d1=friction_axle_diameter-play-6*layer_height+2*spool_wall_left,
                         h=spool_wall_left+2*layer_height+3*e);
                 }
             }
-            friction_width = tape_width-sprocket_gap;
-            profile = (friction_width<11)?
-                      [[0,friction_width,0]]:
-                      [[0,4,0],
-                      [4,1,0.25],
-                      [5,friction_width-10,0.5],
-                      [friction_width-5,1,0.25],
-                      [friction_width-4,4,0]];
-            for (m = [0:len(profile)-1] )
-            translate([0,0,profile[m][0]-e])
-            linear_extrude(height=profile[m][1]+e, convexity=6) {
-                fillet2d(extrusion_width*0.5) union() {
-                    difference() {
-                        circle_p(d=friction_axle_diameter-play);
-                        circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
-                    }
-                    for (a = [0:friction_wings]) {
-                        da=180/PI*spring_small_strength/friction_wing_offset;
-                        rotate(a*360/friction_wings-da) {
-                            r1=friction_wing_offset+friction_wing_length-profile[m][2];
-                            a1=360/friction_wings-da;
-                            spring_contour(
-                                [friction_wing_offset, 0],
-                                [cos(a1)*r1, sin(a1)*r1+e],
-                                50+a1,
-                                -spring_small_strength/2,
-                                spring_small_strength/2);
+            difference()
+            {
+                friction_width = tape_width-sprocket_gap;
+                profile = (friction_width<11)?
+                        [[0,friction_width,0]]:
+                        [[0,4,0],
+                        [4,1,0.25],
+                        [5,friction_width-10,0.5],
+                        [friction_width-5,1,0.25],
+                        [friction_width-4,4,0]];
+                for (m = [0:len(profile)-1] )
+                translate([0,0,profile[m][0]-e])
+                linear_extrude(height=profile[m][1]+e, convexity=6) {
+                    fillet2d(extrusion_width*0.5) union() {
+                        difference() {
+                            circle_p(d=friction_axle_diameter-play);
+                            circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
+                        }
+                        for (a = [0:friction_wings]) {
+                            da=180/PI*spring_small_strength/friction_wing_offset;
+                            rotate(a*360/friction_wings-da) {
+                                r1=friction_wing_offset+friction_wing_length-profile[m][2];
+                                a1=360/friction_wings-da;
+                                spring_contour(
+                                    [friction_wing_offset, 0],
+                                    [cos(a1)*r1, sin(a1)*r1+e],
+                                    50+a1,
+                                    -spring_small_strength/2,
+                                    spring_small_strength/2);
+                            }
                         }
                     }
                 }
+
+                // better elephants-foot defense
+                translate([0,0,e-1])
+                beveled_extrude(height=friction_width+1,bevel=0.7, angle=125)
+                circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
             }
         }
     }
@@ -3667,12 +3643,12 @@ if (do_spool_right) {
             }
             union() {
                 // cut away spool axle
-                translate([0, 0, spool_wall_left-e]) 
+                translate([0, 0, spool_wall_left-e])
                     cylinder_p(h=spool_width-spool_wall_left+2*e, 
                         d=spool_axle_diameter+screw_play); // use screw play for free rotation
 
                 // orientation mark
-                translate([spool_axle_diameter/2+4, 0, spool_wall_left-e]) 
+                translate([spool_axle_diameter/2+4, 0, spool_wall_left-e])
                     cylinder_p(h=spool_width-spool_wall_left+2*e, 
                         d=2); 
 
