@@ -2283,9 +2283,9 @@ if (do_base_plate) {
                                     dog_nominal_y+dog_height1-dog_blocker_strength],
                                 [dog_nominal_x+dog_strength/2, 
                                     0],
-                                [dog_nominal_x-dog_strength-sprocket_pitch*0.5, // was 0.6
+                                [dog_nominal_x-dog_strength-sprocket_pitch*0.5,
                                     0],
-                                [dog_nominal_x-dog_strength-sprocket_pitch*0.9, // was 1.0
+                                [dog_nominal_x-dog_strength-sprocket_pitch*0.9,
                                     dog_bumper_height],
                                 [dog_nominal_x-dog_travel_nominal-sprocket_pitch-dog_strength,
                                     dog_bumper_height],
@@ -2310,16 +2310,16 @@ if (do_base_plate) {
                             linear_extrude(99)
                             polygon([ // vertical outline
                                 [1,0],
-                                [-4.6,0],     // was 4.0, 4.5, 4.1, 4.8, 4.6
-                                [-3.1,-dog_bumper_ramp_width],  // was 2.5, 3.0, 2.6, 3.3, 3.1                    // was 0.6, 0.8
+                                [-4.6,0],
+                                [-3.1,-dog_bumper_ramp_width],
                                 [1,-dog_bumper_ramp_width]
                                 ]);
 
                             if(1)
                             linear_extrude(emboss+e)
                             polygon([ // horizontal outline
-                                [0.5,0],                      // was 0
-                                [-1.2,dog_bumper_height+0.2], // was -2     was 0.2, 0.3
+                                [0.5,0],
+                                [-1.2,dog_bumper_height+0.2],
                                 [-99,dog_bumper_height+0.2],
                                 [-99,0]
                                 ]);
