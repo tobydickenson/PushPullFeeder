@@ -52,7 +52,7 @@
             "make_tape_chute": "false",
             "make_test_print": "false",
 
-            "tape_width": "12"
+            "tape_width": "16"
         },
         "base_24mm": {
             "make_base_plate": "true",
@@ -70,7 +70,7 @@
             "make_tape_chute": "false",
             "make_test_print": "false",
 
-            "tape_width": "12",
+            "tape_width": "24",
             "tape_max_height": "14",
             "lumen_y": "-20"
         },

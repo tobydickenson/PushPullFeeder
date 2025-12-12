@@ -2568,7 +2568,7 @@ if (do_base_plate) {
                         }
                     }
 
-                    translate([lever_axle_x, lever_axle_y, spool_axle_groove_z]) {
+                    translate([lever_axle_x, lever_axle_y, spool_axle_groove_z-(tape_width-tape_width_8)]) {
                         difference() {
                             cylinder_p(d=spool_axle_diameter+2*wall,
                                 h=spool_axle_groove_width);
