@@ -368,7 +368,7 @@ spool_axle_diameter=8;
 spool_axle_groove_innner=spool_axle_diameter-wall;
 spool_axle_groove_outer=spool_axle_diameter+2*layer_height;
 // A groove on round bearing surfaces to allow the slicer to hide the wall start&end point
-spiral_groove_width = 0.3;
+spiral_groove_width = 0.5; // 0.5mm is the minimum for Cura 'sharpest corner' to detect this as a good layer start point
 // Cover tape spool position in x
 spool_axle_x=-86;
 spool_axle_y=spool_outer_diameter/2+2;
