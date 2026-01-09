@@ -259,7 +259,7 @@ tape_inset_right = true;
 
 // The inset cover is arched after the pick window
 tape_inset_part_chute = false;
-part_chute_height = 0.5;
+part_chute_height = 1.0;
 
 // A slot between the pick window and ratchet to reduce vibration
 tape_inset_decoupling_slot = false;
