@@ -367,6 +367,8 @@ spool_wall_right=layer_wall;
 spool_axle_diameter=8;
 spool_axle_groove_innner=spool_axle_diameter-wall;
 spool_axle_groove_outer=spool_axle_diameter+2*layer_height;
+// A groove on round bearing surfaces to allow the slicer to hide the wall start&end point
+spiral_groove_width = 0.3;
 // Cover tape spool position in x
 spool_axle_x=-86;
 spool_axle_y=spool_outer_diameter/2+2;
@@ -1094,6 +1096,9 @@ if (do_test_print) {
                                 circle_p(d=cross_screw_diameter+screw_play);
                             }
                         }
+
+                        translate([0, 0, test_thickness])
+                        spiral_groove(lever_axle_diameter,test_height);
                     }
                     beveled_extrude(convexity=test_height, height=test_height+2*e, angle=135) {
                         for (i = [1:test_nuts]) {
@@ -1102,6 +1107,13 @@ if (do_test_print) {
                             }
                         }
                     }
+
+                    for (i = [1:test_nuts]) {
+                        translate([i*test_step, 0]) {
+                            spiral_groove(lever_axle_diameter,test_height,-1);
+                        }
+                    }
+
                     linear_extrude(height=logo_etch+e) {
                         for (i = [1:test_nuts]) {
                             translate([i*test_step, -lever_axle_diameter/2-1, 0]) {
@@ -2568,6 +2580,9 @@ if (do_base_plate) {
                         }
                     }
 
+                    translate([(spool_axle_x-pick_offset), spool_axle_y, base_thickness-emboss])
+                    spiral_groove(spool_axle_diameter,spool_axle_groove_z-(base_thickness-emboss));
+
                     translate([lever_axle_x, lever_axle_y, spool_axle_groove_z-(tape_width-tape_width_8)]) {
                         difference() {
                             cylinder_p(d=spool_axle_diameter+2*wall,
@@ -2578,6 +2593,9 @@ if (do_base_plate) {
                                 h=spool_axle_groove_width+e);
                         }
                     }
+
+                    translate([lever_axle_x, lever_axle_y, base_thickness-emboss])
+                    spiral_groove(spool_axle_diameter,spool_axle_groove_z-(tape_width-tape_width_8)-(base_thickness-emboss));
 
                     // extrusion mounting screws
                     if (extrusion_mount_enabled && extrusion_mount_h/extrusion_mount_unit > 1.5) {
@@ -3338,6 +3356,9 @@ if (do_lever) {
                         linear_extrude(lever_thickness_8+2*e) translate([-lever_axle_diameter,lever_axle_diameter/4,0]) square(lever_axle_diameter*4,lever_axle_diameter*4);
                 }
             }
+
+            translate([(lever_axle_x-pick_offset), lever_axle_y, 0])
+            spiral_groove(spool_axle_diameter,lever_thickness_8-layer_height*2+2*e,-1);
         }
     }
 }
@@ -3415,71 +3436,78 @@ if (do_friction_wheel) {
                     +friction_tension-phase2_play/2;
             friction_wing_offset=friction_axle_diameter/2-spring_small_strength/2;
             
-            translate([0, 0, -spool_wall_left]) {
-                intersection() {
-                    union() {
-                        // anti friction ring
-                        linear_extrude(height=layer_height+e, convexity=6) {
-                            difference() {
-                                circle_p(d=friction_axle_diameter-fixture_play-2*extrusion_width);
-                                circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
+            difference() {
+                union() {
+                    translate([0, 0, -spool_wall_left]) {
+                        intersection() {
+                            union() {
+                                // anti friction ring
+                                linear_extrude(height=layer_height+e, convexity=6) {
+                                    difference() {
+                                        circle_p(d=friction_axle_diameter-fixture_play-2*extrusion_width);
+                                        circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
+                                    }
+                                }
+                                // hex axle
+                                translate([0, 0, layer_height]) {
+                                    beveled_extrude(height=spool_wall_left+layer_height+e, bevel=layer_height*3, angle=70, convexity=6) {
+                                        difference() {
+                                            circle_p(d=friction_hex_diameter-fixture_play,
+                                                $fn=friction_wings);
+                                            circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
+                                        }
+                                    }
+                                }
                             }
+
+                            cylinder_p(d2=friction_axle_diameter-play-6*layer_height,
+                                d1=friction_axle_diameter-play-6*layer_height+2*spool_wall_left,
+                                h=spool_wall_left+2*layer_height+3*e);
                         }
-                        // hex axle
-                        translate([0, 0, layer_height]) {
-                            linear_extrude(height=spool_wall_left+layer_height+e, convexity=6) {
+                    }
+                    difference()
+                    {
+                        friction_width = tape_width-sprocket_gap;
+                        profile = (friction_width<11)?
+                                [[0,friction_width,0]]:
+                                [[0,4,0],
+                                [4,1,0.25],
+                                [5,friction_width-10,0.5],
+                                [friction_width-5,1,0.25],
+                                [friction_width-4,4,0]];
+                        for (m = [0:len(profile)-1] )
+                        translate([0,0,profile[m][0]-e])
+                        linear_extrude(height=profile[m][1]+e, convexity=6) {
+                            fillet2d(extrusion_width*0.5) union() {
                                 difference() {
-                                    circle_p(d=friction_hex_diameter-fixture_play,
-                                        $fn=friction_wings);
+                                    circle_p(d=friction_axle_diameter-play);
                                     circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
+                                }
+                                for (a = [0:friction_wings]) {
+                                    da=180/PI*spring_small_strength/friction_wing_offset;
+                                    rotate(a*360/friction_wings-da) {
+                                        r1=friction_wing_offset+friction_wing_length-profile[m][2];
+                                        a1=360/friction_wings-da;
+                                        spring_contour(
+                                            [friction_wing_offset, 0],
+                                            [cos(a1)*r1, sin(a1)*r1+e],
+                                            50+a1,
+                                            -spring_small_strength/2,
+                                            spring_small_strength/2);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    cylinder_p(d2=friction_axle_diameter-play-6*layer_height,
-                        d1=friction_axle_diameter-play-6*layer_height+2*spool_wall_left,
-                        h=spool_wall_left+2*layer_height+3*e);
-                }
-            }
-            difference()
-            {
-                friction_width = tape_width-sprocket_gap;
-                profile = (friction_width<11)?
-                        [[0,friction_width,0]]:
-                        [[0,4,0],
-                        [4,1,0.25],
-                        [5,friction_width-10,0.5],
-                        [friction_width-5,1,0.25],
-                        [friction_width-4,4,0]];
-                for (m = [0:len(profile)-1] )
-                translate([0,0,profile[m][0]-e])
-                linear_extrude(height=profile[m][1]+e, convexity=6) {
-                    fillet2d(extrusion_width*0.5) union() {
-                        difference() {
-                            circle_p(d=friction_axle_diameter-play);
-                            circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
-                        }
-                        for (a = [0:friction_wings]) {
-                            da=180/PI*spring_small_strength/friction_wing_offset;
-                            rotate(a*360/friction_wings-da) {
-                                r1=friction_wing_offset+friction_wing_length-profile[m][2];
-                                a1=360/friction_wings-da;
-                                spring_contour(
-                                    [friction_wing_offset, 0],
-                                    [cos(a1)*r1, sin(a1)*r1+e],
-                                    50+a1,
-                                    -spring_small_strength/2,
-                                    spring_small_strength/2);
-                            }
-                        }
+                        // better elephants-foot defense
+                        translate([0,0,e-1])
+                        beveled_extrude(height=friction_width+1,bevel=0.7, angle=125)
+                        circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
                     }
                 }
 
-                // better elephants-foot defense
-                translate([0,0,e-1])
-                beveled_extrude(height=friction_width+1,bevel=0.7, angle=125)
-                circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
+                translate([0, 0, -spool_wall_left])
+                spiral_groove(spool_axle_diameter,spool_wall_left+tape_width-sprocket_gap,-1);
             }
         }
     }
@@ -3669,6 +3697,9 @@ if (do_spool_right) {
                         d1=spool_inner_diameter-spool_drum_strength*2+drum_cone*2,
                         d2=spool_inner_diameter-spool_drum_strength*2-e);
             }
+
+            translate([0, 0, spool_wall_left+e])
+            spiral_groove(spool_inner_diameter-spool_drum_strength*2,tape_width-sprocket_gap-play);
         }
     }
 }    
@@ -4055,3 +4086,12 @@ function extrusion_side(x0, y0, xdim, ydim, rot) =
             ], x0, y0, rot), 
         ],
     ];
+
+module spiral_groove(diameter,height,direction=1) {
+    if(spiral_groove_width>0)
+    linear_extrude(height,twist=height/diameter*60*direction)
+    translate([diameter/2,0])
+    rotate(45,[0,0,1])
+    translate([-spiral_groove_width/2,-spiral_groove_width/2])
+    square(spiral_groove_width);
+}
