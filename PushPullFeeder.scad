@@ -2642,7 +2642,7 @@ tape_inset_support=false;//(tape_emboss > extrusion_width*2);
 tape_45_margin=tape_margin-tape_emboss;
 tape_margin_eff=tape_inset_support ? tape_margin : max(-thorn_groove, tape_45_margin); // just as good as possible
 
-cover_film_thickness = 0.20;
+cover_film_thickness = 0.10;
 
 function inset_profile(left,right,cover,after_pick) = [
 
@@ -2665,9 +2665,9 @@ function inset_profile(left,right,cover,after_pick) = [
             [sprocket_hole_margin+sprocket_hole_diameter-0.2, -tape_thickness*(after_pick?0:tape_inset_cover_tension)+(after_pick?0:cover_film_thickness)],
 
             each arc(
-            [tape_width_eff-inset_edge, +(after_pick?0:cover_film_thickness)],
-            [tape_width_eff, 0],
-            -105 ),
+            [tape_width_eff-0.6, +(after_pick?0:cover_film_thickness)],
+            [tape_width_eff, 0.1+cover_film_thickness], // 0.1mm for the edge of the tape to curl where cut
+            -125 ),
         ] else each [
             [tape_width_eff+reel_wall-e, 0],
         ]
@@ -2978,8 +2978,8 @@ module inset(left,right)
                                     polygon([
                                         [sprocket_hole_margin+sprocket_hole_diameter+0.2,-tape_thickness*tape_inset_cover_tension-2*e],
                                         [sprocket_hole_margin+sprocket_hole_diameter+0.2+part_chute_height,part_chute_height-tape_thickness*tape_inset_cover_tension-2*e],
-                                        [tape_width-2.1,part_chute_height],
-                                        [tape_width-2.1,-tape_thickness*tape_inset_cover_tension-2*e]
+                                        [tape_width_eff-0.7-layer_height*3,part_chute_height],
+                                        [tape_width_eff-0.7-layer_height*3,-tape_thickness*tape_inset_cover_tension-2*e]
                                     ]);
 
                                 // remove a scallop from the strain relief to allow the film to pass under the dog blocker
