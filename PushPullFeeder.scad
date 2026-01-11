@@ -373,7 +373,7 @@ spiral_groove_width = 0.5; // 0.5mm is the minimum for Cura 'sharpest corner' to
 spool_axle_x=-86;
 spool_axle_y=spool_outer_diameter/2+2;
 // Spool left side number spokes (set 0 to switch off)
-spool_spokes_left=0;
+spool_spokes_left=16;
 // Spool right side number spokes (set 0 to switch off)
 spool_spokes_right=16;
 spool_spoke_strength=4*extrusion_width;
@@ -3527,21 +3527,45 @@ if (do_spool_left) {
                 render_preview(convexity=20)
                 difference() {
                     union() {
-                        
-                        //NOPE: on the friction wheel
-                        // cylinder_p(d=friction_hex_diameter+base_anti_friction_ring*2,
-                        //    h=layer_height+e);
-                        
-                        translate([0, 0, layer_height]) {
-                            rotate([0, 0, 360*ratchet_tooth_start/ratchet_teeth]) ratchet(
+
+                        // A thin layer of deeper teeth to pick up the two pawls onto the main ratchet teeth.
+                        // This helps with assembling the spool onto the feeder base.
+                        pickup_height = 0.5;
+                        intersection() {
+                            translate([0, 0, layer_height]) {
+                                rotate([0, 0, 360*ratchet_tooth_start/ratchet_teeth])
+                                ratchet(
+                                    teeth=ratchet_teeth/2,
+                                    overhang=ratchet_overhang,
+                                    diameter0=ratchet_inner_diameter-3,
+                                    diameter1=ratchet_diameter+3,
+                                    thickness=ratchet_thickness-layer_height+e-pickup_height,
+                                    bluntness=ratchet_bluntness/2);
+                            }
+                            translate([0, 0, layer_height]) {
+                                rotate([0, 0, 360*ratchet_tooth_start/ratchet_teeth])
+                                ratchet(
+                                    teeth=ratchet_teeth,
+                                    overhang=ratchet_overhang,
+                                    diameter0=ratchet_inner_diameter,
+                                    diameter1=ratchet_diameter,
+                                    thickness=ratchet_thickness-layer_height+e,
+                                    bluntness=ratchet_bluntness);
+                            }
+
+                        }
+
+                        // normal ratchet profile
+                        translate([0, 0, layer_height+pickup_height]) {
+                            rotate([0, 0, 360*ratchet_tooth_start/ratchet_teeth])
+                            ratchet(
                                 teeth=ratchet_teeth,
                                 overhang=ratchet_overhang,
                                 diameter0=ratchet_inner_diameter,
                                 diameter1=ratchet_diameter,
-                                thickness=ratchet_thickness-layer_height+e,
+                                thickness=ratchet_thickness-layer_height-pickup_height+e,
                                 bluntness=ratchet_bluntness);
                         }
-
                         
                         translate([0, 0, ratchet_thickness]) {
                             r0=ratchet_diameter/2+spool_spoke_strength/2;
