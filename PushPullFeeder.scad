@@ -2907,17 +2907,22 @@ module inset(left,right)
                                     translate([x,20,tape_width+i*(2+2*layer_height)]) rotate(90,[1,0,0]) linear_extrude(60) polygon([[-1,1.5],[1,1.5],[0,-0.5]]);
 
                                 // dog thorn groove
-                                groove = [
-                                    [sprocket_margin-tape_min_margin+thorn_groove/2, -tape_thickness+e],
-                                    [sprocket_margin-tape_min_margin-thorn_groove/2, -tape_thickness-thorn_groove],
-                                    [sprocket_hole_margin+thorn_groove/2, -tape_thickness-thorn_groove],
-                                    [max(0, sprocket_hole_margin-thorn_groove/2), -tape_thickness+e]
-                                ];
-                                translate([dog_nominal_x+2*sprocket_pitch, 0, 0]) {
-                                    rotate([0, -90, 0]) {
-                                        linear_extrude(height=dog_travel_nominal+sprocket_pitch*5,
-                                            convexity=10) {
-                                            polygon(groove);
+                                for(i=[0,1])
+                                {
+                                    // iteration 0 is the long groove
+                                    // iteration 1 is a short extension that allows the tooth to slip off the bumper ramp
+                                    groove = [
+                                        [sprocket_margin-tape_min_margin+thorn_groove/2, -tape_thickness+e],
+                                        [sprocket_margin-tape_min_margin-thorn_groove/2, -tape_thickness-thorn_groove],
+                                        [sprocket_hole_margin+thorn_groove/2, -tape_thickness-thorn_groove],
+                                        [max(0, sprocket_hole_margin-thorn_groove/2), -tape_thickness+e]
+                                    ];
+                                    translate([dog_nominal_x+(i?(2*sprocket_pitch):thorn_diameter*1), 0, i?0:-dog_bumper_ramp_width]) {
+                                        rotate([0, -90, 0]) {
+                                            linear_extrude(height=i?(dog_travel_nominal+sprocket_pitch*5):thorn_diameter*1.5,
+                                                convexity=10) {
+                                                polygon(groove);
+                                            }
                                         }
                                     }
                                 }
