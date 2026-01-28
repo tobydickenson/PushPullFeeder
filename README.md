@@ -1,27 +1,34 @@
 # PushPullFeeder
-All 3d-Printed Feeder
 
 ![A PushPull Feeder](img/feeder.jpg)
 
 This is a fork of Markmaker’s awesome [PushPullFeeder](https://github.com/markmaker/PushPullFeeder). All of the genius in this design should be credited to Mark, and Mark's [blog](https://makr.zone/?p=399) is a great introduction. Here I present some refinements:
 
 - Some general usability and maintainability improvements.
+- A new mechanism for engaging and disengaging the pushing mechanism with the sprocket hole which greatly improves smoothness.
 - Some incremental improvements for feeding parts which were already handled well in Mark’s baseline design.
 - Some new features for feeding parts which were outside the scope of Mark’s original design: Parts with deep wide embossed pockets; from 8mm tape with 4mm pockets, up to 24mm with 11mm pockets tested to be working well.
 - An alternative machine mounting scheme which is particularly suitable for the lumenpnp machine. This model still supports Mark's mounting scheme too.
 
 The original model supports a dazzling array of configuration parameters. Here I present some useful parameter sets that I use in production on the lumenpnp.
 
-# Changes in Release 74 (August 2025)
+# Changes in Release 130 (January 2026)
+
+- Printability improvements for Bambu printers - My main printer is now A1 mini.
+- A huge increase in smoothness. Previous versions push the tape with a pair of sprung teeth. In previous versions a tooth on the pusher dog drags along the top surface of the tape then drops into a sprocket hole before pushing forward. A the tape is then pushed over the reverse-blocking tooth, which pops into the sprocket hole at the end of the push. All of these actions cause vibrations and impacts on the tape surface which can cause vibrations which jump 0603 and smaller parts out of pockets. This version uses "the bumper" cam which actively lifts the tooth out of one sprocket hole, and lowers into the next before pushing forward. The reverse-blocking tooth is removed entirely. Having eliminated the main causes of vibrations, it has been possible to eliminate some other vibration-mitigation features which further improves the smoothness of the feed.
+- Further improvement to prevent the tape getting jammed. A jammed tape can cause the lever to break when activated.
+- Improved rigidity on the machine mount.
+- Some changes to recommended printer settings - see below.
+- Change to assist in assembling the film peeling spool onto the base.
+
+# Changes in Release 74 (August 2025) excluding those later reverted in Release 130
 
 ## Improvements for parts in paper tape
-- The "inset" is the part which holds the tape as it passes through the feeder. There are several changes to the profile of the inset to reduce part jumpiness. Firstly, this model grips the tape all around the pick window, to firmly hold the tape and minimise the risk that vibrations cause a part to jump.
+- The "inset" is the part which holds the tape as it passes through the feeder. There are several changes to the profile of the inset to reduce part jumpiness.
 - The grip after the pick window is arched to allow any mispicked parts to be expelled out the front of the feeder.
-- One of the final actions during the push/pull feed cycle is that the reverse-blocking tooth engages with the sprocket holes. This has been seen to cause jumpiness in very lightweight parts. A new slot in the inset acts to decouple these vibrations. This slot is located between the reverse-blocking tooth and the pick area.
 - A gentle lead-in to help insert the tape into the back of the inset.
 
 ## Improvements for parts in embossed plastic tape
-- Add a second reverse-blocking tooth to minimise the possibility of it not engaging with very thin plastic tape.
 - An option to print the inset in two halves. The left half supports under the sprocket holes on the left side of the tap. The right half supports under the right side of the tape, and grips the tape from above. This avoids any geometry limitations due to 3d printer overhang angle, and allows insets for tapes with deep and wide embossed pockets. This also allows a tighter prestressed grip on the tape to reduce jumpiness.
 
 ## Improvements for cover film peeling
@@ -35,7 +42,7 @@ The original model supports a dazzling array of configuration parameters. Here I
 - There are some geometry changes to give more space around any part that might be carried by the other nozzle on a dual-nozzle machine. Firstly, the angle of the lever arm has been changed to be exactly vertical. This increases the X/Y space available for the part on the other nozzle.
 - Secondly, the knob at the top of the lever arm has a flatter profile. This increases the Z space available for the part on the other nozzle.
 
-## Usability and Printability improvements
+## Usability and printability improvements
 - Added some fillets in places which previously saw some brittle fractures.
 - Sometimes the inset can be a tight fit on the base, so some features have been added to aid disassembly. Finger grips for pulling it off, and a second hole through the base for pushing it off.
 - Improved retention of the film peeler spool washer, or reel-holder arm counterpart.
@@ -51,24 +58,27 @@ Use with the lumenpnp has several design requirements that are quite different t
 - This includes a configuration for a feeder for parts up to 11mm tall in 16mm or 24mm tape. This feeder has a deeper base and deeper inset to support the deep tape.
 - A correspondingly shorter lever is used to maintain a safe-z height consistent with the normal feeders. This needs a slightly slower push/pull speed.
 
-# How to Print
+# How to print
 
 STL files for immediate printing are in the `printme` directory.
 
-Mark recommends printing all parts in PETG.
-PETG is a good choice. I have also had success with PLA, for all parts except those with thinned springs because PLA elastic modulus is affected by room temperature.
+All parts should be printed in PETG. PETG has a stable modulus over temperature, which is required for the spring parts. PETG has good abrasion resistance, which is required for the lever and base which interact at "the bumper"
 
-IMPORTANT: Before printing, it is critical that your printer can produce dimensionally accurate parts. Print the `printme/nuts/nuts-zero-5.stl` file, and confirm that:
+Models are configured for 0.1mm or 0.12mm layer height.
 
-- The parts are circular, not elliptical
-- The parts are circular, not a lower polygon count approximation substituted by your slicer
-- Inner and outer diameter of the parts are 8.00mm
-- The part mate
-- The mated parts turns evenly through 360°. If your printer leaves a line of layer start/end points then a "randomize start location" slicer option may make it turn more evenly.
+Use "layer start: sharpest corner" or "seam: aligned". Plain bearing surfaces have a helical groove which is designed to capture the layer start, ensuring that the exposed bearing surface is a smooth continous extrusion.
+
+IMPORTANT: Before printing, it is critical that your printer can produce dimensionally accurate parts. Print the `printme/nuts/nuts-xxx.stl` file, and confirm that:
+
+- The parts are circular, not elliptical.
+- The parts are circular, not a lower polygon count approximation substituted by your slicer.
+- The outer diameter of the first part is 8.00mm. This is a dimension accuracy check.
+- The inner diameter of the second part (labelled 0) is 8.00mm. This is a dimension accuracy check.
+- The inner diameter of the third part is 8.10mm. This is labelled 10 because of the 10x10µm size increase. Fitting the first part inside this hole is a validation check of axle plain bearings.
 
 Any problems need to be addressed first, through either printer hardware maintenance or slicer configuration. The printed feeder is very sensitive to dimensional tolerance; if your printer can't produce an accurate nut then it will not be able to print a working feeder!
 
-# Recommended Movement Steps
+# Recommended movement steps
 
 The movement steps described below are a little different to those described in Mark’s setup video. The key difference is that the start location is in front of the feeder, not above. This means that the programmed push/pull motion takes the hook actuator well away from the feeder, and therefore the push/pull mechanism does not need to be considered when configuring safe-z.
 
@@ -77,8 +87,8 @@ Manually move the feeder’s push/lull lever back to its home position, with the
 - Set the **Start** location with the tip of the the hook 1mm above the lever, and 10mm in front.
 - **Mid1** location should be set with the hook 1mm above the lever, and aligned ready to move down. Note that the “heel” of the hook ensures that the lever is returned back into its home position during the movement to this location.
 - **Mid2** location: The hook moves down 3mm and forward 0.5mm. This engages the hook onto the lever.
-- **Mid3** location: This is the position with the hook under tension pulling back, pushing the tape forward. Set this position to the same Z as Mid2, and 1.5mm back. You may need to adjust the 1.5mm offset; it needs to push the tape all the way forwards (for repeatable positioning) without unduly bending the lever arm.
-- **End** location: This is the position with the hook under tension pushing forward. Relative to Mid 2 this is 10mm forward and 2.5mm down. 10mm is a good starting point, but you might find this needs to be increased up to around 12mm, depending on machine rigidity.
+- **Mid3** location: This is the position with the hook under tension pulling back, pushing the tape forward. Set this position to the same Z as Mid2, and 1.5mm back. You may need to adjust the 1.5mm offset; it needs to push the tape all the way forwards (for repeatable positioning) without unduly bending the lever arm. Set 20ms pause time to ensure the actuator remains momentarily stationary at this end point.
+- **End** location: This is the position with the hook under tension pushing forward. Relative to Mid 2 this is 10mm forward and 2.5mm down. 10mm is a good starting point, but you might find this needs to be increased up to around 12mm, depending on machine rigidity. Set 20ms pause time to allow the dog to drop of the top of the bumper cam.
 
 The tickboxes control which locations are visited for the forward and backward stroke, and which locations are repeated when pumping multiple cycles in one visit. As shown below, Mid3 is skipped on the forward cycle, Mid 2 skipped on the backwards cycle, and only Mid3 and End are repeated for multiple cycles.
 
@@ -95,7 +105,7 @@ To print a complete feeder you will need one item for each of the following cate
 - The spool right side has 8mm, 12mm, 16mm, or 24mm options.
 - The spool friction wheel again has width options. Please check out the README file in this directory if this prints poorly.
 - A drum, which holds the peeled tape on the spool. Again this has width options.
-- A washer; a single size.
+- Two washers; a single size for all feeders
 
 Plus each feeder needs an inset. Insets for 8mm paper are printed as a single part. Options are:
 
@@ -120,6 +130,8 @@ Options for the plastic tape right side are:
 - 24mm extra-deep
 
 # Photos!
+
+NB these photos show release 74.
 
 Some feeders mounted on the machine. Here we have 4 feeders for 8mm thin paper tapes (with the black inset) and one 8mm feeder for embossed plastic tape (inset in red).
 
