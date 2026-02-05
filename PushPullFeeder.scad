@@ -2675,7 +2675,6 @@ function inset_profile(left,right,cover,after_pick) = [
 
     each [ if(left) each [
         [sprocket_gap+tape_margin, -tape_thickness-tape_emboss],
-        [sprocket_gap+tape_margin, -tape_thickness-tape_emboss],
         [sprocket_gap+(right?tape_margin_eff:tape_margin), -tape_thickness],
         //[sprocket_margin-tape_margin, -tape_thickness],
         //[sprocket_hole_margin, -tape_thickness],
