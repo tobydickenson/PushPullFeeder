@@ -285,6 +285,23 @@ label_frame_wall=layer_wall*2;
 // Size of the 
 label_thumb=8;
                     
+/* [ Tape Inset Compliance ] */
+
+// Compliant sprung support for paper tapes. This is not compatible with deep pocket tapes.
+tape_inset_compliant = false;
+
+// Distance between compliant springs
+tape_inset_compliant_pitch = 8.0;
+
+// Maximum displacement of the compliant spring. This is the maximum extra tape thickness.
+tape_inset_compliant_flex = 0.7;
+
+// Compliant spring wall. This should be the width of two narrow extrusions, so that the slicer can put a full wall around each compliant pocket.
+tape_inset_compliant_wall = 0.5;
+
+// A minimum gap for adjacent parts that need to remain disconnected
+tape_inset_compliant_gap = 0.2;
+
 /* [ Spent Tape Chute ] */
 
 // First bend angle
@@ -2293,7 +2310,7 @@ if (do_base_plate) {
                                 [dog_nominal_x+dog_strength/2
                                     +dog_slant*(dog_nominal_y+dog_height1-dog_blocker_strength), 
                                     dog_nominal_y+dog_height1-dog_blocker_strength],
-                                [dog_nominal_x+dog_strength/2, 
+                                [dog_nominal_x+dog_strength/2,
                                     0],
                                 [dog_nominal_x-dog_strength-sprocket_pitch*0.5,
                                     0],
@@ -2627,9 +2644,8 @@ cover_film_thickness = 0.10;
 function inset_profile(left,right,cover,after_pick) = [
 
     each [ if(right) each [
-        [sprocket_gap+tape_margin+e, -base_height-e],
-        [sprocket_margin, -base_height-e],
-        [tape_width_eff+reel_wall-e, -base_height-e],
+        [tape_width_eff, -base_height-e], // bottom surface; underneath the right edge of the tape
+        [tape_width_eff+reel_wall-e, -base_height-e], // bottom right corner of the inset
         each [ if (cover) each [
             //[tape_width_eff+reel_wall-e, inset_edge],
             each arc(
@@ -2652,36 +2668,29 @@ function inset_profile(left,right,cover,after_pick) = [
             [tape_width_eff+reel_wall-e, 0],
         ]
         ],
-        [tape_width_eff, 0],
+        [tape_width_eff, 0], // the top right corner of the tape
+        [tape_width_eff, -tape_thickness], // the bottom right corner of the tape
+    ]],
 
-        [tape_width_eff, -tape_thickness],
-        [tape_width_eff-tape_margin, -tape_thickness],
-
-        /* does not work in the slicer, unfortunately (wont 90° bridge it)
-        // support, if needed and possible
-        each [ if (tape_inset_support) each [
-        [tape_width_eff-tape_margin, -tape_thickness],
-        [tape_pocket_center, -tape_thickness-tape_support_knee],
-        [sprocket_gap+tape_margin+e, -tape_thickness],
-        [sprocket_gap+tape_margin+e, -tape_thickness-extrusion_width],
-        [tape_pocket_center, -tape_thickness-extrusion_width-tape_support_knee],
-        [tape_width_eff-tape_margin, -tape_thickness-extrusion_width],
-        ]],
-        */
-
-        [tape_width_eff-tape_margin, -tape_thickness-tape_emboss],
-        [sprocket_gap+tape_margin+e, -tape_thickness-tape_emboss],
+    each [ if(right&&!tape_inset_compliant || left&&tape_inset_compliant) each [
+        [tape_width_eff, -tape_thickness], // the bottom right corner of the tape
+        [tape_width_eff-tape_margin, -tape_thickness], // top right corner above the embossed part
+        [tape_width_eff-tape_margin, -tape_thickness-tape_emboss], // bottom right embossed part
+        [sprocket_gap+tape_margin, -tape_thickness-tape_emboss], // bottom left embossed part
     ]],
 
     each [ if(left) each [
-        [sprocket_gap+tape_margin, -tape_thickness-tape_emboss],
-        [sprocket_gap+(right?tape_margin_eff:tape_margin), -tape_thickness],
-        //[sprocket_margin-tape_margin, -tape_thickness],
-        //[sprocket_hole_margin, -tape_thickness],
-        [bevel_z, -tape_thickness],
-        [0, -tape_thickness-bevel_z],
-        [0, -base_height-e],
-        [sprocket_gap+tape_margin, -base_height-e],
+        [sprocket_gap+tape_margin, -tape_thickness-tape_emboss], // bottom left embossed part
+        [sprocket_gap+(right?tape_margin_eff:tape_margin), -tape_thickness], // top left corner above the embossed part
+        [bevel_z, -tape_thickness], // near the bottom left corner of the tape. there is a bevel
+        [0, -tape_thickness-bevel_z],  // near the bottom left corner of the tape. there is a bevel
+        [0, -base_height-e], // bottom left corner of the inset
+        [sprocket_gap+tape_margin, -base_height-e], // bottom surface; underneath the embossed part
+    ]],
+
+    each [ if(right&&!tape_inset_compliant || left&&tape_inset_compliant) each [
+        [sprocket_gap+tape_margin, -base_height-e], // bottom surface; underneath the embossed part
+        [tape_width_eff, -base_height-e], // bottom surface; underneath the right edge of the tape
     ]],
 
 ];
@@ -2717,7 +2726,7 @@ module inset(left,right)
                                 }
                             }
                             // on-ramp
-                            translate([(tape_inset_begin-pick_offset)+e, 0, 0]) 
+                            translate([(tape_inset_begin-pick_offset)+e, 0, 0])
                                 rotate([0, 0, -90]) 
                                     translate([tape_bend_radius_begin, 0, 0]) 
                                         rotate_extrude(angle=tape_bend_angle, convexity=10, $fa=3) 
@@ -2843,23 +2852,24 @@ module inset(left,right)
                                             ]);
                                     }
                                     // window for dog
-                                    dog_x0=dog_nominal_x-dog_travel_nominal-dog_strength-sprocket_pitch;
+                                    dog_x0=dog_nominal_x-dog_travel_nominal-dog_strength;
+                                    dog_clearance = 1.0; // a bit more clearance on the window behind the heel of the dog
                                     linear_extrude(height=sprocket_gap+layer_height+e+dog_bumper_ramp_width, convexity=4) {
                                         polygon([
-                                            [dog_x0-inset_edge,
+                                            [dog_x0-dog_clearance-inset_edge,
                                                 inset_edge+inset_clearance_above],
-                                            [dog_x0,
+                                            [dog_x0-dog_clearance,
                                                     -tape_thickness*tape_inset_cover_tension-e],
-                                            [dog_nominal_x+sprocket_pitch,
+                                            [dog_nominal_x+dog_strength/2+inset_edge,
                                                     -tape_thickness*tape_inset_cover_tension-e],
-                                            [dog_nominal_x+sprocket_pitch-inset_edge, inset_edge+inset_clearance_above],
+                                            [dog_nominal_x+dog_strength/2+0.3, inset_edge+inset_clearance_above],
                                             ]);
                                     }
                                     // leave rear open
                                     linear_extrude(height=inset_height+2*e, convexity=4) {
                                         polygon([
-                                            [dog_x0-sprocket_pitch*2, inset_edge+inset_clearance_above],
-                                            [dog_x0-sprocket_pitch*2+inset_edge,
+                                            [dog_x0-sprocket_pitch*3, inset_edge+inset_clearance_above],
+                                            [dog_x0-sprocket_pitch*3+inset_edge,
                                                     -tape_thickness*tape_inset_cover_tension-e],
                                             [(base_begin-pick_offset),
                                                     -tape_thickness*tape_inset_cover_tension-e],
@@ -2870,20 +2880,21 @@ module inset(left,right)
                                     linear_extrude(height=tape_width, convexity=4) {
                                         polygon([
                                             each arc(
-                                                [dog_x0-sprocket_pitch*2+inset_edge/2,
+                                                [dog_x0-sprocket_pitch*3+inset_edge/2,
                                                         -tape_thickness*tape_inset_cover_tension-e+1.0],
-                                                [dog_x0-sprocket_pitch*2+inset_edge+2,
+                                                [dog_x0-sprocket_pitch*3+inset_edge+2,
                                                         -tape_thickness*tape_inset_cover_tension-e],
                                                      30),
-                                            [dog_x0-sprocket_pitch*2+inset_edge-1,
+                                            [dog_x0-sprocket_pitch*3+inset_edge-1,
                                                     -tape_thickness*tape_inset_cover_tension-e],
                                             ]);
                                     }
                                 }
                                 
+                                // Grips for disassembly
                                 for(x=[base_end,base_end-base_length])
-                                    for(i=[0,1])
-                                    translate([x,20,tape_width+i*(2+2*layer_height)]) rotate(90,[1,0,0]) linear_extrude(60) polygon([[-1,1.5],[1,1.5],[0,-0.5]]);
+                                    for(i=right?[0,1]:[-1,0,1])
+                                    translate([x,20,tape_width-0.3+i*(2+2*layer_height)]) rotate(90,[1,0,0]) linear_extrude(60) polygon([[-1,1.5],[1,1.5],[0,-0.5]]);
 
                                 // dog thorn groove
                                 for(i=[0,1])
@@ -2913,7 +2924,29 @@ module inset(left,right)
                                     cylinder_p(d=2.8+screw_play,h=100);
                                 }
 
-                                if(enable_scraper) {
+                                // compliant surface
+                                if(tape_inset_compliant)
+                                if(left) {
+                                    compliant_footing = tape_inset_compliant_wall*1.5;
+                                    compliant_ceiling = -tape_thickness-thorn_groove-tape_inset_compliant_wall;
+                                    for (x=[0:ceil(-(tape_inset_begin-pick_offset)/tape_inset_compliant_pitch-0.5)])
+                                    translate([base_end-x*tape_inset_compliant_pitch,0,0]) {
+                                        linear_extrude(100)
+                                        translate([0,compliant_ceiling,0])
+                                        polygon([
+                                            [0,0],
+                                            [tape_inset_compliant_pitch-compliant_footing,0],
+                                            [tape_inset_compliant_pitch-compliant_footing,-tape_inset_compliant_gap],
+                                            [tape_inset_compliant_wall,-tape_inset_compliant_flex],
+                                            [tape_inset_compliant_wall,-tape_inset_compliant_flex-tape_inset_compliant_wall-tape_inset_compliant_gap],
+                                            [-tape_inset_compliant_pitch+tape_inset_compliant_wall+compliant_footing,-tape_inset_compliant_flex-tape_inset_compliant_wall-tape_inset_compliant_gap],
+                                            [-tape_inset_compliant_pitch+tape_inset_compliant_wall+compliant_footing,-tape_inset_compliant_flex-tape_inset_compliant_wall],
+                                            [0,-tape_inset_compliant_gap-tape_inset_compliant_wall],
+                                            ]);
+                                    }
+                                }
+
+                                if(enable_scraper && !(tape_inset_split&&left)) {
                                     // mount for the part screen
                                     translate([cover_tape_edge+1.2, inset_edge+e, tape_width])
                                     rotate([90, 0, 0])
