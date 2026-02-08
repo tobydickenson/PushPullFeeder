@@ -677,6 +677,78 @@
 
             "tape_width": "24"
         },
+        "spool_right_8mm": {
+            "make_base_plate": "false",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "false",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_scraper": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "true",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "8"
+        },
+        "spool_right_12mm": {
+            "make_base_plate": "false",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "false",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_scraper": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "true",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "12"
+        },
+        "spool_right_16mm": {
+            "make_base_plate": "false",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "false",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_scraper": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "true",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "16"
+        },
+        "spool_right_24mm": {
+            "make_base_plate": "false",
+            "make_blocking_spring": "false",
+            "make_friction_wheel": "false",
+            "make_handle_lock": "false",
+            "make_inset": "false",
+            "make_scraper": "false",
+            "make_lever": "false",
+            "make_lever_actuator": "false",
+            "make_nozzle_adapter": "false",
+            "make_reel_counterpart": "false",
+            "make_spool_left": "false",
+            "make_spool_right": "true",
+            "make_tape_chute": "false",
+            "make_test_print": "false",
+
+            "tape_width": "24"
+        },
         "lever_8mm_12mm": {
             "make_base_plate": "false",
             "make_blocking_spring": "false",

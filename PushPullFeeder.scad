@@ -291,16 +291,16 @@ label_thumb=8;
 tape_inset_compliant = false;
 
 // Distance between compliant springs
-tape_inset_compliant_pitch = 8.0;
+tape_inset_compliant_pitch = 14.0;
 
 // Maximum displacement of the compliant spring. This is the maximum extra tape thickness.
-tape_inset_compliant_flex = 0.7;
+tape_inset_compliant_flex = 0.9;
 
 // Compliant spring wall. This should be the width of two narrow extrusions, so that the slicer can put a full wall around each compliant pocket.
 tape_inset_compliant_wall = 0.5;
 
 // A minimum gap for adjacent parts that need to remain disconnected
-tape_inset_compliant_gap = 0.2;
+tape_inset_compliant_gap = 0.3;
 
 /* [ Spent Tape Chute ] */
 
@@ -399,7 +399,6 @@ spool_drum_clamp_strength=3*extrusion_width;
 spool_drum_clamp_tension=0.05; 
 // Drum clamp open angle
 spool_drum_clamp_open_angle=60;
-spool_drum_strength=spool_drum_clamp_strength+wall;
 // Spool grip, number of teeth
 grip_teeth=60;
 // Spool grip, depth of teeth
@@ -583,6 +582,12 @@ friction_axle_diameter=(spool_axle_diameter+reel_axle-lever_axle_diameter);
 friction_hex_diameter=friction_axle_diameter/cos(180/friction_wings)-extrusion_width;
 // Friction wheel tension, additional radius [mm]
 friction_tension=0.16; // [-0.2:0.01:0.8]
+
+friction_pip_size = spring_small_strength*0.7;
+friction_pip_max_length = 7;
+
+
+spool_drum_strength=spool_drum_clamp_strength+wall+friction_pip_size;
 
 /* [ Extrusion Mount ] */
 
@@ -2229,20 +2234,29 @@ if (do_base_plate) {
                         y0=inset_edge+dog_blocker_cover_offset;
                         y1=y0+dog_blocker_strength/2;
                         polygon([
-                            [(y0+bevel_z)*dog_slant+dog_nominal_x+dog_strength/2,
-                                y0+bevel_z],
-                            [y0*dog_slant+dog_nominal_x+dog_strength/2+bevel_z,
-                                y0],
+                            [(y0+bevel_z)*dog_slant+dog_nominal_x+dog_strength/2, y0+bevel_z],
+                            [y0*dog_slant+dog_nominal_x+dog_strength/2+bevel_z, y0],
                             each arc(
-                                [y0*dog_slant+dog_nominal_x+dog_strength/2+dog_blocker_strength/2,
-                                    y0],
-                                [y1*dog_slant+dog_nominal_x+dog_strength/2,
-                                    y1],
+                                [y0*dog_slant+dog_nominal_x+dog_strength/2+dog_blocker_strength/2,y0],
+                                [y1*dog_slant+dog_nominal_x+dog_strength/2,y1],
                                 270),
                         ]);
-
                     }
-                    
+
+                    beveled_extrude(height=base_thickness+sprocket_gap-0.2, convexity=10) {
+                        // a rectangular lump underneath the dog blocker which
+                        // prevents the top surface of the inset from rising up
+                        y0=inset_edge;
+                        y1=y0+dog_blocker_strength/2;
+                        fillet2d(-bevel_z)
+                        polygon([
+                            [y0*dog_slant+dog_nominal_x+dog_strength/2, y0],
+                            [y0*dog_slant+dog_nominal_x+dog_strength/2+dog_blocker_strength,y0],
+                            [y1*dog_slant+dog_nominal_x+dog_strength/2+dog_blocker_strength,y1],
+                            [y1*dog_slant+dog_nominal_x+dog_strength/2, y1],
+                        ]);
+                    }
+
                     // thinner parts of the base plate (embossed)
                     beveled_extrude(height=base_thickness-emboss, bevel=bevel_z, convexity=10) {
                         difference() {
@@ -2927,7 +2941,7 @@ module inset(left,right)
                                 // compliant surface
                                 if(tape_inset_compliant)
                                 if(left) {
-                                    compliant_footing = tape_inset_compliant_wall*1.5;
+                                    compliant_footing = max(tape_inset_compliant_wall*1.5,tape_inset_compliant_pitch*0.1);
                                     compliant_ceiling = -tape_thickness-thorn_groove-tape_inset_compliant_wall;
                                     for (x=[0:ceil(-(tape_inset_begin-pick_offset)/tape_inset_compliant_pitch-0.5)])
                                     translate([base_end-x*tape_inset_compliant_pitch,0,0]) {
@@ -3486,13 +3500,10 @@ if (do_friction_wheel) {
                     difference()
                     {
                         friction_width = tape_width-sprocket_gap;
-                        profile = (friction_width<11)?
-                                [[0,friction_width,0]]:
-                                [[0,4,0],
-                                [4,1,0.25],
-                                [5,friction_width-10,0.5],
-                                [friction_width-5,1,0.25],
-                                [friction_width-4,4,0]];
+                        profile = (friction_width<friction_pip_max_length)?
+                                [[0,friction_width,1]]:
+                                [[0,friction_pip_max_length,1],
+                                [friction_pip_max_length,friction_width-friction_pip_max_length,0]];
                         for (m = [0:len(profile)-1] )
                         translate([0,0,profile[m][0]-e])
                         linear_extrude(height=profile[m][1]+e, convexity=6) {
@@ -3503,15 +3514,23 @@ if (do_friction_wheel) {
                                 }
                                 for (a = [0:friction_wings]) {
                                     da=180/PI*spring_small_strength/friction_wing_offset;
+                                    friction_wrap = 1.5;
                                     rotate(a*360/friction_wings-da) {
-                                        r1=friction_wing_offset+friction_wing_length-profile[m][2];
-                                        a1=360/friction_wings-da;
+                                        r1=friction_wing_offset+friction_wing_length;
+                                        a1=friction_wrap*360/friction_wings-da;
                                         spring_contour(
                                             [friction_wing_offset, 0],
                                             [cos(a1)*r1, sin(a1)*r1+e],
-                                            50+a1,
+                                            10+a1,
                                             -spring_small_strength/2,
                                             spring_small_strength/2);
+
+                                        if(profile[m][2]) {
+                                            // friction pips on the end of the spring arms
+                                            translate([cos(a1)*r1, sin(a1)*r1+e,0])
+                                            translate([spring_small_strength/2,spring_small_strength/2,0])
+                                            circle(friction_pip_size/2,$fn=30);
+                                        }
                                     }
                                 }
                             }
@@ -3616,9 +3635,9 @@ if (do_spool_left) {
 }
 
 
-spool_right_drum_clamp = true;
+spool_right_drum_clamp = false;
 spool_right_spool = true;
-spool_right_washer = true;
+spool_right_washer = false;
 
 if (do_spool_right) {
     // spool right side
@@ -3717,11 +3736,6 @@ if (do_spool_right) {
                     cylinder_p(h=spool_width-spool_wall_left+2*e, 
                         d=spool_axle_diameter+screw_play); // use screw play for free rotation
 
-                // orientation mark
-                translate([spool_axle_diameter/2+4, 0, spool_wall_left-e])
-                    cylinder_p(h=spool_width-spool_wall_left+2*e, 
-                        d=2); 
-
                 // cut away drum clamp 
                 translate([0, 0, spool_wall_left-e]) 
                     linear_extrude(height=tape_width-sprocket_gap, convexity=6) {
@@ -3734,14 +3748,21 @@ if (do_spool_right) {
                     cylinder_p(h=tape_width-sprocket_gap+0.5*e, 
                         d=spool_inner_diameter-spool_drum_strength*2);
                 drum_cone=wall-extrusion_width;
-                translate([0, 0, spool_wall_left-2*e]) 
+                translate([0, 0, spool_wall_left-2*e])
                     cylinder_p(h=drum_cone, 
-                        d1=spool_inner_diameter-spool_drum_strength*2+drum_cone*2,
+                        d1=spool_inner_diameter-spool_drum_strength*2+drum_cone*2+friction_pip_size,
                         d2=spool_inner_diameter-spool_drum_strength*2-e);
-            }
 
-            translate([0, 0, spool_wall_left+e])
-            spiral_groove(spool_inner_diameter-spool_drum_strength*2,tape_width-sprocket_gap-play);
+                // indentations
+                indentation_count = 12*6-2;
+                translate([0, 0, spool_wall_left+e])
+                for(a=[0:indentation_count])
+                rotate(360*a/indentation_count,[0,0,1]) {
+                    friction_indentation_engagement = 0.7;
+                    translate([(spool_inner_diameter-spool_drum_strength*2-friction_pip_size*(1-friction_indentation_engagement))/2,0,0])
+                    cylinder_p(friction_pip_size,h=min(tape_width-sprocket_gap,friction_pip_max_length+0.5));
+                }
+            }
         }
     }
 }    
