@@ -93,13 +93,10 @@
             "tape_inset_part_chute": "true",
             "part_chute_height" : 1.4,
 
-            "tape_inset_compliant": "true",
-
             "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
 
             "tape_thickness": "0.75",
-            "tape_inset_cover_tension": "0.1",
             "tape_width": "8",
 
             "tape_inset_split": "true",
@@ -125,13 +122,10 @@
             "tape_inset_part_chute": "true",
             "part_chute_height" : 1.4,
 
-            "tape_inset_compliant": "true",
-
             "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
 
             "tape_thickness": "0.75",
-            "tape_inset_cover_tension": "0.1",
             "tape_width": "8",
 
             "tape_inset_split": "true",
@@ -157,8 +151,6 @@
             "tape_inset_part_chute": "true",
             "part_chute_height" : 1.4,
 
-            "tape_inset_compliant": "true",
-
             "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
 
@@ -167,122 +159,11 @@
             "enable_scraper": "true",
 
             "tape_thickness": "0.75",
-            "tape_inset_cover_tension": "0.1",
             "tape_width": "8",
 
             "tape_inset_split": "true",
             "tape_inset_left": "false",
             "tape_inset_right": "true"
-        },
-        "inset_8mm_thin_paper": {
-            "make_base_plate": "false",
-            "make_blocking_spring": "false",
-            "make_friction_wheel": "false",
-            "make_handle_lock": "false",
-            "make_inset": "true",
-            "make_scraper": "false",
-            "make_lever": "false",
-            "make_lever_actuator": "false",
-            "make_nozzle_adapter": "false",
-            "make_reel_counterpart": "false",
-            "make_spool_left": "false",
-            "make_spool_right": "false",
-            "make_tape_chute": "false",
-            "make_test_print": "false",
-
-            "tape_inset_part_chute": "true",
-
-            "tape_emboss": "0.0",
-            "tape_emboss_size": "4.4",
-
-            "tape_thickness": "0.75",
-            "tape_inset_cover_tension": "0.1",
-            "tape_width": "8"
-        },
-        "inset_8mm_thin_paper_scraper": {
-            "make_base_plate": "false",
-            "make_blocking_spring": "false",
-            "make_friction_wheel": "false",
-            "make_handle_lock": "false",
-            "make_inset": "true",
-            "make_scraper": "false",
-            "make_lever": "false",
-            "make_lever_actuator": "false",
-            "make_nozzle_adapter": "false",
-            "make_reel_counterpart": "false",
-            "make_spool_left": "false",
-            "make_spool_right": "false",
-            "make_tape_chute": "false",
-            "make_test_print": "false",
-
-            "tape_inset_part_chute": "true",
-
-            "tape_emboss": "0.0",
-            "tape_emboss_size": "4.4",
-
-            "cover_tape_edge": "-5.0",
-            "tape_inset_window_length": "11.5",
-            "enable_scraper": "true",
-
-            "tape_thickness": "0.75",
-            "tape_inset_cover_tension": "0.1",
-            "tape_width": "8"
-        },
-        "inset_8mm_thick_paper": {
-            "make_base_plate": "false",
-            "make_blocking_spring": "false",
-            "make_friction_wheel": "false",
-            "make_handle_lock": "false",
-            "make_inset": "true",
-            "make_scraper": "false",
-            "make_lever": "false",
-            "make_lever_actuator": "false",
-            "make_nozzle_adapter": "false",
-            "make_reel_counterpart": "false",
-            "make_spool_left": "false",
-            "make_spool_right": "false",
-            "make_tape_chute": "false",
-            "make_test_print": "false",
-
-            "tape_inset_part_chute": "true",
-            "part_chute_height" : 1.4,
-
-            "tape_emboss": "0.0",
-            "tape_emboss_size": "4.4",
-
-            "tape_thickness": "1.25",
-            "tape_inset_cover_tension": "0.1",
-            "tape_width": "8"
-        },
-        "inset_8mm_thick_paper_scraper": {
-            "make_base_plate": "false",
-            "make_blocking_spring": "false",
-            "make_friction_wheel": "false",
-            "make_handle_lock": "false",
-            "make_inset": "true",
-            "make_scraper": "false",
-            "make_lever": "false",
-            "make_lever_actuator": "false",
-            "make_nozzle_adapter": "false",
-            "make_reel_counterpart": "false",
-            "make_spool_left": "false",
-            "make_spool_right": "false",
-            "make_tape_chute": "false",
-            "make_test_print": "false",
-
-            "tape_inset_part_chute": "true",
-            "part_chute_height" : 1.4,
-
-            "tape_emboss": "0.0",
-            "tape_emboss_size": "4.4",
-
-            "cover_tape_edge": "-5.0",
-            "tape_inset_window_length": "11.5",
-            "enable_scraper": "true",
-
-            "tape_thickness": "1.25",
-            "tape_inset_cover_tension": "0.1",
-            "tape_width": "8"
         },
         "inset_8mm_plastic_left": {
             "make_base_plate": "false",
@@ -301,10 +182,12 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.2",
             "tape_width": "8",
             "tape_emboss": "3.1",
             "tape_emboss_size": "4.4",
+
+            "tape_inset_compliant_pitch": 8,
+            "tape_inset_below_tension": "0.2",
 
             "tape_inset_split": "true",
             "tape_inset_left": "true",
@@ -330,7 +213,6 @@
             "part_chute_height" : 1.4,
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.2",
             "tape_width": "8",
             "tape_emboss": "3.1",
             "tape_emboss_size": "4.4",
@@ -359,7 +241,6 @@
             "part_chute_height" : 1.4,
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.2",
             "tape_width": "8",
             "tape_emboss": "3.1",
             "tape_emboss_size": "4.4",
@@ -389,10 +270,12 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.2",
             "tape_width": "12",
             "tape_emboss": "3.1",
             "tape_emboss_size": "8.4",
+
+            "tape_inset_compliant_pitch": 8,
+            "tape_inset_below_tension": "0.2",
 
             "tape_inset_split": "true",
             "tape_inset_left": "true",
@@ -415,7 +298,6 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.4",
             "tape_width": "12",
             "tape_emboss": "3.1",
             "tape_emboss_size": "8.4",
@@ -444,7 +326,6 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.4",
             "tape_width": "12",
             "tape_emboss": "3.1",
             "tape_emboss_size": "8.4",
@@ -474,10 +355,12 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.6",
             "tape_width": "16",
             "tape_emboss": "3.1",
             "tape_emboss_size": "12.4",
+
+            "tape_inset_compliant_pitch": 8,
+            "tape_inset_below_tension": "0.2",
 
             "tape_inset_split": "true",
             "tape_inset_left": "true",
@@ -500,7 +383,6 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.6",
             "tape_width": "16",
             "tape_emboss": "3.1",
             "tape_emboss_size": "12.4",
@@ -528,11 +410,14 @@
             "make_tape_chute": "false",
             "make_test_print": "false",
 
-            "tape_thickness": "0.3",
-            "tape_inset_cover_tension": "0.6",
+            "tape_thickness": "0.7",
             "tape_width": "16",
             "tape_emboss": "11.8",
             "tape_emboss_size": "11.4",
+
+            "tape_inset_compliant_pitch": 8,
+            "tape_inset_below_tension": 0.5,
+            "tape_inset_compliant_flex": 1.2,
 
             "tape_max_height": "14",
             "cover_tape_edge": "-8.5",
@@ -560,10 +445,13 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.7",
-            "tape_inset_cover_tension": "0.8",
             "tape_width": "24",
             "tape_emboss": "11.8",
             "tape_emboss_size": "19.4",
+
+            "tape_inset_compliant_pitch": 8,
+            "tape_inset_below_tension": 0.5,
+            "tape_inset_compliant_flex": 1.2,
 
             "tape_max_height": "14",
             "tape_inset_window_length": "30",
@@ -591,10 +479,13 @@
             "make_test_print": "false",
 
             "tape_thickness": "0.7",
-            "tape_inset_cover_tension": "0.8",
             "tape_width": "24",
             "tape_emboss": "11.8",
             "tape_emboss_size": "19.4",
+
+            "tape_inset_compliant_pitch": 8,
+            "tape_inset_below_tension": 0.5,
+            "tape_inset_compliant_flex": 1.2,
 
             "tape_max_height": "14",
             "tape_inset_window_length": "30",

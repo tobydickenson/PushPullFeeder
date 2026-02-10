@@ -234,7 +234,9 @@ tape_inset_begin=-74;
 // Tape inset end x
 tape_inset_end=6;
 // Tension for tape cover (ratio of tape thickness)
-tape_inset_cover_tension=0.2;
+tape_inset_cover_tension=0.0;
+// (mm)
+tape_inset_below_tension=0.0; // [0.0:1.0:0.01]
 // Radius of the tape on-ramp
 tape_bend_radius_begin=30;
 // Bend angle of the tape on-ramp
@@ -288,13 +290,16 @@ label_thumb=8;
 /* [ Tape Inset Compliance ] */
 
 // Compliant sprung support for paper tapes. This is not compatible with deep pocket tapes.
-tape_inset_compliant = false;
+tape_inset_compliant = true;
+
+// Compliant support only works with split insets
+tape_inset_effective_compliant = tape_inset_compliant && tape_inset_split;
 
 // Distance between compliant springs
 tape_inset_compliant_pitch = 14.0;
 
 // Maximum displacement of the compliant spring. This is the maximum extra tape thickness.
-tape_inset_compliant_flex = 0.9;
+tape_inset_compliant_flex = 0.9;  // [0.0:2.0:0.1]
 
 // Compliant spring wall. This should be the width of two narrow extrusions, so that the slicer can put a full wall around each compliant pocket.
 tape_inset_compliant_wall = 0.5;
@@ -2655,6 +2660,9 @@ tape_margin_eff=tape_inset_support ? tape_margin : max(-thorn_groove, tape_45_ma
 
 cover_film_thickness = 0.10;
 
+// If the inset is split into left and right, where does that split occur? left or right of the embossed trough
+compliant_emboss = tape_emboss<0.5;
+
 function inset_profile(left,right,cover,after_pick) = [
 
     each [ if(right) each [
@@ -2686,7 +2694,7 @@ function inset_profile(left,right,cover,after_pick) = [
         [tape_width_eff, -tape_thickness], // the bottom right corner of the tape
     ]],
 
-    each [ if(right&&!tape_inset_compliant || left&&tape_inset_compliant) each [
+    each [ if(right&&!compliant_emboss || left&&compliant_emboss) each [
         [tape_width_eff, -tape_thickness], // the bottom right corner of the tape
         [tape_width_eff-tape_margin, -tape_thickness], // top right corner above the embossed part
         [tape_width_eff-tape_margin, -tape_thickness-tape_emboss], // bottom right embossed part
@@ -2695,14 +2703,14 @@ function inset_profile(left,right,cover,after_pick) = [
 
     each [ if(left) each [
         [sprocket_gap+tape_margin, -tape_thickness-tape_emboss], // bottom left embossed part
-        [sprocket_gap+(right?tape_margin_eff:tape_margin), -tape_thickness], // top left corner above the embossed part
-        [bevel_z, -tape_thickness], // near the bottom left corner of the tape. there is a bevel
-        [0, -tape_thickness-bevel_z],  // near the bottom left corner of the tape. there is a bevel
+        [sprocket_gap+(right?tape_margin_eff:tape_margin), tape_inset_below_tension-tape_thickness], // top left corner above the embossed part
+        [bevel_z, tape_inset_below_tension-tape_thickness], // near the bottom left corner of the tape. there is a bevel
+        [0, tape_inset_below_tension-tape_thickness-bevel_z],  // near the bottom left corner of the tape. there is a bevel
         [0, -base_height-e], // bottom left corner of the inset
         [sprocket_gap+tape_margin, -base_height-e], // bottom surface; underneath the embossed part
     ]],
 
-    each [ if(right&&!tape_inset_compliant || left&&tape_inset_compliant) each [
+    each [ if(right&&!compliant_emboss || left&&compliant_emboss) each [
         [sprocket_gap+tape_margin, -base_height-e], // bottom surface; underneath the embossed part
         [tape_width_eff, -base_height-e], // bottom surface; underneath the right edge of the tape
     ]],
@@ -2916,10 +2924,10 @@ module inset(left,right)
                                     // iteration 0 is the long groove
                                     // iteration 1 is a short extension that allows the tooth to slip off the bumper ramp
                                     groove = [
-                                        [sprocket_margin-tape_min_margin+thorn_groove/2, -tape_thickness+e],
-                                        [sprocket_margin-tape_min_margin-thorn_groove/2, -tape_thickness-thorn_groove],
-                                        [sprocket_hole_margin+thorn_groove/2, -tape_thickness-thorn_groove],
-                                        [max(0, sprocket_hole_margin-thorn_groove/2), -tape_thickness+e]
+                                        [sprocket_margin-tape_min_margin+thorn_groove/2, tape_inset_below_tension-tape_thickness+e],
+                                        [sprocket_margin-tape_min_margin-thorn_groove/2, tape_inset_below_tension-tape_thickness-thorn_groove],
+                                        [sprocket_hole_margin+thorn_groove/2, tape_inset_below_tension-tape_thickness-thorn_groove],
+                                        [max(0, sprocket_hole_margin-thorn_groove/2), tape_inset_below_tension-tape_thickness+e]
                                     ];
                                     translate([dog_nominal_x+(i?(2*sprocket_pitch):thorn_diameter*1), 0, i?0:-dog_bumper_ramp_width]) {
                                         rotate([0, -90, 0]) {
@@ -2939,10 +2947,10 @@ module inset(left,right)
                                 }
 
                                 // compliant surface
-                                if(tape_inset_compliant)
+                                if(tape_inset_effective_compliant)
                                 if(left) {
                                     compliant_footing = max(tape_inset_compliant_wall*1.5,tape_inset_compliant_pitch*0.1);
-                                    compliant_ceiling = -tape_thickness-thorn_groove-tape_inset_compliant_wall;
+                                    compliant_ceiling = tape_inset_below_tension-tape_thickness-thorn_groove-tape_inset_compliant_wall;
                                     for (x=[0:ceil(-(tape_inset_begin-pick_offset)/tape_inset_compliant_pitch-0.5)])
                                     translate([base_end-x*tape_inset_compliant_pitch,0,0]) {
                                         linear_extrude(100)
@@ -3029,7 +3037,7 @@ module inset(left,right)
                     if (reversal_blocking_thorn_length > 0 && right) {
                         dog_xx = [dog_nominal_x-dog_travel_nominal-sprocket_pitch*2, dog_nominal_x+sprocket_pitch*2];
                         for(x = [ for (i=[0:inset_number_of_reverse_blocking_thorns-1]) dog_xx[i] ]) {
-                            translate([round(x/sprocket_pitch)*sprocket_pitch, e - tape_thickness*tape_inset_cover_tension*(tape_width-sprocket_hole_distance)/tape_width,
+                            translate([round(x/sprocket_pitch)*sprocket_pitch, tape_inset_below_tension+e - tape_thickness*tape_inset_cover_tension*(tape_width-sprocket_hole_distance)/tape_width,
                                 sprocket_hole_distance-thorn_sideways_tension]) {
                                 rotate([90, 0, 0])
                                     thorn(diameter=thorn_diameter,
