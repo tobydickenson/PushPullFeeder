@@ -142,7 +142,7 @@ opacity_low = 1.0;
 // Standard layer height
 layer_height=0.1;
 // Standard extrusion width
-extrusion_width=0.4;
+extrusion_width=0.4; // [ 0.1 : 0.01 : 1.0 ]
 // Minimum gap between parts on the the print bed
 gap=2;
 // Maximum spacing between supports (0 to switch off)
@@ -236,7 +236,7 @@ tape_inset_end=6;
 // Tension for tape cover (ratio of tape thickness)
 tape_inset_cover_tension=0.0;
 // (mm)
-tape_inset_below_tension=0.0; // [0.0:1.0:0.01]
+tape_inset_below_tension=0.0; // [0.0:0.01:1.0]
 // Radius of the tape on-ramp
 tape_bend_radius_begin=30;
 // Bend angle of the tape on-ramp
@@ -299,7 +299,7 @@ tape_inset_effective_compliant = tape_inset_compliant && tape_inset_split;
 tape_inset_compliant_pitch = 14.0;
 
 // Maximum displacement of the compliant spring. This is the maximum extra tape thickness.
-tape_inset_compliant_flex = 0.9;  // [0.0:2.0:0.1]
+tape_inset_compliant_flex = 0.9;  // [0.0:0.1:2.0]
 
 // Compliant spring wall. This should be the width of two narrow extrusions, so that the slicer can put a full wall around each compliant pocket.
 tape_inset_compliant_wall = 0.5;
