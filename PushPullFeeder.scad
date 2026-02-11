@@ -504,7 +504,7 @@ lever_spool_spring_bend=5;
 // Ratchet tooth that the spool spring connects to (counter-clockwise from 0°)
 lever_spool_spring_tooth=-1;
 // Lever fillet radius
-lever_fillet=4;
+lever_fillet=2.5;
 
 lever_axle_outer_diameter = reel_axle;
 lever_strength=lever_axle_diameter+3*wall;
@@ -577,7 +577,7 @@ dog_bumper_height=0.6;
 // The width of the ramp which lifts the dog out of the sprocket hole
 dog_bumper_ramp_width=0.8;
 // The effective horizontal tension to drive the dog against the bumper
-dog_bumper_tension=0.6;
+dog_bumper_tension=0.3;
 
 /* [ Friction Wheel ] */
 
@@ -3317,7 +3317,8 @@ if (do_lever) {
                                     dog_eff_y+dog_height0],
                             dog_spring_bend_eff,
                             -spring_strength/2,
-                            spring_strength/2);
+                            spring_strength/2,
+                            strengthA = spring_strength/8);
                         // dog
                         translate([dog_eff_x, dog_eff_y])
                             translate(dog_neck)
@@ -3893,7 +3894,8 @@ function spring_relaxed_endpoint(p0, p1, angle, angle_relax) =
 module spring_contour(p0, p1, angle, 
     strength0=-spring_strength/2, 
     strength1=spring_strength/2, 
-    end_angle = undef) {
+    end_angle = undef,
+    strengthA = undef) {
     strength=strength1-strength0;
     d=p1-p0;
     m=(p1+p0)/2;
@@ -3904,17 +3906,19 @@ module spring_contour(p0, p1, angle,
     n0=sign(-angle)*v0/r;
     v1=p1-c;
     n1=sign(-angle)*v1/r;
+
+    strengthAA = (strengthA==undef)? 0.0: strengthA;
     
     difference() {
         polygon([
             each arc(
-            p0+n0*strength0, 
-            p1+n1*strength0,
+            p0+n0*(strength0-strengthAA),
+            p1+n1*(strength0),
             angle),
             
             each arc(
-            p1+n1*strength1, 
-            p0+n0*strength1,
+            p1+n1*(strength1),
+            p0+n0*(strength1+strengthAA),
             -angle),
         ]);
         if (end_angle != undef) { 
