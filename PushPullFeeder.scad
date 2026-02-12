@@ -433,7 +433,7 @@ ratchet_window=true;
 // Tension of springs angle
 spring_tension=12;
 // Strength of springs [number of extrusions]
-spring_strength_extrusions=3;
+spring_strength_extrusions=2;
 spring_strength_extrusions_small=2;
 spring_strength=spring_strength_extrusions*extrusion_width;
 spring_small_strength=spring_strength_extrusions_small*extrusion_width;
@@ -2260,6 +2260,10 @@ if (do_base_plate) {
                             [y1*dog_slant+dog_nominal_x+dog_strength/2+dog_blocker_strength,y1],
                             [y1*dog_slant+dog_nominal_x+dog_strength/2, y1],
                         ]);
+
+                        // a lump behind the dog window
+                        translate([dog_nominal_x-dog_travel_nominal-sprocket_pitch-dog_strength-inset_edge,inset_edge]) // move it just behind the tape side
+                        polygon(arc([0,0],[-dog_blocker_strength,0],180));
                     }
 
                     // thinner parts of the base plate (embossed)
@@ -3309,7 +3313,12 @@ if (do_lever) {
                                 circle_p(d=lever_axle_diameter);
                             }
                         }
-                        // dog spring
+                        // Dog spring
+                        // The spring width is tweaked so that:
+                        // * It is slightly thicker near the lever, where bending stress is greater
+                        // * There are continuous extrusions through the length of the lever, to prevent
+                        //   stress concentrations. This has been tweaked for BambuStudio slicer, and other
+                        //   slicers might be different.
                         spring_contour(
                             [lever_tape_x+(lever_axle_x-pick_offset),
                                 lever_tape_y+lever_axle_y],
@@ -3318,7 +3327,8 @@ if (do_lever) {
                             dog_spring_bend_eff,
                             -spring_strength/2,
                             spring_strength/2,
-                            strengthA = spring_strength/8);
+                            strengthA = spring_strength*0.30,
+                            strengthB = spring_strength*0.05);
                         // dog
                         translate([dog_eff_x, dog_eff_y])
                             translate(dog_neck)
@@ -3895,7 +3905,8 @@ module spring_contour(p0, p1, angle,
     strength0=-spring_strength/2, 
     strength1=spring_strength/2, 
     end_angle = undef,
-    strengthA = undef) {
+    strengthA = 0.0,
+    strengthB = 0.0) {
     strength=strength1-strength0;
     d=p1-p0;
     m=(p1+p0)/2;
@@ -3907,18 +3918,16 @@ module spring_contour(p0, p1, angle,
     v1=p1-c;
     n1=sign(-angle)*v1/r;
 
-    strengthAA = (strengthA==undef)? 0.0: strengthA;
-    
     difference() {
         polygon([
             each arc(
-            p0+n0*(strength0-strengthAA),
-            p1+n1*(strength0),
+            p0+n0*(strength0-strengthA),
+            p1+n1*(strength0-strengthB),
             angle),
             
             each arc(
-            p1+n1*(strength1),
-            p0+n0*(strength1+strengthAA),
+            p1+n1*(strength1+strengthB),
+            p0+n0*(strength1+strengthA),
             -angle),
         ]);
         if (end_angle != undef) { 
