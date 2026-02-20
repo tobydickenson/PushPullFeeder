@@ -72,7 +72,7 @@
 
             "tape_width": "24",
             "tape_max_height": "14",
-            "lumen_y": "-20"
+            "simple_extrusion_mount_y": "-20"
         },
         "inset_8mm_paper_left": {
             "make_base_plate": "false",
@@ -422,7 +422,7 @@
             "tape_max_height": "14",
             "cover_tape_edge": "-8.5",
             "tape_inset_window_length": "15",
-            "lumen_y": "-20",
+            "simple_extrusion_mount_y": "-20",
 
             "tape_inset_split": "true",
             "tape_inset_left": "false",
@@ -456,7 +456,7 @@
             "tape_max_height": "14",
             "tape_inset_window_length": "30",
             "cover_tape_edge": "-8",
-            "lumen_y": "-20",
+            "simple_extrusion_mount_y": "-20",
 
             "tape_inset_split": "true",
             "tape_inset_left": "true",
@@ -490,7 +490,7 @@
             "tape_max_height": "14",
             "tape_inset_window_length": "30",
             "cover_tape_edge": "-8",
-            "lumen_y": "-20",
+            "simple_extrusion_mount_y": "-20",
 
             "tape_inset_split": "true",
             "tape_inset_left": "false",

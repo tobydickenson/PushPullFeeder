@@ -372,8 +372,8 @@ base_screw_holes=[base_screw_hole1, base_screw_hole2];
 draw_nozzle_tip = false;
 
 // mounting point; top of extrusion
-lumen_y = -12;
-lumen_x = 2;
+simple_extrusion_mount_y = -12;
+simple_extrusion_mount_x = 2;
 
 
 /* [ Cover Tape Spool ] */
@@ -596,9 +596,14 @@ spool_drum_strength=spool_drum_clamp_strength+wall+friction_pip_size;
 
 /* [ Extrusion Mount ] */
 
-// Add the lumen mount
-lumen_mount_enabled=true;
-// Add the extrusion mount to the base plate
+// Add the mount where the extrusion is located immediately under
+// the pick location, fixed with a vertical bolt into a t-nut
+extrusion_mount_with_bolt_fixing_enabled = false;
+// Add the mount where the extrusion is located immediately under
+// the pick location with a sprung clip
+extrusion_mount_with_clip_fixing_enabled = true;
+
+// Add the **original** extrusion mount with handle lock to the base plate
 extrusion_mount_enabled=false;
 // Extrusion unit size
 extrusion_mount_unit=20; 
@@ -1881,7 +1886,7 @@ if (do_reel_counterpart && base_with_reel_holder) {
     }
 }
 
-module lumen_mount_2D() {
+module extrusion_mount_with_bolt_fixing_2D() {
     t = 4; // structural wall thickness
     extrusion_r = 0.8; // internal corner radius
     external_r = 2.0; // rounding our structural corners
@@ -1890,34 +1895,141 @@ module lumen_mount_2D() {
         [lever_axle_x-16,             -base_height],
 
         each arc(
-            [lumen_x + extrusion_mount_w/2 + t - external_r, -base_height+e],
-            [lumen_x + extrusion_mount_w/2 + t,              -base_height - external_r],
+            [simple_extrusion_mount_x + extrusion_mount_w/2 + t - external_r, -base_height+e],
+            [simple_extrusion_mount_x + extrusion_mount_w/2 + t,              -base_height - external_r],
             -90),
 
         each arc(
-            [lumen_x + extrusion_mount_w/2 + t - tension,    lumen_y - extrusion_mount_h*0.4],
-            [lumen_x + extrusion_mount_w/2 - tension,        lumen_y - extrusion_mount_h*0.4],
+            [simple_extrusion_mount_x + extrusion_mount_w/2 + t - tension,    simple_extrusion_mount_y - extrusion_mount_h*0.4],
+            [simple_extrusion_mount_x + extrusion_mount_w/2 - tension,        simple_extrusion_mount_y - extrusion_mount_h*0.4],
             -180),
 
         each arc(
-            [lumen_x + extrusion_mount_w/2,             lumen_y-extrusion_r],
-            [lumen_x + extrusion_mount_w/2-extrusion_r, lumen_y],
+            [simple_extrusion_mount_x + extrusion_mount_w/2,             simple_extrusion_mount_y-extrusion_r],
+            [simple_extrusion_mount_x + extrusion_mount_w/2-extrusion_r, simple_extrusion_mount_y],
             90),
 
         each arc(
-            [lumen_x - extrusion_mount_w/2+extrusion_r, lumen_y],
-            [lumen_x - extrusion_mount_w/2,             lumen_y-extrusion_r],
+            [simple_extrusion_mount_x - extrusion_mount_w/2+extrusion_r, simple_extrusion_mount_y],
+            [simple_extrusion_mount_x - extrusion_mount_w/2,             simple_extrusion_mount_y-extrusion_r],
             90),
 
         each arc(
-            [lumen_x - extrusion_mount_w/2,             lumen_y - extrusion_mount_h+t/2 ],
-            [lumen_x - extrusion_mount_w/2 - t/2,         lumen_y - extrusion_mount_h ],
+            [simple_extrusion_mount_x - extrusion_mount_w/2,             simple_extrusion_mount_y - extrusion_mount_h+t/2 ],
+            [simple_extrusion_mount_x - extrusion_mount_w/2 - t/2,         simple_extrusion_mount_y - extrusion_mount_h ],
             -90),
 
-        [lumen_x - extrusion_mount_w/2 - t,         lumen_y - extrusion_mount_h ],
+        [simple_extrusion_mount_x - extrusion_mount_w/2 - t,         simple_extrusion_mount_y - extrusion_mount_h ],
 
     ]);
 }
+
+
+module extrusion_mount_with_clip_fixing_2D() {
+    t = 4; // structural wall thickness
+    f = 2; // finger thickness
+    j = 2; // how far the tip protrudes behind the v slot wall
+    k = 2; // how far the tip protrudes around the bottom of the extrusion
+    tip_r = 0.5;
+    extrusion_r = 0.5; // internal corner radius
+    external_r = 2.0; // rounding our structural corners
+    wall = 1.8; // extrusion wall thickness
+    big_r = 18;
+    m = 7.26; // internal pocket size for v channel wall
+    polygon([
+        [simple_extrusion_mount_x - extrusion_mount_w/2 - t,         simple_extrusion_mount_y - extrusion_mount_h - f],
+
+        [lever_axle_x-16,             -base_height],
+
+
+        each arc(
+            [simple_extrusion_mount_x + extrusion_mount_w/2 + t - external_r, -base_height+e],
+            [simple_extrusion_mount_x + extrusion_mount_w/2 + t,              -base_height - external_r],
+            -90),
+
+        each arc(
+            [simple_extrusion_mount_x + extrusion_mount_w/2 + t,              simple_extrusion_mount_y - m - f + t],
+            [simple_extrusion_mount_x + extrusion_mount_w/2 + t - t, simple_extrusion_mount_y - m - f],
+            -90),
+
+
+        each arc(
+            [simple_extrusion_mount_x + extrusion_mount_w/2 - wall - j + external_r,    simple_extrusion_mount_y - m - f ],
+            [simple_extrusion_mount_x + extrusion_mount_w/2 - wall - j,                 simple_extrusion_mount_y - m - f + external_r],
+            -90),
+
+        each arc(
+            [simple_extrusion_mount_x + extrusion_mount_w/2 - wall - j,           simple_extrusion_mount_y - m],
+            [simple_extrusion_mount_x + extrusion_mount_w/2 - wall,            simple_extrusion_mount_y - m],
+            -180),
+
+        each arc(
+            [simple_extrusion_mount_x + extrusion_mount_w/2-wall,          simple_extrusion_mount_y - m],
+            [simple_extrusion_mount_x + extrusion_mount_w/2,                 simple_extrusion_mount_y - m + wall],
+            90),
+
+
+        each arc(
+            [simple_extrusion_mount_x + extrusion_mount_w/2,             simple_extrusion_mount_y-extrusion_r],
+            [simple_extrusion_mount_x + extrusion_mount_w/2-extrusion_r, simple_extrusion_mount_y],
+            90),
+
+        each arc(
+            [simple_extrusion_mount_x - extrusion_mount_w/2+extrusion_r, simple_extrusion_mount_y],
+            [simple_extrusion_mount_x - extrusion_mount_w/2,             simple_extrusion_mount_y-extrusion_r],
+            90),
+
+        each arc(
+            [simple_extrusion_mount_x - extrusion_mount_w/2,             simple_extrusion_mount_y - extrusion_mount_h + extrusion_r],
+            [simple_extrusion_mount_x - extrusion_mount_w/2+extrusion_r, simple_extrusion_mount_y - extrusion_mount_h],
+            90),
+
+        each arc(
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k - tip_r, simple_extrusion_mount_y - extrusion_mount_h],
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k,         simple_extrusion_mount_y - extrusion_mount_h - tip_r],
+            -90),
+
+        each arc(
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k,         simple_extrusion_mount_y - extrusion_mount_h - f + external_r],
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k - external_r, simple_extrusion_mount_y - extrusion_mount_h - f],
+            -90),
+    ]);
+}
+
+module extrusion_mount_with_clip_fixing_2D_low() {
+    t = 5; // structural wall thickness
+    f = 2; // finger thickness
+    j = 2; // how far the tip protrudes behind the v slot wall
+    k = 2; // how far the tip protrudes around the bottom of the extrusion
+    tip_r = 0.5;
+    extrusion_r = 0.5; // internal corner radius
+    external_r = 2.0; // rounding our structural corners
+    wall = 1.8; // extrusion wall thickness
+    big_r = 18;
+    m = 7.26; // internal pocket size for v channel wall
+    polygon([
+        [simple_extrusion_mount_x - extrusion_mount_w/2 , simple_extrusion_mount_y - extrusion_mount_h+5],
+        [simple_extrusion_mount_x - extrusion_mount_w/2 , simple_extrusion_mount_y - extrusion_mount_h],
+        each arc(
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k - tip_r, simple_extrusion_mount_y - extrusion_mount_h],
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k,         simple_extrusion_mount_y - extrusion_mount_h -8],
+            20),
+        each arc(
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k,         simple_extrusion_mount_y - extrusion_mount_h -8],
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k-1,         simple_extrusion_mount_y - extrusion_mount_h -9],
+            -90),
+        each arc(
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k - 9,         simple_extrusion_mount_y - extrusion_mount_h -9],
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k - 10,         simple_extrusion_mount_y - extrusion_mount_h -8],
+            -90),
+        each arc(
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k - 10,         simple_extrusion_mount_y - extrusion_mount_h -8],
+            [simple_extrusion_mount_x - extrusion_mount_w/2 + k - 8, simple_extrusion_mount_y - extrusion_mount_h+5],
+            20),
+    ]);
+}
+
+
 
 module extrusion_mount_2D() {
         
@@ -2170,8 +2282,11 @@ if (do_base_plate) {
                             translate([(lever_axle_x-pick_offset), lever_axle_y])
                                 circle_p(d=lever_axle_diameter);
 
-                            if (lumen_mount_enabled) {
-                                lumen_mount_2D();
+                            if (extrusion_mount_with_bolt_fixing_enabled) {
+                                extrusion_mount_with_bolt_fixing_2D();
+                            }
+                            if (extrusion_mount_with_clip_fixing_enabled) {
+                                extrusion_mount_with_clip_fixing_2D();
                             }
 
                     }
@@ -2312,6 +2427,13 @@ if (do_base_plate) {
                     translate([(lever_axle_x-pick_offset), lever_axle_y, base_thickness-emboss-e]) {
                         cylinder_p(h=layer_height+e, d=lever_axle_diameter+2*base_anti_friction_ring);
                     }
+
+                    beveled_extrude(height=base_thickness, bevel=bevel_z) {
+                        if (extrusion_mount_with_clip_fixing_enabled) {
+                            extrusion_mount_with_clip_fixing_2D_low();
+                        }
+                    }
+
                     
                     if (emboss > 0) {
                         // thicker parts of the base plate
@@ -2516,7 +2638,7 @@ if (do_base_plate) {
                             }
                         }
                         else {
-                            if(!lumen_mount_enabled) {
+                            if(!(extrusion_mount_with_bolt_fixing_enabled || extrusion_mount_with_clip_fixing_enabled)) {
                                 // floor screws
                                 sunk=base_height-tape_max_height;
                                 for (x = base_screw_holes) {
@@ -2529,17 +2651,17 @@ if (do_base_plate) {
                             }
                         }
 
-                        if(lumen_mount_enabled) {
+                        if(extrusion_mount_with_bolt_fixing_enabled || extrusion_mount_with_clip_fixing_enabled) {
                             // extrusion top t nut hole
-                            translate([lumen_x, -50, base_thickness+tape_halfway_hole])
+                            translate([simple_extrusion_mount_x, -50, base_thickness+tape_halfway_hole])
                             rotate([-90, 0, 0])
                             cylinder_p(d=mounting_screw_diameter,h=100);
 
-                            translate([lumen_x, 0, base_thickness+tape_halfway_hole])
+                            translate([simple_extrusion_mount_x, 0, base_thickness+tape_halfway_hole])
                             rotate([90, 0, 0])
-                            cylinder_p(d=mounting_screw_head_diameter,h=-lumen_y-mounting_screw_wall_thickness);
+                            cylinder_p(d=mounting_screw_head_diameter,h=-simple_extrusion_mount_y-mounting_screw_wall_thickness);
 
-                            translate([lumen_x, lumen_y+mounting_screw_wall_thickness, base_thickness+tape_halfway_hole])
+                            translate([simple_extrusion_mount_x, simple_extrusion_mount_y+mounting_screw_wall_thickness, base_thickness+tape_halfway_hole])
                             rotate([90, 0, 0])
                             cylinder_p(d1=mounting_screw_head_diameter,d2=mounting_screw_diameter,h=mounting_screw_countersink_depth);
                         }
@@ -2943,9 +3065,9 @@ module inset(left,right)
                                     }
                                 }
 
-                                if(lumen_mount_enabled) {
+                                if(extrusion_mount_with_bolt_fixing_enabled||extrusion_mount_with_clip_fixing_enabled) {
                                     // extrusion top t nut driver hole
-                                    translate([lumen_x, -50, tape_halfway_hole])
+                                    translate([simple_extrusion_mount_x, -50, tape_halfway_hole])
                                     rotate([-90, 0, 0])
                                     cylinder_p(d=2.8+screw_play,h=100);
                                 }
