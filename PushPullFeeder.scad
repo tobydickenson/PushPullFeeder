@@ -433,7 +433,7 @@ ratchet_window=true;
 // Tension of springs angle
 spring_tension=12;
 // Strength of springs [number of extrusions]
-spring_strength_extrusions=2;
+spring_strength_extrusions=3;
 spring_strength_extrusions_small=2;
 spring_strength=spring_strength_extrusions*extrusion_width;
 spring_small_strength=spring_strength_extrusions_small*extrusion_width;
@@ -503,8 +503,10 @@ lever_spool_angle=125;
 lever_spool_spring_bend=5;
 // Ratchet tooth that the spool spring connects to (counter-clockwise from 0°)
 lever_spool_spring_tooth=-1;
-// Lever fillet radius
-lever_fillet=2.5;
+// Lever/spring fillet radius
+lever_fillet=0.5;
+// spring/dog fillet radius
+dog_fillet=2.5;
 
 lever_axle_outer_diameter = reel_axle;
 lever_strength=lever_axle_diameter+3*wall;
@@ -598,10 +600,10 @@ spool_drum_strength=spool_drum_clamp_strength+wall+friction_pip_size;
 
 // Add the mount where the extrusion is located immediately under
 // the pick location, fixed with a vertical bolt into a t-nut
-extrusion_mount_with_bolt_fixing_enabled = false;
+extrusion_mount_with_bolt_fixing_enabled = true;
 // Add the mount where the extrusion is located immediately under
 // the pick location with a sprung clip
-extrusion_mount_with_clip_fixing_enabled = true;
+extrusion_mount_with_clip_fixing_enabled = false;
 
 // Add the **original** extrusion mount with handle lock to the base plate
 extrusion_mount_enabled=false;
@@ -3439,24 +3441,30 @@ if (do_lever) {
                         // The spring width is tweaked so that:
                         // * It is slightly thicker near the lever, where bending stress is greater
                         // * There are continuous extrusions through the length of the lever, to prevent
-                        //   stress concentrations. This has been tweaked for BambuStudio slicer, and other
-                        //   slicers might be different.
-                        spring_contour(
-                            [lever_tape_x+(lever_axle_x-pick_offset),
-                                lever_tape_y+lever_axle_y],
-                            [dog_eff_x-dog_length+dog_slant*dog_height0,
-                                    dog_eff_y+dog_height0],
-                            dog_spring_bend_eff,
-                            -spring_strength/2,
-                            spring_strength/2,
-                            strengthA = spring_strength*0.30,
-                            strengthB = spring_strength*0.05);
-                        // dog
-                        translate([dog_eff_x, dog_eff_y])
-                            translate(dog_neck)
-                                rotate(dog_spring_bend_eff-dog_spring_bend)
-                                    translate(-dog_neck)
-                                        polygon(dog_contour);
+                        //   stress concentrations. This has been tweaked for BambuStudio slicer,
+                        //   and needs the Inner wall and Outer wall options set to 0.3mm with a 0.4mm
+                        //   nozzle. Other slicers and other machines may be different. Anyway, the
+                        //   most important detail is to avoid any discontinuities that may cause
+                        //   a stress concentration.
+                        fillet2d(dog_fillet) union() {
+                            spring_contour(
+                                [lever_tape_x+(lever_axle_x-pick_offset),
+                                    lever_tape_y+lever_axle_y],
+                                [dog_eff_x-dog_length+dog_slant*dog_height0,
+                                        dog_eff_y+dog_height0],
+                                dog_spring_bend_eff,
+                                -spring_strength/2,
+                                spring_strength/2,
+                                strengthA = spring_strength*-0.01,
+                                strengthB = spring_strength*-0.08);
+                            // dog
+
+                            translate([dog_eff_x, dog_eff_y])
+                                translate(dog_neck)
+                                    rotate(dog_spring_bend_eff-dog_spring_bend)
+                                        translate(-dog_neck)
+                                            polygon(dog_contour);
+                        }
                     }
                 }
                 // add the dog's thorn
@@ -3520,17 +3528,24 @@ if (do_lever) {
             }
 
             translate([(lever_axle_x-pick_offset), lever_axle_y, -1])
-            rotate(-asin(dog_bumper_tension/(dog_offset-lever_axle_x)),[1,1,0]) // tilt the dog towards the bumper
             {
-                // axle
-                beveled_extrude(height=lever_thickness_8-layer_height*2+2,bevel=bevel_z, angle=135)
-                circle_p(d=lever_axle_diameter+axle_play+phase2_play);
+                rotate(-asin(dog_bumper_tension/(dog_offset-lever_axle_x)),[1,1,0]) // tilt the dog towards the bumper
+                {
+                    // axle
+                    beveled_extrude(height=lever_thickness_8-layer_height*2+2,bevel=bevel_z, angle=135)
+                    circle_p(d=lever_axle_diameter+axle_play+phase2_play);
 
-                // additional elephants-foot protection
-                beveled_extrude(height=lever_thickness_8-layer_height*2+2,bevel=0.7, angle=125)
-                circle_p(d=lever_axle_diameter+axle_play+phase2_play);
+                    // additional elephants-foot protection
+                    beveled_extrude(height=lever_thickness_8-layer_height*2+2,bevel=0.7, angle=125)
+                    circle_p(d=lever_axle_diameter+axle_play+phase2_play);
 
-                spiral_groove(spool_axle_diameter,lever_thickness_8-layer_height*2+2,-1);
+                    spiral_groove(lever_axle_diameter,lever_thickness_8-layer_height*2+2,-1);
+                }
+
+                // A groove to capture layer start/end point. This is to ensure the slicer
+                // never puts the layer start near a leaf spring
+                rotate(180,[0,0,1])
+                spiral_groove(lever_axle_outer_diameter,lever_thickness_8-layer_height*2+2,-1);
             }
         }
     }

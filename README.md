@@ -12,16 +12,17 @@ This is a fork of Markmaker’s awesome [PushPullFeeder](https://github.com/mark
 
 The original model supports a dazzling array of configuration parameters. Here I present some useful parameter sets that I use in production on the lumenpnp.
 
-# Changes in Release 130 (January 2026)
+# Changes in Release 152 (January 2026)
 
 - Printability improvements for Bambu printers - My main printer is now A1 mini.
 - A huge increase in smoothness. Previous versions push the tape with a pair of sprung teeth. In previous versions a tooth on the pusher dog drags along the top surface of the tape then drops into a sprocket hole before pushing forward. A the tape is then pushed over the reverse-blocking tooth, which pops into the sprocket hole at the end of the push. All of these actions cause vibrations and impacts on the tape surface which can cause vibrations which jump 0603 and smaller parts out of pockets. This version uses "the bumper" cam which actively lifts the tooth out of one sprocket hole, and lowers into the next before pushing forward. The reverse-blocking tooth is removed entirely. Having eliminated the main causes of vibrations, it has been possible to eliminate some other vibration-mitigation features which further improves the smoothness of the feed.
+- The lever part is much more robust. This is due to some design refinements and some changes to the printing recommendations.
 - Further improvement to prevent the tape getting jammed. A jammed tape can cause the lever to break when activated.
 - Improved rigidity on the machine mount.
 - Some changes to recommended printer settings - see below.
 - Change to assist in assembling the film peeling spool onto the base.
 
-# Changes in Release 74 (August 2025) excluding those later reverted in Release 130
+# Changes in Release 74 (August 2025) excluding those later reverted in Release 152
 
 ## Improvements for parts in paper tape
 - The "inset" is the part which holds the tape as it passes through the feeder. There are several changes to the profile of the inset to reduce part jumpiness.
@@ -64,19 +65,24 @@ STL files for immediate printing are in the `printme` directory.
 
 All parts should be printed in PETG. PETG has a stable modulus over temperature, which is required for the spring parts. PETG has good abrasion resistance, which is required for the lever and base which interact at "the bumper"
 
-Models are configured for 0.1mm or 0.12mm layer height.
+All models are tested on a Bambu A1 printer with 0.4mm nozzle. All parts print with the standard "0.12mm High Quality" print profile, with the exception of the Lever part (see below)
 
-Use "layer start: sharpest corner" or "seam: aligned". Plain bearing surfaces have a helical groove which is designed to capture the layer start, ensuring that the exposed bearing surface is a smooth continous extrusion.
+For other slicers, use a "layer start: sharpest corner" or "seam: aligned" option. Plain bearing surfaces have a helical groove which is designed to capture the layer start, ensuring that the exposed bearing surface is a smooth continous extrusion.
 
 IMPORTANT: Before printing, it is critical that your printer can produce dimensionally accurate parts. Print the `printme/nuts/nuts-xxx.stl` file, and confirm that:
 
 - The parts are circular, not elliptical.
 - The parts are circular, not a lower polygon count approximation substituted by your slicer.
-- The outer diameter of the first part is 8.00mm. This is a dimension accuracy check.
-- The inner diameter of the second part (labelled 0) is 8.00mm. This is a dimension accuracy check.
+- The outer diameter of the first part is 8.00mm. This is a dimension accuracy check. You may need to adjust a "X-Y contour compensation" option.
+- The inner diameter of the second part (labelled 0) is 8.00mm. This is a dimension accuracy check. You may need to adjust a "X-Y hole compensation" option.
 - The inner diameter of the third part is 8.10mm. This is labelled 10 because of the 10x10µm size increase. Fitting the first part inside this hole is a validation check of axle plain bearings.
 
 Any problems need to be addressed first, through either printer hardware maintenance or slicer configuration. The printed feeder is very sensitive to dimensional tolerance; if your printer can't produce an accurate nut then it will not be able to print a working feeder!
+
+The **Lever** parts has a leaf spring feature which needs some care to print effectively. The important constraint is that the leaf springs must be printed as continuous extrusions; any discontinuities will result in a stress concentration which will make the spring insufficiently robust. On a Bambu A1 with 0.4mm nozzle this can be acheived by setting the "Outer wall" and "Inner wall" options to 0.3mm. Please confirm this has the desired effect using your slicer preview. The leaf springs should be printed as four wall extrusions with no discontinuities, as highlighted in green below. The red highlights show various discontinuities which would cause the leaf spring to be insufficiently robust.
+
+![Lever slicing](img/dogslicer.png)
+
 
 # Recommended movement steps
 
