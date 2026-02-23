@@ -17,6 +17,7 @@ The original model supports a dazzling array of configuration parameters. Here I
 - Printability improvements for Bambu printers - My main printer is now A1 mini.
 - A huge increase in smoothness. Previous versions push the tape with a pair of sprung teeth. In previous versions a tooth on the pusher dog drags along the top surface of the tape then drops into a sprocket hole before pushing forward. A the tape is then pushed over the reverse-blocking tooth, which pops into the sprocket hole at the end of the push. All of these actions cause vibrations and impacts on the tape surface which can cause vibrations which jump 0603 and smaller parts out of pockets. This version uses "the bumper" cam which actively lifts the tooth out of one sprocket hole, and lowers into the next before pushing forward. The reverse-blocking tooth is removed entirely. Having eliminated the main causes of vibrations, it has been possible to eliminate some other vibration-mitigation features which further improves the smoothness of the feed.
 - The lever part is much more robust. This is due to some design refinements and some changes to the printing recommendations.
+- An improved friction clutch for film peeling.
 - Further improvement to prevent the tape getting jammed. A jammed tape can cause the lever to break when activated.
 - Improved rigidity on the machine mount.
 - Some changes to recommended printer settings - see below.
