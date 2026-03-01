@@ -179,5 +179,5 @@ A single feed cycle, at 10% speed
 
 The bumper cam which actively lifts the tooth out of one sprocket hole, and lowers into the next before pushing forward.
 
-[The bumper cam action](img/bumper-cam-action.gif)
+![The bumper cam action](img/bumper-cam-action.gif)
 
