@@ -15,8 +15,9 @@ The original model supports a dazzling array of configuration parameters. Here I
 # Changes in Release 152 (January 2026)
 
 - Printability improvements for Bambu printers - My main printer is now A1 mini.
-- A huge increase in smoothness. Previous versions push the tape with a pair of sprung teeth. In previous versions a tooth on the pusher dog drags along the top surface of the tape then drops into a sprocket hole before pushing forward. A the tape is then pushed over the reverse-blocking tooth, which pops into the sprocket hole at the end of the push. All of these actions cause vibrations and impacts on the tape surface which can cause vibrations which jump 0603 and smaller parts out of pockets. This version uses "the bumper" cam which actively lifts the tooth out of one sprocket hole, and lowers into the next before pushing forward. The reverse-blocking tooth is removed entirely. Having eliminated the main causes of vibrations, it has been possible to eliminate some other vibration-mitigation features which further improves the smoothness of the feed.
+- A huge increase in smoothness. Previous versions push the tape with a pair of sprung teeth. In previous versions a tooth on the pusher dog drags along the top surface of the tape then drops into a sprocket hole before pushing forward. The tape is then pushed over the reverse-blocking tooth, which pops into the sprocket hole at the end of the push. All of these actions cause vibrations and impacts on the tape surface which can cause vibrations which jump 0603 and smaller parts out of pockets. This version uses "the bumper" cam which actively lifts the tooth out of one sprocket hole, and lowers into the next before pushing forward. The reverse-blocking tooth is removed entirely. Having eliminated the main causes of vibrations, it has been possible to eliminate some other vibration-mitigation features which further improves the smoothness of the feed.
 - The lever part is much more robust. This is due to some design refinements and some changes to the printing recommendations.
+- A compliant spring mechanism to gently support the underside of the tape.
 - An improved friction clutch for film peeling.
 - Further improvement to prevent the tape getting jammed. A jammed tape can cause the lever to break when activated.
 - Improved rigidity on the machine mount.
@@ -64,7 +65,7 @@ Use with the lumenpnp has several design requirements that are quite different t
 
 STL files for immediate printing are in the `printme` directory.
 
-All parts should be printed in PETG. PETG has a stable modulus over temperature, which is required for the spring parts. PETG has good abrasion resistance, which is required for the lever and base which interact at "the bumper"
+All parts should be printed in PETG. PETG has a stable modulus over temperature, which is required for the spring parts. PETG has good abrasion resistance, which is required for the lever and base which interact at "the bumper".
 
 All models are tested on a Bambu A1 printer with 0.4mm nozzle. All parts print with the standard "0.12mm High Quality" print profile, with the exception of the Lever part (see below)
 
@@ -80,7 +81,7 @@ IMPORTANT: Before printing, it is critical that your printer can produce dimensi
 
 Any problems need to be addressed first, through either printer hardware maintenance or slicer configuration. The printed feeder is very sensitive to dimensional tolerance; if your printer can't produce an accurate nut then it will not be able to print a working feeder!
 
-The **Lever** parts has a leaf spring feature which needs some care to print effectively. The important constraint is that the leaf springs must be printed as continuous extrusions; any discontinuities will result in a stress concentration which will make the spring insufficiently robust. On a Bambu A1 with 0.4mm nozzle this can be acheived by setting the "Outer wall" and "Inner wall" options to 0.3mm. Please confirm this has the desired effect using your slicer preview. The leaf springs should be printed as four wall extrusions with no discontinuities, as highlighted in green below. The red highlights show various discontinuities which would cause the leaf spring to be insufficiently robust.
+The **Lever** parts has a leaf spring feature which needs some care to print effectively. The important constraint is that the leaf springs must be printed as continuous extrusions; any discontinuities will result in a stress concentration which will make the spring insufficiently robust. On a Bambu A1 with 0.4mm nozzle this can be acheived by setting the "Outer wall" and "Inner wall" options to **0.3mm**. Please confirm this has the desired effect using your slicer preview. The leaf springs should be printed as four wall extrusions with no discontinuities, as highlighted in green below. The red highlights show various discontinuities which would cause the leaf spring to be insufficiently robust.
 
 ![Lever slicing](img/dogslicer.png)
 
@@ -107,38 +108,33 @@ To print a complete feeder you will need one item for each of the following cate
 
 - A base. 8mm, 12mm, or 16mm wide bases support paper tape and plastic tape with pockets up to 4mm deep. A 24mm extra-deep base supports both 24mm and 16mm tapes, with up to 11mm pockets.
 - A lever. The normal size fits the normal bases, and the extra-deep base needs a shorter lever.
-- A blocking spring; a single size for all feeders
-- For the film-peeling spool, the left side has an option to print either as a solid plate (for more robustness) or with spokes (for better visibility).
+- A blocking spring; a single size for all feeders.
+- The spool for spent film has several components. The left side is common to all variants.
 - The spool right side has 8mm, 12mm, 16mm, or 24mm options.
-- The spool friction wheel again has width options. Please check out the README file in this directory if this prints poorly.
+- The spool friction wheel again has width options.
 - A drum, which holds the peeled tape on the spool. Again this has width options.
-- Two washers; a single size for all feeders
+- Two washers; a single size for all feeders.
 
-Plus each feeder needs an inset. Insets for 8mm paper are printed as a single part. Options are:
+Plus each feeder needs an inset which consist of two parts, left and right. For **plastic tape** the options for the left side are:
 
-- 8mm for thin 0.7mm paper tape.
-- 8mm for thin paper with a scraper. (If you are not sure, then you don’t want a scraper)
-- 8mm for thick 1.0mm paper tape.
-- 8mm for thick paper with a scraper.
-
-Insets for plastic tape are printed in two parts. Options for the left side are:
-
-- The normal size which works with 8mm, 12mm, and 16mm feeders
+- The normal size which works with 8mm, 12mm, and 16mm feeders.
 - The extra-deep size for 24mm bases.
 
 Options for the plastic tape right side are:
 
 - 8mm
-- 8mm with a scraper
+- 8mm with a scraper (for parts that stick to the peeling film)
 - 12mm
 - 12mm with a scraper
 - 16mm
 - 16mm extra-deep
 - 24mm extra-deep
 
+Insets for 8m **paper tape** are also printed in two parts. The right side again has an optional scraper.
+
 # Photos!
 
-NB these photos show release 74.
+NB some of these photos show release 74.
 
 Some feeders mounted on the machine. Here we have 4 feeders for 8mm thin paper tapes (with the black inset) and one 8mm feeder for embossed plastic tape (inset in red).
 
@@ -179,4 +175,9 @@ The feeder in use, feeding and placing four parts.
 A single feed cycle, at 10% speed
 
 [![A single feed cycle, at 10% speed](img/yt2.jpg)](https://www.youtube.com/watch?v=0Pb1ezohiMo)
+
+
+The bumper cam which actively lifts the tooth out of one sprocket hole, and lowers into the next before pushing forward.
+
+[The bumper cam action](img/bumper-cam-action.gif)
 
