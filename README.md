@@ -177,7 +177,7 @@ A single feed cycle, at 10% speed
 [![A single feed cycle, at 10% speed](img/yt2.jpg)](https://www.youtube.com/watch?v=0Pb1ezohiMo)
 
 
-The bumper cam which actively lifts the tooth out of one sprocket hole, and lowers into the next before pushing forward.
+This shows the action of the bumper cam. It actively lifts the pusher tooth out of one sprocket hole, and lowers into the next before pushing forward.
 
 ![The bumper cam action](img/bumper-cam-action.gif)
 
