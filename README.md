@@ -5,7 +5,7 @@
 This is a fork of Markmaker’s awesome [PushPullFeeder](https://github.com/markmaker/PushPullFeeder). All of the genius in this design should be credited to Mark, and Mark's [blog](https://makr.zone/?p=399) is a great introduction. Here I present some refinements:
 
 - Some general usability and maintainability improvements.
-- A new mechanism for engaging and disengaging the pushing mechanism with the sprocket hole which greatly improves smoothness.
+- A new Bumper Cam mechanism for engaging and disengaging the pushing mechanism with the sprocket hole which greatly improves smoothness.
 - Some incremental improvements for feeding parts which were already handled well in Mark’s baseline design.
 - Some new features for feeding parts which were outside the scope of Mark’s original design: Parts with deep wide embossed pockets; from 8mm tape with 4mm pockets, up to 24mm with 11mm pockets tested to be working well.
 - An alternative machine mounting scheme which is particularly suitable for the lumenpnp machine. This model still supports Mark's mounting scheme too.
@@ -17,7 +17,7 @@ The original model supports a dazzling array of configuration parameters. Here I
 - Printability improvements for Bambu printers - My main printer is now A1 mini.
 - A huge increase in smoothness. Previous versions push the tape with a pair of sprung teeth. In previous versions a tooth on the pusher dog drags along the top surface of the tape then drops into a sprocket hole before pushing forward. The tape is then pushed over the reverse-blocking tooth, which pops into the sprocket hole at the end of the push. All of these actions cause vibrations and impacts on the tape surface which can cause vibrations which jump 0603 and smaller parts out of pockets. This version uses "the bumper" cam which actively lifts the tooth out of one sprocket hole, and lowers into the next before pushing forward. The reverse-blocking tooth is removed entirely. Having eliminated the main causes of vibrations, it has been possible to eliminate some other vibration-mitigation features which further improves the smoothness of the feed.
 - The lever part is much more robust. This is due to some design refinements and some changes to the printing recommendations.
-- A compliant spring mechanism to gently support the underside of the tape.
+- A compliant spring mechanism to gently support the underside of the tape and hold its top surface at the correct Z position.
 - An improved friction clutch for film peeling.
 - Further improvement to prevent the tape getting jammed. A jammed tape can cause the lever to break when activated.
 - Improved rigidity on the machine mount.
@@ -32,11 +32,11 @@ The original model supports a dazzling array of configuration parameters. Here I
 - A gentle lead-in to help insert the tape into the back of the inset.
 
 ## Improvements for parts in embossed plastic tape
-- An option to print the inset in two halves. The left half supports under the sprocket holes on the left side of the tap. The right half supports under the right side of the tape, and grips the tape from above. This avoids any geometry limitations due to 3d printer overhang angle, and allows insets for tapes with deep and wide embossed pockets. This also allows a tighter prestressed grip on the tape to reduce jumpiness.
+- An option to print the inset in two halves. The left half supports under the sprocket holes on the left side of the tap. The right half supports under the right side of the tape, and grips the tape from above. This avoids any geometry limitations due to 3d printer overhang angle, and allows insets for tapes with deep and wide embossed pockets.
 
 ## Improvements for cover film peeling
 - The film peeling edge has been remodelled to ensure it is perpendicular to the tape feed direction, which reduces the risk of the film tearing.
-- A narrower mount for the reverse-blocking spring gives a clearer path for film onto the peeling spool.
+- A narrower mount for the peeling spring gives a clearer path for film onto the peeling spool.
 - With wider tapes, the friction wheel sometimes had a problem where there is an excess of friction due to a large contact area, and the peeling force is too large. The film can pull the tape ahead of the sprocket hole engagement. A tapered friction wheel controls the contact area used with wider tapes.
 - “The scraper” is a new optional feature which can be used for feeding parts that tend to stick to the film rather than stay in their pocket. This is a finger which holds the parts in their pocket until they advace to the pick location.
 
@@ -118,7 +118,7 @@ To print a complete feeder you will need one item for each of the following cate
 Plus each feeder needs an inset which consist of two parts, left and right. For **plastic tape** the options for the left side are:
 
 - The normal size which works with 8mm, 12mm, and 16mm feeders.
-- The extra-deep size for 24mm bases.
+- The extra-deep size.
 
 Options for the plastic tape right side are:
 
@@ -130,7 +130,7 @@ Options for the plastic tape right side are:
 - 16mm extra-deep
 - 24mm extra-deep
 
-Insets for 8m **paper tape** are also printed in two parts. The right side again has an optional scraper.
+Insets for 8mm **paper tape** are also printed in two parts. The right side again has an optional scraper.
 
 # Photos!
 
@@ -160,7 +160,7 @@ The inset for paper tape is printed in two parts. The left part (green) is a com
 
 ![Part-assembled feeder for paper tape](img/paper-part.png)
 
-The right part (blue) of the inset for paper tape is the cover which defines the tape upper surface Z position thicknesses. Here the feeder is fully assembled.
+The right part (blue) of the inset for paper tape is the cover which defines the tape upper surface Z position. Here the feeder is fully assembled.
 
 ![Fully assembled feeder for paper tape](img/paper-full.png)
 
@@ -168,7 +168,7 @@ The inset for plastic tape with embossed pockets is also printed in two parts. T
 
 ![Part-assembled feeder for plastic tape](img/plastic-part.png)
 
-The right part (blue) of the inset for plastic tape is the cover. Here the feeder is fully assembled.
+The right part (blue) hold the right edge of plastic tape. Here the feeder is fully assembled.
 
 ![Fully assembled feeder for plastic tape](img/plastic-full.png)
 
