@@ -136,15 +136,11 @@ Insets for 8m **paper tape** are also printed in two parts. The right side again
 
 NB some of these photos show release 74.
 
-Some feeders mounted on the machine. Here we have 4 feeders for 8mm thin paper tapes (with the black inset) and one 8mm feeder for embossed plastic tape (inset in red).
+Some 8mm feeders mounted on the machine. One has a scraper.
 
 ![Some PushPull Feeders](img/some-feeders-2.jpg)
 
-Below, the 24mm feeder with extra-deep pockets is feeding a connector. Note the extra-deep feeder has an extra-short lever to keep a consistent hook engagement height.
-
-Feeder P27 with an inset for 8mm paper tape has the "scraper" option. The scraper is the red finger which holds the parts in their pocket if they have a tendency to stick to the film.
-
-All the other feeders here have insets for plastic tape.
+A 24mm feeder with extra-deep pockets, and several 12mm feeders. Note the extra-deep feeder has an extra-short lever to keep a consistent hook engagement height.
 
 ![Some PushPull Feeders](img/some-feeders.jpg)
 
@@ -152,23 +148,36 @@ This shows the feeders mounted onto the 20mm extrusion, and that extrusion mount
 
 ![Mounted on the lumenpnp](img/lumenpnp-mounting.jpg)
 
-Partial assembly of the friction wheel onto the left side of the spool.
+This is a 24mm spool. The red drum is to clamp the film.
 
 ![Mounted on the lumenpnp](img/friction-wheel.jpg)
 
-The scraper finger removed from the inset.
-
-The red inset on the left illustrates the two-part assembly of plastic tape insets; the left part of the inset is in yellow, and the right in red. This also shows the access hole for tightening the 3M bolt into the t-nut.
+The scraper finger removed from the inset. (The feeders in this photo are the previous version, release 74)
 
 ![Scraper](img/scraper.jpg)
 
-The inset for plastic tape with embossed pockets is printed in two parts, which allows those embossed pockets to be deep and wide without requiring 3d printer overhang.
+The inset for paper tape is printed in two parts. The left part (green) is a compliant sprung platform that supports the full width of the tape, holds it at the right Z position, and accomodates tapes of different thicknesses.
 
-![Two-part printing for embossed pockets](img/two-part.jpg)
+![Part-assembled feeder for paper tape](img/paper-part.png)
 
+The right part (blue) of the inset for paper tape is the cover which defines the tape upper surface Z position thicknesses. Here the feeder is fully assembled.
+
+![Fully assembled feeder for paper tape](img/paper-full.png)
+
+The inset for plastic tape with embossed pockets is also printed in two parts. The left part (green) is a compliant sprung platform that supports just the sprocket hole edge.
+
+![Part-assembled feeder for plastic tape](img/plastic-part.png)
+
+The right part (blue) of the inset for plastic tape is the cover. Here the feeder is fully assembled.
+
+![Fully assembled feeder for plastic tape](img/plastic-full.png)
+
+This shows the action of the bumper cam. It actively lifts the pusher tooth out of one sprocket hole, and lowers into the next before pushing forward.
+
+![The bumper cam action](img/bumper-cam-action.gif)
 # Videos
 
-The feeder in use, feeding and placing four parts.
+The feeder in use, feeding and placing four parts. The feeders in all these videos are the previous version, release 74.
 
 [![The feeder in use, feeding and placing four parts](img/yt1.jpg)](https://www.youtube.com/watch?v=HmRUPP_7lOk)
 
@@ -176,8 +185,4 @@ A single feed cycle, at 10% speed
 
 [![A single feed cycle, at 10% speed](img/yt2.jpg)](https://www.youtube.com/watch?v=0Pb1ezohiMo)
 
-
-This shows the action of the bumper cam. It actively lifts the pusher tooth out of one sprocket hole, and lowers into the next before pushing forward.
-
-![The bumper cam action](img/bumper-cam-action.gif)
 
