@@ -67,21 +67,25 @@ STL files for immediate printing are in the `printme` directory.
 
 All parts should be printed in PETG. PETG has a stable modulus over temperature, which is required for the spring parts. PETG has good abrasion resistance, which is required for the lever and base which interact at "the bumper".
 
-All models are tested on a Bambu A1 printer with 0.4mm nozzle. All parts print with the standard "0.12mm High Quality" print profile, with the exception of the Lever part (see below)
+All models are tested on a Bambu printer with 0.4mm nozzle. All parts print with the standard "0.12mm High Quality" print profile, with the exception of the Lever part (see below)
 
 For other slicers, use a "layer start: sharpest corner" or "seam: aligned" option. Plain bearing surfaces have a helical groove which is designed to capture the layer start, ensuring that the exposed bearing surface is a smooth continous extrusion.
 
-IMPORTANT: Before printing, it is critical that your printer can produce dimensionally accurate parts. Print the `printme/nuts/nuts-xxx.stl` file, and confirm that:
+IMPORTANT: Before printing, it is critical that your printer can produce dimensionally accurate parts. Print the `printme/nuts/nuts-xxx.stl` file, and perform the following checks:
 
-- The parts are circular, not elliptical.
-- The parts are circular, not a lower polygon count approximation substituted by your slicer.
-- The outer diameter of the first part is 8.00mm. This is a dimension accuracy check. You may need to adjust a "X-Y contour compensation" option.
-- The inner diameter of the second part (labelled 0) is 8.00mm. This is a dimension accuracy check. You may need to adjust a "X-Y hole compensation" option.
-- The inner diameter of the third part is 8.10mm. This is labelled 10 because of the 10x10µm size increase. Fitting the first part inside this hole is a validation check of axle plain bearings.
+- Check the bottom surface (first layer) is smooth and correct (a textured build plate is ok).
+- Check the top surface is smooth and correct.
+- Check the parts are circular, not elliptical.
+- Check the parts are circular, not a lower polygon count approximation substituted by your slicer.
+- Check the outer diameter of the male part is 8.00mm, and its surface is smooth. This is a dimension accuracy check.
+- Check the inner diameter of the female part printed with "10" is 8.10mm. This is labelled 10 because of the 10x10µm size increase. Fitting the male part inside this hole is a validation check of axle plain bearings. The axle should turn smoothly, without being loose. See the assembly video (linked below) for how this axle should appear.
+- Check the inner diameter of the other female part printed with "0" is 8.00mm. Fitting the male part inside this hole is a validation of interference fit assembly.
 
 Any problems need to be addressed first, through either printer hardware maintenance or slicer configuration. The printed feeder is very sensitive to dimensional tolerance; if your printer can't produce an accurate nut then it will not be able to print a working feeder!
 
-The **Lever** parts has a leaf spring feature which needs some care to print effectively. The important constraint is that the leaf springs must be printed as continuous extrusions; any discontinuities will result in a stress concentration which will make the spring insufficiently robust. On a Bambu A1 with 0.4mm nozzle this can be acheived by setting the "Outer wall" and "Inner wall" options to **0.3mm**. Please confirm this has the desired effect using your slicer preview. The leaf springs should be printed as four wall extrusions with no discontinuities, as highlighted in green below. The red highlights show various discontinuities which would cause the leaf spring to be insufficiently robust.
+If any of the diameters are wrong then you will need to adjust a "X-Y hole compensation" slicer option with a correction offset. Re-print the test nuts and re-check.
+
+The **Lever** parts has a leaf spring feature which needs a modified slicer profile. The important constraint is that the leaf springs must be printed as continuous extrusions; any discontinuities will result in a stress concentration which will make the spring insufficiently robust. On a Bambu printer with 0.4mm nozzle this can be acheived by setting the "Outer wall" and "Inner wall" options to **0.3mm**. Please confirm this has the desired effect using your slicer preview. The leaf springs should be printed as four wall extrusions with no discontinuities, as highlighted in green below. The red highlights show various discontinuities which would cause the leaf spring to be insufficiently robust.
 
 ![Lever slicing](img/dogslicer.png)
 
@@ -184,5 +188,9 @@ The feeder in use, feeding and placing four parts. The feeders in all these vide
 A single feed cycle, at 10% speed
 
 [![A single feed cycle, at 10% speed](img/yt2.jpg)](https://www.youtube.com/watch?v=0Pb1ezohiMo)
+
+Assembly instructions
+
+[![Assembly instructions](img/assembly.jpg)](https://www.youtube.com/watch?v=XDT4DxTVX4w)
 
 
