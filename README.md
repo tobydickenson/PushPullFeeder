@@ -181,7 +181,7 @@ This shows the action of the bumper cam. It actively lifts the pusher tooth out 
 ![The bumper cam action](img/bumper-cam-action.gif)
 # Videos
 
-The feeder in use, feeding and placing four parts. The feeders in all these videos are the previous version, release 74.
+The feeder in use, feeding and placing four parts. The feeders in this video are the previous version, release 74.
 
 [![The feeder in use, feeding and placing four parts](img/yt1.jpg)](https://www.youtube.com/watch?v=HmRUPP_7lOk)
 
