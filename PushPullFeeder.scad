@@ -591,7 +591,7 @@ friction_hex_diameter=friction_axle_diameter/cos(180/friction_wings)-extrusion_w
 friction_tension=0.16; // [-0.2:0.01:0.8]
 
 friction_pip_size = spring_small_strength*0.7;
-friction_pip_max_length = 7;
+friction_pip_max_length = 9;
 
 
 spool_drum_strength=spool_drum_clamp_strength+wall+friction_pip_size;
@@ -3916,7 +3916,7 @@ if (do_spool_right) {
                 rotate(360*a/indentation_count,[0,0,1]) {
                     friction_indentation_engagement = 0.7;
                     translate([(spool_inner_diameter-spool_drum_strength*2-friction_pip_size*(1-friction_indentation_engagement))/2,0,0])
-                    cylinder_p(friction_pip_size,h=min(tape_width-sprocket_gap,friction_pip_max_length+0.5));
+                    cylinder_p(friction_pip_size,h=tape_width-sprocket_gap);
                 }
             }
         }
