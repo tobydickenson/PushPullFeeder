@@ -179,6 +179,15 @@ The right part (blue) hold the right edge of plastic tape. Here the feeder is fu
 This shows the action of the bumper cam. It actively lifts the pusher tooth out of one sprocket hole, and lowers into the next before pushing forward.
 
 ![The bumper cam action](img/bumper-cam-action.gif)
+
+This is the profile of the bumper cam. When the pusher dog moves backward, it rides over the top of the cam (blue path)
+which quickly withdraws the pusher thorn from the tape hole to avoid having it drag along the top surface of the tape.
+When it pushes forward it rides to the right of the cam (green path) which lowers the pusher thorn into the hole
+before pushing forward.
+
+![The bumper cam profile](img/bumper-cam.jpg)
+
+
 # Videos
 
 The feeder in use, feeding and placing four parts. The feeders in this video are the previous version, release 74.
