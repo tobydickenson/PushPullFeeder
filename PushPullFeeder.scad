@@ -4163,26 +4163,28 @@ module render_preview(convexity=undef) {
     }
 }
 
-module beveled_extrude(height=1, bevel=layer_height*1, angle=45, convexity=undef) {
+module beveled_extrude(height=1, bevel=layer_height*1, angle=45, convexity=undef, top=true, bottom=true) {
     render_preview(convexity=convexity) union() {
         if ((bevel+e)*2 < height && bevel > e) {
             for (h = [0:layer_height:bevel-e]) {
                 l=min(layer_height, bevel-h);
                 rh=bevel-h;
                 rb=rh*tan(90-angle);
+                if(bottom)
                 translate([0,0,h]) {
                     linear_extrude(height=l+e, convexity=convexity) {
                         offset(delta=-rb, chamfer=true) children();
                     }
                 }
+                if(top)
                 translate([0,0,height-h-l-e]) {
                     linear_extrude(height=l+e, convexity=convexity) {
                         offset(delta=-rb, chamfer=true) children();
                     }
                 }
             }
-            translate([0,0,bevel]) {
-                linear_extrude(height=height-bevel*2, convexity=convexity) {
+            translate([0,0,bottom?bevel:0]) {
+                linear_extrude(height=height-(top?bevel:0)-(bottom?bevel:0), convexity=convexity) {
                     children();
                 }
             }
