@@ -376,6 +376,27 @@ simple_extrusion_mount_y = -12;
 simple_extrusion_mount_x = 2;
 
 
+/* [ Bearing ] */
+// Is there a bearing on the lever axle
+bearing = true;
+// bearing outer
+bearing_outer_diameter=10;
+// bearing inner
+bearing_inner_diameter=6;
+// bearing thickness
+bearing_thickness=3;
+
+// better to have some slack in the bearing aperture
+effective_bearing_thickness = bearing_thickness+0.5;
+
+// added to bearing diameter when sizing the bearing housing
+bearing_housing_tolerance = 0.2;
+
+// each bearing is held in place with six points of contact. This is the reduction
+// on bearing housing diameter
+bearing_housing_contact = 0.0;
+
+
 /* [ Cover Tape Spool ] */
 
 //cover_tape_slot=extrusion_width*2;
@@ -387,8 +408,9 @@ spool_wall_left=emboss+sprocket_gap;
 spool_wall_right=layer_wall;
 // Cover tape pool axle diameter
 spool_axle_diameter=8;
-spool_axle_groove_innner=spool_axle_diameter-wall;
-spool_axle_groove_outer=spool_axle_diameter+2*layer_height;
+spool_axle_effective_diameter=(bearing?bearing_inner_diameter:spool_axle_diameter);
+spool_axle_groove_innner=spool_axle_effective_diameter-wall;
+spool_axle_groove_outer=spool_axle_effective_diameter+2*layer_height;
 // A groove on round bearing surfaces to allow the slicer to hide the wall start&end point
 spiral_groove_width = 0.5; // 0.5mm is the minimum for Cura 'sharpest corner' to detect this as a good layer start point
 // Cover tape spool position in x
@@ -508,7 +530,7 @@ lever_fillet=0.5;
 // spring/dog fillet radius
 dog_fillet=2.5;
 
-lever_axle_outer_diameter = reel_axle;
+lever_axle_outer_diameter = bearing ? (bearing_outer_diameter+wall_strength_min*4) : reel_axle;
 lever_strength=lever_axle_diameter+3*wall;
 lever_thickness=emboss+tape_width+reel_wall;
 lever_thickness_8=emboss+tape_width_8+reel_wall;
@@ -586,7 +608,7 @@ dog_bumper_tension=0.3;
 // Friction wheel number of wings
 friction_wings=6;
 friction_axle_diameter=(spool_axle_diameter+reel_axle-lever_axle_diameter);
-friction_hex_diameter=friction_axle_diameter/cos(180/friction_wings)-extrusion_width;
+friction_hex_diameter=max(bearing?bearing_outer_diameter+wall_strength_min*2:0,friction_axle_diameter)/cos(180/friction_wings)-extrusion_width;
 // Friction wheel tension, additional radius [mm]
 friction_tension=0.16; // [-0.2:0.01:0.8]
 
@@ -2280,9 +2302,16 @@ if (do_base_plate) {
                     beveled_extrude(height=lever_thickness_8+base_thickness-emboss,
                         bevel=bevel_z, convexity=10) {
                             // lever axle
-                            // axle fits the level
-                            translate([(lever_axle_x-pick_offset), lever_axle_y])
-                                circle_p(d=lever_axle_diameter);
+                            if(bearing) {
+                                // axle fits a bearing
+                                translate([(lever_axle_x-pick_offset), lever_axle_y])
+                                    circle_p(d=bearing_inner_diameter);
+                            }
+                            else {
+                                // axle fits the level
+                                translate([(lever_axle_x-pick_offset), lever_axle_y])
+                                    circle_p(d=lever_axle_diameter);
+                            }
 
                             if (extrusion_mount_with_bolt_fixing_enabled) {
                                 extrusion_mount_with_bolt_fixing_2D();
@@ -2297,9 +2326,16 @@ if (do_base_plate) {
                     beveled_extrude(height=lever_thickness+base_thickness-emboss,
                         bevel=bevel_z, convexity=10) {
                         union() {
-                            // spool axle
-                            translate([(spool_axle_x-pick_offset), spool_axle_y])
-                                circle_p(d=spool_axle_diameter);
+                            if(bearing) {
+                                // axle fits a bearing
+                                translate([(spool_axle_x-pick_offset), spool_axle_y])
+                                    circle_p(d=bearing_inner_diameter);
+                            }
+                            else {
+                                // spool axle
+                                translate([(spool_axle_x-pick_offset), spool_axle_y])
+                                    circle_p(d=spool_axle_diameter);
+                            }
                             
                             // tape inset fixture
                             polygon([
@@ -2725,8 +2761,9 @@ if (do_base_plate) {
                     }
 
                     translate([(spool_axle_x-pick_offset), spool_axle_y, base_thickness-emboss])
-                    spiral_groove(spool_axle_diameter,spool_axle_groove_z-(base_thickness-emboss));
+                    spiral_groove(spool_axle_effective_diameter,spool_axle_groove_z-(base_thickness-emboss));
 
+                    // lever axle groove
                     translate([lever_axle_x, lever_axle_y, spool_axle_groove_z-(tape_width-tape_width_8)]) {
                         difference() {
                             cylinder_p(d=spool_axle_diameter+2*wall,
@@ -2739,7 +2776,7 @@ if (do_base_plate) {
                     }
 
                     translate([lever_axle_x, lever_axle_y, base_thickness-emboss])
-                    spiral_groove(spool_axle_diameter,spool_axle_groove_z-(tape_width-tape_width_8)-(base_thickness-emboss));
+                    spiral_groove(spool_axle_effective_diameter,spool_axle_groove_z-(tape_width-tape_width_8)-(base_thickness-emboss));
 
                     // extrusion mounting screws
                     if (extrusion_mount_enabled && extrusion_mount_h/extrusion_mount_unit > 1.5) {
@@ -3527,25 +3564,65 @@ if (do_lever) {
                 }
             }
 
-            translate([(lever_axle_x-pick_offset), lever_axle_y, -1])
+            translate([(lever_axle_x-pick_offset), lever_axle_y, 0])
             {
+                m1 = 0.2;
                 rotate(-asin(dog_bumper_tension/(dog_offset-lever_axle_x)),[1,1,0]) // tilt the dog towards the bumper
                 {
-                    // axle
-                    beveled_extrude(height=lever_thickness_8-layer_height*2+2,bevel=bevel_z, angle=135)
-                    circle_p(d=lever_axle_diameter+axle_play+phase2_play);
+                    if(bearing) {
+                        z = spool_axle_groove_z - layer_height*2 - (base_thickness-emboss);
 
-                    // additional elephants-foot protection
-                    beveled_extrude(height=lever_thickness_8-layer_height*2+2,bevel=0.7, angle=125)
-                    circle_p(d=lever_axle_diameter+axle_play+phase2_play);
+                        // bottom bearing
+                        translate([0, 0, -m1]) {
+                            beveled_extrude(height=effective_bearing_thickness + m1, angle=110, bevel=0.8, top=false)
+                            intersection() {
+                                circle_p(d=bearing_outer_diameter+bearing_housing_tolerance);
+                                circle_p(d=((bearing_outer_diameter-bearing_housing_contact)/cos(180/6)), $fn=6);
+                            }
+                            translate([0,0,effective_bearing_thickness/2+m1])
+                            linear_extrude(height=effective_bearing_thickness/2)
+                            circle_p(d=bearing_outer_diameter+bearing_housing_tolerance);
+                        }
 
-                    spiral_groove(lever_axle_diameter,lever_thickness_8-layer_height*2+2,-1);
+                        // top bearing
+                        translate([0, 0, z-effective_bearing_thickness+2*e]) {
+                            beveled_extrude(height=effective_bearing_thickness + m1, angle=110, bevel=0.8, bottom=false)
+                            intersection() {
+                                circle_p(d=bearing_outer_diameter+bearing_housing_tolerance);
+                                circle_p(d=((bearing_outer_diameter-bearing_housing_contact)/cos(180/6)), $fn=6);
+                            }
+                            linear_extrude(height=effective_bearing_thickness/2)
+                            circle_p(d=bearing_outer_diameter+bearing_housing_tolerance);
+                        }
+
+                        // A through hole
+                        translate([0, 0, -e])
+                        linear_extrude(height=z+2*e)
+                        intersection() {
+                            circle_p(d=bearing_outer_diameter+bearing_housing_tolerance);
+                            circle_p(d=((bearing_outer_diameter-1)/cos(180/6)), $fn=6);
+
+                        }
+                    } else {
+                        // axle
+                        translate([0,0,-m1])
+                        linear_extrude(height=lever_thickness_8-layer_height*2+m1*2)
+                        circle_p(d=lever_axle_diameter+axle_play+phase2_play);
+
+                        spiral_groove(lever_axle_diameter,lever_thickness_8-layer_height*2+2,-1);
+                    }
                 }
 
                 // A groove to capture layer start/end point. This is to ensure the slicer
                 // never puts the layer start near a leaf spring
+                translate([0,0,-m1])
                 rotate(180,[0,0,1])
-                spiral_groove(lever_axle_outer_diameter,lever_thickness_8-layer_height*2+2,-1);
+                spiral_groove(lever_axle_outer_diameter,lever_thickness_8-layer_height*2+2*m1,-1);
+
+                // additional elephants-foot protection
+                translate([0,0,-e])
+                beveled_extrude(height=lever_thickness_8-layer_height*2+2,bevel=0.7, angle=125)
+                circle_p(d=lever_axle_diameter+axle_play+phase2_play);
             }
         }
     }
@@ -3633,7 +3710,7 @@ if (do_friction_wheel) {
                                 linear_extrude(height=layer_height+e, convexity=6) {
                                     difference() {
                                         circle_p(d=friction_axle_diameter-fixture_play-2*extrusion_width);
-                                        circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
+                                        if(!bearing) circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
                                     }
                                 }
                                 // hex axle
@@ -3642,12 +3719,13 @@ if (do_friction_wheel) {
                                         difference() {
                                             circle_p(d=friction_hex_diameter-fixture_play,
                                                 $fn=friction_wings);
-                                            circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
+                                            if(!bearing) circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
                                         }
                                     }
                                 }
                             }
 
+                            // taper overhang on the hex
                             cylinder_p(d2=friction_axle_diameter-play-6*layer_height,
                                 d1=friction_axle_diameter-play-6*layer_height+2*spool_wall_left,
                                 h=spool_wall_left+2*layer_height+3*e);
@@ -3692,15 +3770,55 @@ if (do_friction_wheel) {
                             }
                         }
 
-                        // better elephants-foot defense
-                        translate([0,0,e-1])
-                        beveled_extrude(height=friction_width+1,bevel=0.7, angle=125)
-                        circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
+                        if(bearing)
+                        {
+                            // bottom bearing
+                            translate([0,0,friction_width-effective_bearing_thickness]) {
+                                beveled_extrude(height=effective_bearing_thickness+e, angle=110, bevel=0.8, bottom=false)
+                                intersection() {
+                                    circle_p(d=bearing_outer_diameter+bearing_housing_tolerance);
+                                    circle_p(d=((bearing_outer_diameter-bearing_housing_contact)/cos(180/6)), $fn=6);
+                                }
+                                linear_extrude(height=effective_bearing_thickness/2)
+                                circle_p(d=bearing_outer_diameter+bearing_housing_tolerance);
+                            }
+                        } else {
+                            // better elephants-foot defense
+                            translate([0,0,e-1])
+                            beveled_extrude(height=friction_width+1,bevel=0.7, angle=125)
+                            circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
+                        }
                     }
                 }
 
                 translate([0, 0, -spool_wall_left])
-                spiral_groove(spool_axle_diameter,spool_wall_left+tape_width-sprocket_gap,-1);
+                rotate([0,0,30])
+                spiral_groove(bearing?bearing_outer_diameter:spool_axle_diameter,spool_wall_left+tape_width-sprocket_gap,-1);
+
+                if(bearing)
+                {
+                    z = tape_width - sprocket_gap + spool_wall_left;
+
+                    // hex-end bearing
+                    translate([0,0,-spool_wall_left-e]) {
+                        beveled_extrude(height=effective_bearing_thickness, angle=110, bevel=0.8, top=false)
+                        intersection() {
+                            circle_p(d=bearing_outer_diameter+bearing_housing_tolerance);
+                            circle_p(d=((bearing_outer_diameter-bearing_housing_contact)/cos(180/6)), $fn=6);
+                        }
+                        translate([0,0,effective_bearing_thickness/2])
+                        linear_extrude(height=effective_bearing_thickness/2)
+                        circle_p(d=bearing_outer_diameter+bearing_housing_tolerance);
+                    }
+
+                    // A through hole, to reduce material
+                    translate([0, 0, -spool_wall_left-e])
+                    linear_extrude(height=z+2*e)
+                    intersection() {
+                        circle_p(d=bearing_outer_diameter+bearing_housing_tolerance);
+                        circle_p(d=((bearing_outer_diameter-1)/cos(180/6)), $fn=6);
+                    }
+                }
             }
         }
     }
@@ -3870,7 +3988,7 @@ if (do_spool_right) {
                     rotate([debug_eff ? 0 : 180, 0, 0]) {
                         difference() {
                             cylinder_p(h=spool_axle_groove_width,
-                                d=spool_axle_groove_outer+4*wall);
+                                d=max(bearing?bearing_outer_diameter+4*wall:0,spool_axle_groove_outer+4*wall));
                             translate([0, 0, -e])
                                 cylinder_p(h=spool_axle_groove_width+2*e,
                                     d2=spool_axle_groove_outer, d1=spool_axle_groove_innner-axle_groove_tension);
