@@ -2576,12 +2576,12 @@ if (do_base_plate) {
                 
                     
                     // cross screws / punchouts
-                    translate([(lever_axle_x-pick_offset), lever_axle_y, -5*e])
+                    translate([(lever_axle_x-pick_offset), lever_axle_y, layered_wall_strength_min])
                         cylinder_p(d=cross_screw_diameter+screw_play, 
-                            h=base_thickness+tape_width+reel_wall+10*e);
-                    translate([(spool_axle_x-pick_offset), spool_axle_y, -5*e])
+                            h=base_thickness+tape_width+reel_wall - spool_axle_groove_width*2);
+                    translate([(spool_axle_x-pick_offset), spool_axle_y, layered_wall_strength_min])
                         cylinder_p(d=cross_screw_diameter+screw_play,
-                            h=base_thickness+tape_width+reel_wall+10*e);
+                            h=base_thickness+tape_width+reel_wall - spool_axle_groove_width*2);
                     translate([(block_axle_x-pick_offset), block_axle_y, -5*e])
                         cylinder_p(d=cross_screw_diameter+screw_play,
                             h=base_thickness+tape_width+reel_wall+10*e);
