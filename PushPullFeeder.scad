@@ -3527,16 +3527,17 @@ if (do_lever) {
                 }
             }
 
-            translate([(lever_axle_x-pick_offset), lever_axle_y, -1])
+            zoffset = lever_axle_diameter*dog_bumper_tension/(dog_offset-lever_axle_x);
+            translate([(lever_axle_x-pick_offset), lever_axle_y, -zoffset])
             {
                 rotate(-asin(dog_bumper_tension/(dog_offset-lever_axle_x)),[1,1,0]) // tilt the dog towards the bumper
                 {
                     // axle
-                    beveled_extrude(height=lever_thickness_8-layer_height*2+2,bevel=bevel_z, angle=135)
+                    beveled_extrude(height=lever_thickness_8-layer_height*2+2*zoffset,bevel=bevel_z, angle=135)
                     circle_p(d=lever_axle_diameter+axle_play+phase2_play);
 
                     // additional elephants-foot protection
-                    beveled_extrude(height=lever_thickness_8-layer_height*2+2,bevel=0.7, angle=125)
+                    beveled_extrude(height=lever_thickness_8-layer_height*2+2*zoffset,bevel=0.7, angle=125)
                     circle_p(d=lever_axle_diameter+axle_play+phase2_play);
 
                     spiral_groove(lever_axle_diameter,lever_thickness_8-layer_height*2+2,-1);
