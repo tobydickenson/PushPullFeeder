@@ -73,8 +73,8 @@ For other slicers, use a "layer start: sharpest corner" or "seam: aligned" optio
 
 IMPORTANT: Before printing, it is critical that your printer can produce dimensionally accurate parts. Print the `printme/nuts/nuts-xxx.stl` file, and perform the following checks:
 
-- Check the bottom surface (first layer) is smooth and correct (a textured build plate is ok).
-- Check the top surface is smooth and correct.
+- Check the bottom surface (first layer) is smooth and correct. A textured build plate is ok.
+- Check the top surface is smooth and correct. It is ok to have some under-extrusion visible in the top surface, and indeed this is better than a precise flow calibration which shows a smooth top surface but makes surface dimensions more sensitive to any variation in flow.
 - Check the parts are circular, not elliptical.
 - Check the parts are circular, not a lower polygon count approximation substituted by your slicer.
 - Check the outer diameter of the male part is 8.00mm, and its surface is smooth. This is a dimension accuracy check.
