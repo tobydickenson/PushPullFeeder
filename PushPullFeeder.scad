@@ -246,7 +246,7 @@ tape_inset_slant=2;
 // Minimum thorn groove 
 thorn_min_groove=0.4;
 // Cover tape edge relative to the pick location
-cover_tape_edge=-2.5;
+cover_tape_edge=-1.9;
 // Tape reversal blocking thorn (set 0 to switch off)
 reversal_blocking_thorn_length=0.4;
 //
@@ -299,7 +299,7 @@ tape_inset_effective_compliant = tape_inset_compliant && tape_inset_split;
 tape_inset_compliant_pitch = 14.0;
 
 // Maximum displacement of the compliant spring. This is the maximum extra tape thickness.
-tape_inset_compliant_flex = 0.9;  // [0.0:0.1:2.0]
+tape_inset_compliant_flex = 1.25;  // [0.0:0.1:2.0]
 
 // Compliant spring wall. This should be the width of two narrow extrusions, so that the slicer can put a full wall around each compliant pocket.
 tape_inset_compliant_wall = 0.5;
