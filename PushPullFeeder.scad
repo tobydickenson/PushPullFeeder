@@ -2341,13 +2341,19 @@ if (do_base_plate) {
                             }
                             union() {
                                 // cutout ratchet blocking spring fixture
-                                translate([(block_axle_x-pick_offset), block_axle_y]) 
+                                translate([(block_axle_x-pick_offset), block_axle_y])
                                     circle_p(d=fixture_axle, $fn=6);
                                 polygon(points=[
                                         [(block_axle_x-pick_offset), block_axle_y],
                                         [(block_axle_x-pick_offset)-fixture_axle, block_axle_y+fixture_axle/2],
                                         [(block_axle_x-pick_offset)-fixture_axle, block_axle_y-fixture_axle/2]
                                     ]);
+
+                                // Trim off the bottom edge at the level of the top of the inset.
+                                // This gives a wider tape entry path
+                                translate([(block_axle_x-pick_offset), 0])
+                                translate([-fixture_axle,-inset_edge-layer_height*2])
+                                square([fixture_axle*2,inset_edge*2]);
                             }
                         }
                     }
