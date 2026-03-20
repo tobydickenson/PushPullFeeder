@@ -12,6 +12,14 @@ This is a fork of Markmaker’s awesome [PushPullFeeder](https://github.com/mark
 
 The original model supports a dazzling array of configuration parameters. Here I present some useful parameter sets that I use in production on the lumenpnp.
 
+# Changes since the first alpha release of this branch
+
+- Slightly increased the height of the complaint spring for paper insets; some 0402 tapes are thinner than expected.
+- Slightly moved the pick window for paper insets to improve alignment with 0402 part pick positions.
+- Fix the chamfer on the lever axle hole.
+- On a base, trim the bottom edge of the blocking spring mount to avoid a clash with the thickest paper tapes.
+- Change some through holes to blind holes for a cleaner faster bottom surface print.
+
 # Changes in Release 152 (March 2026)
 
 - Printability improvements for Bambu printers - My main printer is now A1 mini.
