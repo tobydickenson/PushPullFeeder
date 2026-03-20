@@ -125,6 +125,8 @@
             "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
 
+            "cover_tape_edge": "-1.5",
+
             "tape_thickness": "0.40",
             "tape_width": "8",
 
@@ -154,7 +156,7 @@
             "tape_emboss": "0.0",
             "tape_emboss_size": "4.4",
 
-            "cover_tape_edge": "-4.4",
+            "cover_tape_edge": "-3.9",
             "tape_inset_window_length": "11.5",
             "enable_scraper": "true",
 
