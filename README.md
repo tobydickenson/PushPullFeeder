@@ -14,6 +14,7 @@ The original model supports a dazzling array of configuration parameters. Here I
 
 # Changes since the first alpha release of this branch
 
+- Increased peeling force on feeders wider than 8mm.
 - Slightly increased the height of the complaint spring for paper insets; some 0402 tapes are thinner than expected.
 - Slightly moved the pick window for paper insets to improve alignment with 0402 part pick positions.
 - Fix the chamfer on the lever axle hole.
