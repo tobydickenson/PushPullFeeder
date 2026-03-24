@@ -228,7 +228,7 @@ sprocket_margin=sprocket_gap+tape_min_margin;
 /* [ Tape Inset ] */
 
 // Tape inset pick window length (make it longer than the inset to keep the end open)
-tape_inset_window_length=9;
+tape_inset_window_length=9; // [0.0:0.1:20.0]
 // Tape inset begin x
 tape_inset_begin=-74;
 // Tape inset end x
