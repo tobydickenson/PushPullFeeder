@@ -588,7 +588,7 @@ friction_wings=6;
 friction_axle_diameter=(spool_axle_diameter+reel_axle-lever_axle_diameter);
 friction_hex_diameter=friction_axle_diameter/cos(180/friction_wings)-extrusion_width;
 // Friction wheel tension, additional radius [mm]
-friction_tension=0.16; // [-0.2:0.01:0.8]
+friction_tension=0.3; // [-0.2:0.01:0.8]
 
 friction_pip_size = spring_small_strength*0.7;
 friction_pip_max_length = 9;
