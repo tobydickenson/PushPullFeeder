@@ -12,16 +12,7 @@ This is a fork of Markmaker’s awesome [PushPullFeeder](https://github.com/mark
 
 The original model supports a dazzling array of configuration parameters. Here I present some useful parameter sets that I use in production on the lumenpnp.
 
-# Changes since the first alpha release of this branch
-
-- Increased peeling force on feeders wider than 8mm.
-- Slightly increased the height of the complaint spring for paper insets; some 0402 tapes are thinner than expected.
-- Slightly moved the pick window for paper insets to improve alignment with 0402 part pick positions.
-- Fix the chamfer on the lever axle hole.
-- On a base, trim the bottom edge of the blocking spring mount to avoid a clash with the thickest paper tapes.
-- Change some through holes to blind holes for a cleaner faster bottom surface print.
-
-# Changes in Release 152 (March 2026)
+# Changes in Release 175 (March 2026)
 
 - Printability improvements for Bambu printers - My main printer is now A1 mini.
 - A huge increase in smoothness. Previous versions push the tape with a pair of sprung teeth. In previous versions a tooth on the pusher dog drags along the top surface of the tape then drops into a sprocket hole before pushing forward. The tape is then pushed over the reverse-blocking tooth, which pops into the sprocket hole at the end of the push. All of these actions cause vibrations and impacts on the tape surface which can cause vibrations which jump 0603 and smaller parts out of pockets. This version uses "the bumper" cam which actively lifts the tooth out of one sprocket hole, and lowers into the next before pushing forward. The reverse-blocking tooth is removed entirely. Having eliminated the main causes of vibrations, it has been possible to eliminate some other vibration-mitigation features which further improves the smoothness of the feed.
@@ -33,7 +24,16 @@ The original model supports a dazzling array of configuration parameters. Here I
 - Some changes to recommended printer settings - see below.
 - Change to assist in assembling the film peeling spool onto the base.
 
-# Changes in Release 74 (August 2025) excluding those later reverted in Release 152
+## Changes since the first alpha release of this branch
+
+- Increased peeling force.
+- Changes to the compliant spring and base to accomodate super-thin and super-fat tapes.
+- Move the paper tape pick window for better alignment with 0402 parts.
+- Fix a chamfer on the lever axle hole.
+- Change some through holes to blind holes for a cleaner faster bottom surface print.
+
+
+# Changes in Release 74 (August 2025) excluding those later reverted in Release 175
 
 ## Improvements for parts in paper tape
 - The "inset" is the part which holds the tape as it passes through the feeder. There are several changes to the profile of the inset to reduce part jumpiness.
