@@ -3543,7 +3543,7 @@ if (do_lever) {
                     circle_p(d=lever_axle_diameter+axle_play+phase2_play);
 
                     // additional elephants-foot protection
-                    beveled_extrude(height=lever_thickness_8-layer_height*2+2*zoffset,bevel=0.7, angle=125)
+                    beveled_extrude(height=lever_thickness_8-layer_height*2+2*zoffset,bevel=0.7, angle=105)
                     circle_p(d=lever_axle_diameter+axle_play+phase2_play);
 
                     spiral_groove(lever_axle_diameter,lever_thickness_8-layer_height*2+2,-1);
@@ -3701,7 +3701,7 @@ if (do_friction_wheel) {
 
                         // better elephants-foot defense
                         translate([0,0,e-1])
-                        beveled_extrude(height=friction_width+1,bevel=0.7, angle=125)
+                        beveled_extrude(height=friction_width+1,bevel=0.7, angle=105)
                         circle_p(d=spool_axle_diameter+spool_axle_play+phase2_play);
                     }
                 }
