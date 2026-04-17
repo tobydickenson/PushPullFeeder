@@ -3473,17 +3473,6 @@ if (do_lever) {
                         }
                     }
                 }
-                // add the dog's thorn
-                translate([dog_eff_x, dog_eff_y, 
-                    emboss+sprocket_hole_distance-thorn_sideways_tension-dog_bumper_ramp_width
-                    -layer_height]) // one layer height down because of the friction ring
-                    translate([dog_neck.x, dog_neck.y, 0])
-                        rotate([0, 0, dog_spring_bend_eff-dog_spring_bend])
-                            translate([dog_thorn_nominal_x-dog_nominal_x-2*e, e, 0]     
-                                - [dog_neck.x, dog_neck.y, 0])
-                                rotate([90, 0, 0]) 
-                                    thorn(diameter=thorn_diameter, 
-                                        length=thorn_length+e);
                 
                 translate([(lever_axle_x-pick_offset), lever_axle_y, 0]) {
                     union() {
@@ -3512,9 +3501,10 @@ if (do_lever) {
                 [dog_slant*(dog_height1-dog_cut)+dog_cut,
                     dog_height1-dog_cut],
             ];
-            translate([0, 0, sprocket_gap+emboss-layer_height]) {
-                beveled_extrude(height=dog_lever_thickness-sprocket_gap-emboss
-                    +layer_height+e, angle=135) {
+            t = emboss+sprocket_hole_distance-thorn_sideways_tension-dog_bumper_ramp_width;
+            //t = sprocket_gap+emboss-layer_height;
+            translate([0, 0, t]) {
+                beveled_extrude(height=dog_lever_thickness-t+e, angle=135, bottom=false) {
                     translate([dog_eff_x, dog_eff_y])
                         translate(dog_neck)
                             rotate(dog_spring_bend_eff-dog_spring_bend)
@@ -3555,6 +3545,20 @@ if (do_lever) {
                 spiral_groove(lever_axle_outer_diameter,lever_thickness_8-layer_height*2+2,-1);
             }
         }
+
+        // add the dog's thorn
+        translate([dog_eff_x, dog_eff_y,
+            emboss+sprocket_hole_distance-thorn_sideways_tension-dog_bumper_ramp_width
+            -layer_height]) // one layer height down because of the friction ring
+            translate([dog_neck.x, dog_neck.y, 0])
+                rotate([0, 0, dog_spring_bend_eff-dog_spring_bend])
+                    translate([dog_thorn_nominal_x-dog_nominal_x-2*e, e, 0]
+                        - [dog_neck.x, dog_neck.y, 0])
+                        rotate([90, 0, 0])
+                            thorn(diameter=thorn_diameter,
+                                length=thorn_length+e,
+                                shank_length=3);
+
     }
 }
 
@@ -4204,10 +4208,10 @@ module beveled_extrude(height=1, bevel=layer_height*1, angle=45, convexity=undef
     }
 }
 
-module thorn(diameter, length, overlength=0) {
+module thorn(diameter, length, overlength=0, shank_length=1) {
     
     hull() {
-        translate([0,0,-1]) linear_extrude(height=1) {
+        translate([0,0,-shank_length]) linear_extrude(height=shank_length) {
             hull() {
                 translate ([0, 0])
                     circle_p(d=diameter);
