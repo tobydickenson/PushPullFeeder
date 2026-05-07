@@ -163,9 +163,13 @@ A 24mm feeder with extra-deep pockets, and several 12mm feeders. Note the extra-
 
 ## Extrusion Photo
 
-This shows the feeders mounted onto the 20mm extrusion, and that extrusion mounted onto the side rails of the lumenpnp machine. This is the recommended location on a lumenpnp; it puts the feeder right at the front of the machine. The hook can only just reach the lever, and the nozzles only just reach the parts at the pick location, so there is minimal waste of build area on the rest of the machine.
+This shows the feeders mounted onto the 20mm extrusion, and that extrusion mounted onto the side rails of the lumenpnp machine.
+
+This is my preferred location on a lumenpnp; it puts the feeder right at the front of the machine. The hook can only just reach the lever, and the nozzles only just reach the parts at the pick location, so there is minimal waste of build area on the rest of the machine.
 
 ![Mounted on the lumenpnp](img/lumenpnp-mounting.jpg)
+
+Alternatively the feeders extrusion could be stacked on top of the front rail. An advantage of this approach is that the feeder extrusion does not have to be the full width of the machine. (Please share if you have a photo of such a setup)
 
 ## Spool Photo
 
