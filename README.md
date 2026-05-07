@@ -149,25 +149,37 @@ Insets for 8mm **paper tape** are also printed in two parts. The right side agai
 
 NB some of these photos show release 74.
 
+## 8mm Feeder Photo
+
 Some 8mm feeders mounted on the machine. One has a scraper.
 
 ![Some PushPull Feeders](img/some-feeders-2.jpg)
+
+## 24mm Feeder Photo
 
 A 24mm feeder with extra-deep pockets, and several 12mm feeders. Note the extra-deep feeder has an extra-short lever to keep a consistent hook engagement height.
 
 ![Some PushPull Feeders](img/some-feeders.jpg)
 
+## Extrusion Photo
+
 This shows the feeders mounted onto the 20mm extrusion, and that extrusion mounted onto the side rails of the lumenpnp machine. This is the recommended location on a lumenpnp; it puts the feeder right at the front of the machine. The hook can only just reach the lever, and the nozzles only just reach the parts at the pick location, so there is minimal waste of build area on the rest of the machine.
 
 ![Mounted on the lumenpnp](img/lumenpnp-mounting.jpg)
+
+## Spool Photo
 
 This is a 24mm spool. The red drum is to clamp the film.
 
 ![Mounted on the lumenpnp](img/friction-wheel.jpg)
 
+## Scraper Photo
+
 The scraper finger removed from the inset. (The feeders in this photo are the previous version, release 74)
 
 ![Scraper](img/scraper.jpg)
+
+## Paper Inset Photo
 
 The inset for paper tape is printed in two parts. The left part (green) is a compliant sprung platform that supports the full width of the tape, holds it at the right Z position, and accomodates tapes of different thicknesses.
 
@@ -177,6 +189,8 @@ The right part (blue) of the inset for paper tape is the cover which defines the
 
 ![Fully assembled feeder for paper tape](img/paper-full.png)
 
+## Plastic Inset Photo
+
 The inset for plastic tape with embossed pockets is also printed in two parts. The left part (green) is a compliant sprung platform that supports just the sprocket hole edge.
 
 ![Part-assembled feeder for plastic tape](img/plastic-part.png)
@@ -184,6 +198,8 @@ The inset for plastic tape with embossed pockets is also printed in two parts. T
 The right part (blue) hold the right edge of plastic tape. Here the feeder is fully assembled.
 
 ![Fully assembled feeder for plastic tape](img/plastic-full.png)
+
+## Bumper Cam Photo
 
 This shows the action of the bumper cam. It actively lifts the pusher tooth out of one sprocket hole, and lowers into the next before pushing forward.
 
