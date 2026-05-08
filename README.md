@@ -129,10 +129,10 @@ STL files are in the `printme` folder for direct printing.
 |               |     |     |     |     |      |      |      |      |      |
 | ------------- | --- | --- | --- | --- | ---- | ---- | ---- | ---- | ---- |
 | **Options**   |     |     |     |     |      |      |      |      |      |
-| Tape width    | 8mm | 8mm | 8mm | 8mm | 12mm | 12mm | 16mm | 16mm | 24mm |
+| Tape width (mm) | 8 | 8   | 8   | 8   | 12   | 12   | 16   | 16   | 24   |
 | Paper tape?                         | yes |     | yes |     |      |      |      |      |      |
 | Plastic tape?                       |     | yes |     | yes | yes  | yes  | yes  | yes  | yes  |
-| Max embossed pocket depth           | 3mm | 3mm | 3mm | 3mm | 3mm  | 3mm  | 3mm  | 11mm | 11mm |
+| Max embossed pocket depth (mm)      | 3   | 3   | 3   | 3   | 3    | 3    | 3    | 11   | 11   |
 | Has a scraper?                      |     |     | yes | yes |      | yes  |      |      |      |
 |                                     |     |     |     |     |      |      |      |      |      |
 | **Printed Parts**                   |     |     |     |     |      |      |      |      |      |
