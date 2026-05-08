@@ -126,6 +126,7 @@ Feeder options are:
 STL files are in the `printme` folder for direct printing.
 
 
+| ------------------- | --- | --- | --- | --- | ---- | ---- | ---- | ---- | ---- |
 | **Options**   |     |     |     |     |      |      |      |      |      |
 | Tape width    | 8mm | 8mm | 8mm | 8mm | 12mm | 12mm | 16mm | 16mm | 24mm |
 | Paper tape?                         | yes |     | yes |     |      |      |      |      |      |
