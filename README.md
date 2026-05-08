@@ -117,33 +117,64 @@ The tickboxes control which locations are visited for the forward and backward s
 
 # BOM
 
-To print a complete feeder you will need one item for each of the following categories. STL files are in the `printme` folder for direct printing:
+Feeder options are:
+ * Tape width
+ * For 8mm tape, paper and plastic tape have different insets
+ * For 8mm and 12mm feeders there is a on option to include the "scraper".
+ * The 24mm feeder supports deeper pockets. There is an option to convert a 24mm extra-deep feeder for 16mm tape.
 
-- A base. 8mm, 12mm, or 16mm wide bases support paper tape and plastic tape with pockets up to 4mm deep. A 24mm extra-deep base supports both 24mm and 16mm tapes, with up to 11mm pockets.
-- A lever. The normal size fits the normal bases, and the extra-deep base needs a shorter lever.
-- A blocking spring; a single size for all feeders.
-- The spool for spent film has several components. The left side is common to all variants.
-- The spool right side has 8mm, 12mm, 16mm, or 24mm options.
-- The spool friction wheel again has width options.
-- A drum, which holds the peeled tape on the spool. Again this has width options.
-- Two washers; a single size for all feeders.
+STL files are in the `printme` folder for direct printing.
 
-Plus each feeder needs an inset which consist of two parts, left and right. For **plastic tape** the options for the left side are:
-
-- The normal size which works with 8mm, 12mm, and 16mm feeders.
-- The extra-deep size.
-
-Options for the plastic tape right side are:
-
-- 8mm
-- 8mm with a scraper (for parts that stick to the peeling film)
-- 12mm
-- 12mm with a scraper
-- 16mm
-- 16mm extra-deep
-- 24mm extra-deep
-
-Insets for 8mm **paper tape** are also printed in two parts. The right side again has an optional scraper.
+| **Printed Parts**                   | 8mm | 8mm | 8mm | 8mm | 12mm | 12mm | 16mm | 16mm | 24mm |
+| ----------------------------------- | --- | --- | --- | --- | ---- | ---- | ---- | ---- | ---- |
+| Tape type                           | paper | plastic | paper | plastic | plastic | plastic | plastic | plastic | plastic |
+| Max embossed pocket depth           | 3mm | 3mm | 3mm | 3mm | 3mm  | 3mm  | 3mm  | 11mm | 11mm |
+| Has a scraper?                      |     |     | yes | yes |      | yes  |      |      |      |
+|                                     |     |     |     |     |      |      |      |      |      |
+| base-8mm                            | *   | *   | *   | *   |      |      |      |      |      |
+| base-12mm                           |     |     |     |     | *    | *    |      |      |      |
+| base-16mm                           |     |     |     |     |      |      | *    |      |      |
+| base-24mm-extra-deep                |     |     |     |     |      |      |      | *    | *    |
+|                                     |     |     |     |     |      |      |      |      |      |
+| inset-8mm-left                      | *   |     | *   |     |      |      |      |      |      |
+| inset-8mm-right                     | *   |     |     |     |      |      |      |      |      |
+| inset-8mm-right-scraper             |     |     | *   |     |      |      |      |      |      |
+| inset-8mm-12mm-16mm-plastic-left    |     | *   |     | *   | *    | *    | *    |      |      |
+| inset-8mm-plastic-right             |     | *   |     |     |      |      |      |      |      |
+| inset-8mm-plastic-right-scraper     |     | *   |     | *   |      |      |      |      |      |
+| inset-12mm-plastic-right            |     |     |     |     | *    |      |      |      |      |
+| inset-12mm-plastic-right-scraper    |     |     |     |     |      | *    |      |      |      |
+| inset-16mm-plastic-right            |     |     |     |     |      |      | *    |      |      |
+| inset-24mm-extra-deep-left          |     |     |     |     |      |      |      | *    | *    |
+| inset-16mm-extra-deep-right         |     |     |     |     |      |      |      | *    |      |
+| inset-24mm-extra-deep-right         |     |     |     |     |      |      |      |      | *    |
+|                                     |     |     |     |     |      |      |      |      |      |
+| lever-8mm-12mm-16mm                 | *   | *   | *   | *   | *    | *    | *    |      |      |
+| lever-extra-deep                    |     |     |     |     |      |      |      | *    | *    |
+|                                     |     |     |     |     |      |      |      |      |      |
+| scraper-8mm                         |     |     | *   | *   |      |      |      |      |      |
+| scraper-12mm                        |     |     |     |     |      | *    |      |      |      |
+|                                     |     |     |     |     |      |      |      |      |      |
+| friction-8mm                        | *   | *   | *   | *   |      |      |      |      |      |
+| friction-12mm                       |     |     |     |     | *    | *    |      |      |      |
+| friction-16mm                       |     |     |     |     |      |      | *    | *    |      |
+| friction-24mm                       |     |     |     |     |      |      |      |      | *    |
+| spool-left                          | *   | *   | *   | *   | *    | *    | *    | *    | *    |
+| spool-right-8mm                     | *   | *   | *   | *   |      |      |      |      |      |
+| spool-right-12mm                    |     |     |     |     | *    | *    |      |      |      |
+| spool-right-16mm                    |     |     |     |     |      |      | *    | *    |      |
+| spool-right-24mm                    |     |     |     |     |      |      |      |      | *    |
+|                                     |     |     |     |     |      |      |      |      |      |
+| drum-8mm                            | *   | *   | *   | *   |      |      |      |      |      |
+| drum-12mm                           |     |     |     |     | *    | *    |      |      |      |
+| drum-16mm                           |     |     |     |     |      |      | *    | *    |      |
+| drum-24mm                           |     |     |     |     |      |      |      |      | *    |
+| washer                              | 2   | 2   | 2   | 2   | 2    | 2    | 2    | 2    | 2    |
+| blocking-spring                     | *   | *   | *   | *   | *    | *    | *    | *    | *    |
+|                                     |     |     |     |     |      |      |      |      |      |
+| **Hardware**                        |     |     |     |     |      |      |      |      |      |
+| 6mm M3 countersunk screw            |     |     |     |     |      |      |      |      |      |
+| M3 t-nut                            |     |     |     |     |      |      |      |      |      |
 
 # Photos!
 
