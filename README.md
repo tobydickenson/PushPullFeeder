@@ -136,50 +136,50 @@ STL files are in the `printme` folder for direct printing.
 | Has a scraper?                      |     |     | yes | yes |      | yes  |      |      |      |
 |                                     |     |     |     |     |      |      |      |      |      |
 | **Printed Parts**                   |     |     |     |     |      |      |      |      |      |
-| base-8mm                            | *   | *   | *   | *   |      |      |      |      |      |
-| base-12mm                           |     |     |     |     | *    | *    |      |      |      |
-| base-16mm                           |     |     |     |     |      |      | *    |      |      |
-| base-24mm-extra-deep                |     |     |     |     |      |      |      | *    | *    |
+| base-8mm                            | 1   | 1   | 1   | 1   |      |      |      |      |      |
+| base-12mm                           |     |     |     |     | 1    | 1    |      |      |      |
+| base-16mm                           |     |     |     |     |      |      | 1    |      |      |
+| base-24mm-extra-deep                |     |     |     |     |      |      |      | 1    | 1    |
 |                                     |     |     |     |     |      |      |      |      |      |
-| inset-8mm-left                      | *   |     | *   |     |      |      |      |      |      |
-| inset-8mm-right                     | *   |     |     |     |      |      |      |      |      |
-| inset-8mm-right-scraper             |     |     | *   |     |      |      |      |      |      |
-| inset-8mm-12mm-16mm-plastic-left    |     | *   |     | *   | *    | *    | *    |      |      |
-| inset-8mm-plastic-right             |     | *   |     |     |      |      |      |      |      |
-| inset-8mm-plastic-right-scraper     |     | *   |     | *   |      |      |      |      |      |
-| inset-12mm-plastic-right            |     |     |     |     | *    |      |      |      |      |
-| inset-12mm-plastic-right-scraper    |     |     |     |     |      | *    |      |      |      |
-| inset-16mm-plastic-right            |     |     |     |     |      |      | *    |      |      |
-| inset-24mm-extra-deep-left          |     |     |     |     |      |      |      | *    | *    |
-| inset-16mm-extra-deep-right         |     |     |     |     |      |      |      | *    |      |
-| inset-24mm-extra-deep-right         |     |     |     |     |      |      |      |      | *    |
+| inset-8mm-left                      | 1   |     | 1   |     |      |      |      |      |      |
+| inset-8mm-right                     | 1   |     |     |     |      |      |      |      |      |
+| inset-8mm-right-scraper             |     |     | 1   |     |      |      |      |      |      |
+| inset-8mm-12mm-16mm-plastic-left    |     | 1   |     | 1   | 1    | 1    | 1    |      |      |
+| inset-8mm-plastic-right             |     | 1   |     |     |      |      |      |      |      |
+| inset-8mm-plastic-right-scraper     |     | 1   |     | 1   |      |      |      |      |      |
+| inset-12mm-plastic-right            |     |     |     |     | 1    |      |      |      |      |
+| inset-12mm-plastic-right-scraper    |     |     |     |     |      | 1    |      |      |      |
+| inset-16mm-plastic-right            |     |     |     |     |      |      | 1    |      |      |
+| inset-24mm-extra-deep-left          |     |     |     |     |      |      |      | 1    | 1    |
+| inset-16mm-extra-deep-right         |     |     |     |     |      |      |      | 1    |      |
+| inset-24mm-extra-deep-right         |     |     |     |     |      |      |      |      | 1    |
 |                                     |     |     |     |     |      |      |      |      |      |
-| lever-8mm-12mm-16mm                 | *   | *   | *   | *   | *    | *    | *    |      |      |
-| lever-extra-deep                    |     |     |     |     |      |      |      | *    | *    |
+| lever-8mm-12mm-16mm                 | 1   | 1   | 1   | 1   | 1    | 1    | 1    |      |      |
+| lever-extra-deep                    |     |     |     |     |      |      |      | 1    | 1    |
 |                                     |     |     |     |     |      |      |      |      |      |
-| scraper-8mm                         |     |     | *   | *   |      |      |      |      |      |
-| scraper-12mm                        |     |     |     |     |      | *    |      |      |      |
+| scraper-8mm                         |     |     | 1   | 1   |      |      |      |      |      |
+| scraper-12mm                        |     |     |     |     |      | 1    |      |      |      |
 |                                     |     |     |     |     |      |      |      |      |      |
-| friction-8mm                        | *   | *   | *   | *   |      |      |      |      |      |
-| friction-12mm                       |     |     |     |     | *    | *    |      |      |      |
-| friction-16mm                       |     |     |     |     |      |      | *    | *    |      |
-| friction-24mm                       |     |     |     |     |      |      |      |      | *    |
-| spool-left                          | *   | *   | *   | *   | *    | *    | *    | *    | *    |
-| spool-right-8mm                     | *   | *   | *   | *   |      |      |      |      |      |
-| spool-right-12mm                    |     |     |     |     | *    | *    |      |      |      |
-| spool-right-16mm                    |     |     |     |     |      |      | *    | *    |      |
-| spool-right-24mm                    |     |     |     |     |      |      |      |      | *    |
+| friction-8mm                        | 1   | 1   | 1   | 1   |      |      |      |      |      |
+| friction-12mm                       |     |     |     |     | 1    | 1    |      |      |      |
+| friction-16mm                       |     |     |     |     |      |      | 1    | 1    |      |
+| friction-24mm                       |     |     |     |     |      |      |      |      | 1    |
+| spool-left                          | 1   | 1   | 1   | 1   | 1    | 1    | 1    | 1    | 1    |
+| spool-right-8mm                     | 1   | 1   | 1   | 1   |      |      |      |      |      |
+| spool-right-12mm                    |     |     |     |     | 1    | 1    |      |      |      |
+| spool-right-16mm                    |     |     |     |     |      |      | 1    | 1    |      |
+| spool-right-24mm                    |     |     |     |     |      |      |      |      | 1    |
 |                                     |     |     |     |     |      |      |      |      |      |
-| drum-8mm                            | *   | *   | *   | *   |      |      |      |      |      |
-| drum-12mm                           |     |     |     |     | *    | *    |      |      |      |
-| drum-16mm                           |     |     |     |     |      |      | *    | *    |      |
-| drum-24mm                           |     |     |     |     |      |      |      |      | *    |
+| drum-8mm                            | 1   | 1   | 1   | 1   |      |      |      |      |      |
+| drum-12mm                           |     |     |     |     | 1    | 1    |      |      |      |
+| drum-16mm                           |     |     |     |     |      |      | 1    | 1    |      |
+| drum-24mm                           |     |     |     |     |      |      |      |      | 1    |
 | washer                              | 2   | 2   | 2   | 2   | 2    | 2    | 2    | 2    | 2    |
-| blocking-spring                     | *   | *   | *   | *   | *    | *    | *    | *    | *    |
+| blocking-spring                     | 1   | 1   | 1   | 1   | 1    | 1    | 1    | 1    | 1    |
 |                                     |     |     |     |     |      |      |      |      |      |
 | **Hardware**                        |     |     |     |     |      |      |      |      |      |
-| 6mm M3 countersunk screw            |     |     |     |     |      |      |      |      |      |
-| M3 t-nut                            |     |     |     |     |      |      |      |      |      |
+| 6mm M3 countersunk screw            | 1   | 1   | 1   | 1   | 1    | 1    | 1    | 1    | 1    |
+| M3 t-nut                            | 1   | 1   | 1   | 1   | 1    | 1    | 1    | 1    | 1    |
 
 # Photos!
 
