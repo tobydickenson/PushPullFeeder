@@ -125,14 +125,15 @@ Feeder options are:
 
 STL files are in the `printme` folder for direct printing.
 
-|                     | 8mm | 8mm | 8mm | 8mm | 12mm | 12mm | 16mm | 16mm | 24mm |
-| ------------------- | --- | --- | --- | --- | ---- | ---- | ---- | ---- | ---- |
-| **Printed Parts**   |     |     |     |     |      |      |      |      |      |
+
+| **Options**   |     |     |     |     |      |      |      |      |      |
+| Tape width    | 8mm | 8mm | 8mm | 8mm | 12mm | 12mm | 16mm | 16mm | 24mm |
 | Paper tape?                         | yes |     | yes |     |      |      |      |      |      |
 | Plastic tape?                       |     | yes |     | yes | yes  | yes  | yes  | yes  | yes  |
 | Max embossed pocket depth           | 3mm | 3mm | 3mm | 3mm | 3mm  | 3mm  | 3mm  | 11mm | 11mm |
 | Has a scraper?                      |     |     | yes | yes |      | yes  |      |      |      |
 |                                     |     |     |     |     |      |      |      |      |      |
+| **Printed Parts**                   |     |     |     |     |      |      |      |      |      |
 | base-8mm                            | *   | *   | *   | *   |      |      |      |      |      |
 | base-12mm                           |     |     |     |     | *    | *    |      |      |      |
 | base-16mm                           |     |     |     |     |      |      | *    |      |      |
