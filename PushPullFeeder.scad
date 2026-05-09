@@ -508,6 +508,8 @@ lever_fillet=0.5;
 // spring/dog fillet radius
 dog_fillet=2.5;
 
+lever_peg=true;
+
 lever_axle_outer_diameter = reel_axle;
 lever_strength=lever_axle_diameter+3*wall;
 lever_thickness=emboss+tape_width+reel_wall;
@@ -3416,7 +3418,7 @@ if (do_lever) {
                             hull() {
                                 rotate([0, 0, lever_feed_angle])
                                     translate([lever_feed_leverage, 0])
-                                        circle_p(d=lever_axle_diameter);
+                                        circle_p(d=(lever_peg?4:lever_axle_diameter));
                                 circle_p(d=lever_axle_diameter+2*wall);
                             }
                             hull() {
@@ -3496,7 +3498,7 @@ if (do_lever) {
                         // nozzle actuation knob
                         translate([lever_feed_x, lever_feed_y, lever_actuation_thickness/2-e])
                             cylinder_p(
-                                d=lever_axle_diameter-nozzle_play,
+                                d=lever_peg?4:(lever_axle_diameter-nozzle_play),
                                 h=lever_thickness_8-lever_actuation_thickness/2+e);
                     }
                 }
@@ -3525,11 +3527,22 @@ if (do_lever) {
 
 
             // slice the top off the knob; a few mm extra safe Z for the actuator!
-            translate([(lever_axle_x-pick_offset), lever_axle_y, 0]) {
-                union() {
-                    // nozzle actuation knob
-                    translate([lever_feed_x, lever_feed_y, -e])
-                        linear_extrude(lever_thickness_8+2*e) translate([-lever_axle_diameter,lever_axle_diameter/4,0]) square(lever_axle_diameter*4,lever_axle_diameter*4);
+            translate([(lever_axle_x-pick_offset), lever_axle_y, 0])
+            translate([lever_feed_x, lever_feed_y, -e])
+            linear_extrude(lever_thickness_8+2*e)
+            translate([-lever_axle_diameter,lever_axle_diameter/4,0])
+            square(lever_axle_diameter*4,lever_axle_diameter*4);
+
+            if(lever_peg) {
+                translate([0,0,lever_thickness_8-9])
+                translate([(lever_axle_x-pick_offset), lever_axle_y, 0])
+                translate([lever_feed_x, lever_feed_y, -e])
+                difference() {
+                    linear_extrude(20)
+                    circle_p(16);
+
+                    linear_extrude(4)
+                    circle_p(4);
                 }
             }
 
