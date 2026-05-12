@@ -3170,7 +3170,7 @@ module inset(left,right)
                     // tape reversal blocking thorn
                     if (reversal_blocking_thorn_length > 0 && right) {
                         dog_xx = [dog_nominal_x-dog_travel_nominal-sprocket_pitch*2, dog_nominal_x+sprocket_pitch*2];
-                        for(x = [ for (i=[0:inset_number_of_reverse_blocking_thorns-1]) dog_xx[i] ]) {
+                        for(x = [ for (i=[0:max(0,inset_number_of_reverse_blocking_thorns-1)]) dog_xx[i] ]) {
                             translate([round(x/sprocket_pitch)*sprocket_pitch, tape_inset_below_tension+e - tape_thickness*tape_inset_cover_tension*(tape_width-sprocket_hole_distance)/tape_width,
                                 sprocket_hole_distance-thorn_sideways_tension]) {
                                 rotate([90, 0, 0])
