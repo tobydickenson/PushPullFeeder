@@ -115,6 +115,12 @@ The tickboxes control which locations are visited for the forward and backward s
 
 ![Motion Steps](img/motion.png)
 
+# OpenSCAD versions
+
+At the time of writing this, the openscad nightly build has some huge improvements and the "released" version is now getting quite old. This model is primarily developed using a nightly build. It probably does work with the released version of openscad too but this is untested.
+
+If any openscad maintainers are reading this; the improvements are very much appreciated and I would love to see a stable release sometime soon.
+
 # BOM
 
 Feeder options are:
